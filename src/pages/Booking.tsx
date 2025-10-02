@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import notificationService from '@/services/notificationService';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -548,6 +549,21 @@ const Booking = () => {
 
       // Success - navigate to confirmation with instant feedback
       setBookingProgress(100);
+      
+      // Schedule session reminder notification
+      if (selectedCounselorData && selectedDate && selectedTime) {
+        const sessionDateTime = new Date(selectedDate);
+        const [hours, minutes] = selectedTime.split(':').map(Number);
+        sessionDateTime.setHours(hours, minutes, 0, 0);
+        
+        const sessionId = `session-${Date.now()}`;
+        notificationService.scheduleSessionReminder(
+          sessionId,
+          sessionDateTime,
+          selectedCounselorData.name
+        );
+      }
+      
       setStep('confirmation');
       
     } catch (error) {

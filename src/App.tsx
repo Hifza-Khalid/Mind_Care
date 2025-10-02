@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Layout from "@/components/layout/Layout";
 import ChatWidget from "@/components/chat/ChatWidget";
+import NotificationContainer from "@/components/notifications/NotificationContainer";
 import { lazy, Suspense } from "react";
 
 // Lazy load pages for better performance
@@ -24,6 +25,8 @@ const UserManagement = lazy(() => import("./pages/UserManagement"));
 const ContentModeration = lazy(() => import("./pages/ContentModeration"));
 const Sessions = lazy(() => import("./pages/Sessions"));
 const AIChat = lazy(() => import("./pages/AIChat"));
+const BreathingExercises = lazy(() => import("./pages/BreathingExercises"));
+const NotificationSettings = lazy(() => import("./components/settings/NotificationSettings"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -50,6 +53,8 @@ const App = () => (
                 <Route path="booking" element={<Booking />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="sessions" element={<Sessions />} />
+                <Route path="breathing" element={<BreathingExercises />} />
+                <Route path="notifications" element={<NotificationSettings />} />
                 <Route path="system" element={<SystemHealth />} />
                 <Route path="users" element={<UserManagement />} />
                 <Route path="moderation" element={<ContentModeration />} />
@@ -60,6 +65,7 @@ const App = () => (
             </Routes>
           </Suspense>
           <ChatWidget />
+          <NotificationContainer />
         </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
