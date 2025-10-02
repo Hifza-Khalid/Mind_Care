@@ -42,8 +42,8 @@ MInd_Care is a comprehensive mental health support platform designed to provide 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/MInd_Care.git
-   cd MInd_Care
+   git clone https://github.com/AbhishekChamp879/Mind_Care.git
+   cd Mind_Care
    ```
 
 2. **Install dependencies**
