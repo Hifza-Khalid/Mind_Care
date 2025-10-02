@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & Discussions
+    url: https://github.com/AbhishekChamp879/MInd_Care/discussions
+    about: Ask questions, share ideas, or start general discussions about the project
+  - name: 🔒 Security Issues
+    url: https://github.com/AbhishekChamp879/MInd_Care/security/advisories/new
+    about: Report security vulnerabilities privately
+  - name: 📧 Contact Maintainers
+    url: mailto:your-email@example.com
+    about: Direct contact with project maintainers for urgent matters
