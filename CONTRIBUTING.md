@@ -1,4 +1,4 @@
-# 🤝 Contributing to MInd_Care
+# 🤝 Contributing to Mind_Care
 
 Thank you for your interest in contributing to MInd_Care! We're excited to have you as part of our community working to make mental health support more accessible.
 
@@ -55,13 +55,6 @@ git checkout -b fix/issue-number
 
 ### Code Style
 We use ESLint and Prettier for consistent code formatting:
-
-```bash
-# Check linting
-bun run lint
-# or
-npm run lint
-```
 
 ### TypeScript
 - Use TypeScript for all new code
