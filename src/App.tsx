@@ -29,6 +29,7 @@ const BreathingExercises = lazy(() => import("./pages/BreathingExercises"));
 const NotificationSettings = lazy(() => import("./components/settings/NotificationSettings"));
 const EnhancedThemeSettings = lazy(() => import("./components/settings/EnhancedThemeSettings"));
 const QuickMoodShowcase = lazy(() => import("./components/dashboard/QuickMoodShowcase"));
+const FeedbackDemo = lazy(() => import("./pages/FeedbackDemo"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => (
                 <Route path="notifications" element={<NotificationSettings />} />
                 <Route path="theme-settings" element={<EnhancedThemeSettings />} />
                 <Route path="mood-showcase" element={<QuickMoodShowcase />} />
+                <Route path="feedback-demo" element={<FeedbackDemo />} />
                 <Route path="system" element={<SystemHealth />} />
                 <Route path="users" element={<UserManagement />} />
                 <Route path="moderation" element={<ContentModeration />} />
