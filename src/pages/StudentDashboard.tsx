@@ -40,6 +40,11 @@ import { useState, useEffect } from 'react';
 
 // Import new functional components
 import { MoodTracker } from '@/components/dashboard/MoodTracker';
+import QuickMoodCheckIn from '@/components/dashboard/QuickMoodCheckIn';
+import { MoodSummaryWidget, MoodTrendWidget, MoodStreakWidget, MoodWeeklyWidget } from '@/components/dashboard/MoodWidgets';
+import FloatingMoodButton from '@/components/dashboard/FloatingMoodButton';
+import QuickMoodHeader from '@/components/dashboard/QuickMoodHeader';
+import MoodAnalytics from '@/components/dashboard/MoodAnalytics';
 import { GoalsTracker } from '@/components/dashboard/GoalsTracker';
 import { ActivityTracker, AchievementTracker } from '@/components/dashboard/ActivityTracker';
 import { EnhancedDailyTips } from '@/components/dashboard/EnhancedDailyTips';
@@ -308,6 +313,38 @@ const StudentDashboard = () => {
           </div>
         </section>
 
+        {/* Quick Mood Check-in Section */}
+        <section className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-heading mb-2">Quick Mood Check-in</h2>
+            <p className="text-muted-foreground">One-tap mood logging for faster wellness tracking</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Quick Mood Check-in */}
+            <div className="md:col-span-2">
+              <QuickMoodCheckIn variant="default" showStreak={true} />
+            </div>
+            
+            {/* Mood Summary Widget */}
+            <MoodSummaryWidget />
+            
+            {/* Mood Streak Widget */}
+            <MoodStreakWidget />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Mood Trend Widget */}
+            <MoodTrendWidget />
+            
+            {/* Weekly Pattern */}
+            <MoodWeeklyWidget />
+            
+            {/* Mood Analytics */}
+            <MoodAnalytics timeframe="week" />
+          </div>
+        </section>
+
         {/* Enhanced Progress Dashboard with Functional Components */}
         <section className="space-y-6">
           <div className="text-center">
@@ -535,6 +572,9 @@ const StudentDashboard = () => {
           </div>
         </section>
       </div>
+      
+      {/* Floating Mood Button */}
+      <FloatingMoodButton position="bottom-right" showOnlyIfNotLogged={true} />
     </div>
   );
 };
