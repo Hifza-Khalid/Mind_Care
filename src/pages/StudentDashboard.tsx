@@ -23,6 +23,9 @@ import {
   Phone,
   Shield,
   Brain,
+  Wind,
+  Bell,
+  Settings,
   Smile,
   Activity,
   Moon,
@@ -335,6 +338,90 @@ const StudentDashboard = () => {
         {/* Enhanced Daily Wellness Tips - Now Fully Functional */}
         <section className="space-y-6">
           <EnhancedDailyTips />
+        </section>
+
+        {/* Quick Wellness Tools */}
+        <section className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-heading mb-2">Quick Wellness Tools</h2>
+            <p className="text-muted-foreground">Instant access to stress relief and wellness features</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Breathing Exercises */}
+            <Card className="enhanced-card group hover:shadow-aurora hover:-translate-y-1 transition-all duration-300 cursor-pointer border-blue-200/50">
+              <CardHeader className="text-center pb-4">
+                <div className="mb-4 p-4 rounded-2xl bg-gradient-to-br from-blue-100/50 to-blue-200/50 text-blue-600 border-blue-200/50 w-fit mx-auto group-hover:scale-110 transition-transform duration-300 shadow-soft">
+                  <Wind className="h-8 w-8" />
+                </div>
+                <CardTitle className="text-xl mb-2 group-hover:text-blue-600 transition-colors">
+                  Breathing Exercises
+                </CardTitle>
+                <CardDescription className="text-center leading-relaxed">
+                  Quick breathing techniques to reduce stress and improve focus
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-0 space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-blue-500 mr-2" />
+                    <span>4-7-8 breathing for anxiety</span>
+                  </div>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-blue-500 mr-2" />
+                    <span>Box breathing for focus</span>
+                  </div>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-blue-500 mr-2" />
+                    <span>Guided sessions (1-10 minutes)</span>
+                  </div>
+                </div>
+                <Button asChild className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
+                  <Link to="/app/breathing">
+                    <Wind className="h-4 w-4 mr-2" />
+                    Start Breathing Exercise
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Notification Settings */}
+            <Card className="enhanced-card group hover:shadow-aurora hover:-translate-y-1 transition-all duration-300 cursor-pointer border-purple-200/50">
+              <CardHeader className="text-center pb-4">
+                <div className="mb-4 p-4 rounded-2xl bg-gradient-to-br from-purple-100/50 to-purple-200/50 text-purple-600 border-purple-200/50 w-fit mx-auto group-hover:scale-110 transition-transform duration-300 shadow-soft">
+                  <Bell className="h-8 w-8" />
+                </div>
+                <CardTitle className="text-xl mb-2 group-hover:text-purple-600 transition-colors">
+                  Wellness Reminders
+                </CardTitle>
+                <CardDescription className="text-center leading-relaxed">
+                  Customize notifications for mood check-ins, breathing exercises, and more
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-0 space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
+                    <span>Daily mood reminders</span>
+                  </div>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
+                    <span>Breathing exercise alerts</span>
+                  </div>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
+                    <span>Session reminders</span>
+                  </div>
+                </div>
+                <Button asChild variant="outline" className="w-full border-purple-200 hover:bg-purple-50">
+                  <Link to="/app/notifications">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Manage Notifications
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
         {/* Quick Actions Bar */}

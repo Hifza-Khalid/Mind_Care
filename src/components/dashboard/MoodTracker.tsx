@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useMoodTracking } from '@/hooks/useDashboardFeatures';
 import { useRealTimeUpdates, useSmoothAnimations, useStreakTracking } from '@/hooks/useRealTimeFeatures';
 import { showRealTimeNotification, AnimatedCounter, ProgressFeedback } from '@/components/dashboard/RealTimeFeedback';
+import notificationService from '@/services/notificationService';
 import { Smile, Frown, Meh, Heart, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 const moodEmojis = {
@@ -39,6 +40,9 @@ export const MoodTracker = () => {
         // Update streak and trigger real-time updates
         const newStreak = updateStreak('mood_tracking');
         triggerUpdate('mood_logged', { mood: selectedMood, streak: newStreak });
+        
+        // Mark mood reminder notification as acted upon if present
+        notificationService.markNotificationAsActedUpon('mood-reminder');
         
         // Show success notification
         showRealTimeNotification('success', `Mood logged! ${moodEmojis[selectedMood as keyof typeof moodEmojis].label}`);
