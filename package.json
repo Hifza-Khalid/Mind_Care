@@ -1,8 +1,19 @@
 {
-  "name": "vite_react_shadcn_ts",
-  "private": true,
-  "version": "0.0.0",
+  "name": "mind-care",
+  "description": "A comprehensive mental health support platform built with React, TypeScript, and modern web technologies",
+  "version": "1.0.0",
   "type": "module",
+  "keywords": ["mental-health", "healthcare", "react", "typescript", "vite", "tailwind", "shadcn", "open-source", "hacktoberfest"],
+  "author": "Abhishek Kumar Giri",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AbhishekChamp879/MInd_Care.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AbhishekChamp879/MInd_Care/issues"
+  },
+  "homepage": "https://github.com/AbhishekChamp879/MInd_Care#readme",
  "scripts": {
   "dev": "vite",
   "build": "vite build",

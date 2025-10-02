@@ -683,7 +683,7 @@ const InstitutionSelection = () => {
 
   // Filter and sort institutions
   const filteredAndSortedInstitutions = useMemo(() => {
-    let filtered = institutions.filter(institution => {
+    const filtered = institutions.filter(institution => {
       const matchesSearch = institution.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
                            institution.location.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
                            institution.type.toLowerCase().includes(debouncedSearch.toLowerCase());

@@ -259,7 +259,7 @@ const ChatWidget = () => {
   // Action handlers for enhanced crisis intervention
   const handleAction = (action: {type: 'emergency' | 'counselor' | 'resources' | 'followup', label: string, urgent?: boolean}) => {
     switch (action.type) {
-      case 'emergency':
+      case 'emergency': {
         // Redirect to crisis helpline or emergency services
         const emergencyNumbers = {
           en: '988', // US Suicide & Crisis Lifeline
@@ -269,6 +269,7 @@ const ChatWidget = () => {
         const number = emergencyNumbers[selectedLanguage as keyof typeof emergencyNumbers] || emergencyNumbers.en;
         window.open(`tel:${number}`, '_blank');
         break;
+      }
         
       case 'counselor':
         // Navigate to booking page or open video call
@@ -285,7 +286,7 @@ const ChatWidget = () => {
         }));
         break;
         
-      case 'followup':
+      case 'followup': {
         // Add a follow-up message to continue the conversation
         const followUpMessage: Message = {
           id: Date.now().toString(),
@@ -296,6 +297,7 @@ const ChatWidget = () => {
         };
         setMessages(prev => [...prev, followUpMessage]);
         break;
+      }
     }
   };
 
@@ -370,8 +372,8 @@ const ChatWidget = () => {
     let severity: 'low' | 'medium' | 'high' | 'crisis' = 'low';
     let sentiment: 'positive' | 'neutral' | 'negative' = 'neutral';
     let confidence = 0;
-    let triggers: string[] = [];
-    let detectedRiskFactors: string[] = [];
+    const triggers: string[] = [];
+    const detectedRiskFactors: string[] = [];
 
     // Crisis detection with higher precision
     let crisisScore = 0;

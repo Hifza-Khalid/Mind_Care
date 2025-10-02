@@ -322,11 +322,12 @@ const Forum = () => {
           return b.likes - a.likes;
         case 'most-replies':
           return b.replies.length - a.replies.length;
-        case 'trending':
+        case 'trending': {
           // Simple trending algorithm based on recent activity and engagement
           const aScore = (a.likes * 2 + a.replies.length * 3 + a.views) / Math.max(1, (Date.now() - a.timestamp.getTime()) / (1000 * 60 * 60));
           const bScore = (b.likes * 2 + b.replies.length * 3 + b.views) / Math.max(1, (Date.now() - b.timestamp.getTime()) / (1000 * 60 * 60));
           return bScore - aScore;
+        }
         default: // newest
           return b.timestamp.getTime() - a.timestamp.getTime();
       }
@@ -811,8 +812,8 @@ const Forum = () => {
                       Report
                     </Button>
 
-                    {/* Moderation controls for admins/moderators */}
-                    {user?.role === 'admin' || user?.role === 'moderator' ? (
+                    {/* Moderation controls for admins/counselors */}
+                    {user?.role === 'admin' || user?.role === 'counselor' ? (
                       <>
                         <Button 
                           variant="ghost" 
@@ -853,7 +854,7 @@ const Forum = () => {
                 )}
 
                 {/* Moderation Panel */}
-                {showModeration && (user?.role === 'admin' || user?.role === 'moderator') && (
+                {showModeration && (user?.role === 'admin' || user?.role === 'counselor') && (
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-3">
                     <h4 className="font-medium text-red-800 mb-2">Moderation Actions</h4>
                     <div className="flex space-x-2">

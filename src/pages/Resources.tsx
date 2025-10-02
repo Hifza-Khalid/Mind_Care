@@ -418,7 +418,7 @@ const Resources = () => {
 
   // Enhanced filtering and search
   const filteredResources = useMemo(() => {
-    let filtered = mockResources.filter(resource => {
+    const filtered = mockResources.filter(resource => {
       const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            resource.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
