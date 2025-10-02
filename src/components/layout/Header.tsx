@@ -14,7 +14,9 @@ import {
   Calendar,
   BookOpen,
   Users,
-  BarChart
+  BarChart,
+  Palette,
+  Bell
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -139,6 +141,18 @@ const Header = () => {
                   <Link to="/app/profile" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
                     <User className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
                     <span className="font-medium">Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/app/notifications" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
+                    <Bell className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span className="font-medium">Notifications</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/app/theme-settings" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
+                    <Palette className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span className="font-medium">Theme & Reading</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
