@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import QuickMoodHeader from '@/components/dashboard/QuickMoodHeader';
 import { 
   Heart, 
   Menu, 
@@ -104,6 +105,13 @@ const Header = () => {
         )}
 
         <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* Quick Mood Header - Only for students */}
+          {user?.role === 'student' && (
+            <div className="hidden md:block">
+              <QuickMoodHeader variant="dropdown" showTrend={false} />
+            </div>
+          )}
+          
           {/* Theme Toggle */}
           <div className="hidden sm:block">
             <ThemeToggle />
