@@ -1,5 +1,6 @@
 /* Import modern UI enhancements */
 @import './styles/modern-ui.css';
+@import './styles/enhanced-theme.css';
 
 @tailwind base;
 @tailwind components;

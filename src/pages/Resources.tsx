@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ReadingModeButton from '@/components/ui/reading-mode-button';
+import { useTheme } from '@/contexts/ThemeContext';
 import { 
   BookOpen, 
   Play, 
@@ -406,6 +408,7 @@ const mockResources: Resource[] = [
 ];
 
 const Resources = () => {
+  const { settings } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof categories>('all');
   const [selectedLanguage, setSelectedLanguage] = useState<keyof typeof languages | 'all'>('all');
@@ -415,6 +418,18 @@ const Resources = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [bookmarkedOnly, setBookmarkedOnly] = useState(false);
   const [currentLanguageContext, setCurrentLanguageContext] = useState<keyof typeof languages>('english');
+
+  // Reading mode classes
+  const readingModeClasses = settings.readingMode?.enabled ? [
+    'reading-mode',
+    settings.readingMode.backgroundColor && `${settings.readingMode.backgroundColor}-bg`,
+    settings.readingMode.contrast === 'high' && 'reading-high-contrast',
+    settings.readingMode.warmColors && 'reading-warm-colors',
+    settings.readingMode.reducedMotion && 'reading-reduced-motion',
+    settings.readingMode.fontFamily && `font-${settings.readingMode.fontFamily}`,
+    settings.readingMode.fontSize && `text-${settings.readingMode.fontSize}`,
+    settings.readingMode.lineHeight && `leading-${settings.readingMode.lineHeight}`,
+  ].filter(Boolean).join(' ') : '';
 
   // Enhanced filtering and search
   const filteredResources = useMemo(() => {
@@ -504,13 +519,16 @@ const Resources = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses}`}>
       {/* Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 relative">
+        <div className="absolute top-0 right-0">
+          <ReadingModeButton />
+        </div>
         <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
           Psychoeducational Resources
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto reading-content">
           Evidence-based resources to support your mental health journey. All content is reviewed by licensed professionals.
         </p>
       </div>
