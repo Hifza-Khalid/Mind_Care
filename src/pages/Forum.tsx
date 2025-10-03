@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from '@/components/ui/sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   MessageCircle, 
@@ -353,7 +354,10 @@ const Forum = () => {
   }, [expandedPosts]);
 
   const handleCreatePost = () => {
-    if (!newPost.title.trim() || !newPost.content.trim()) return;
+    if (!newPost.title.trim() || !newPost.content.trim()) {
+      toast.error("Please fill in both title and content to create your post.");
+      return;
+    }
 
     const post: ForumPost = {
       id: Date.now().toString(),
@@ -375,10 +379,27 @@ const Forum = () => {
     setPosts([post, ...posts]);
     setNewPost({ title: '', content: '', category: 'General Discussion', isAnonymous: true, tags: '' });
     setShowNewPostForm(false);
+    
+    // Success notification
+    toast.success("Your post has been created successfully!", {
+      description: `"${post.title}" is now live in the ${post.category} category.`,
+      duration: 4000,
+      action: {
+        label: "View Post",
+        onClick: () => {
+          const postElement = document.getElementById(`post-${post.id}`);
+          if (postElement) {
+            postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }
+    });
   };
 
   const handleLikePost = (postId: string) => {
     const userId = user?.id || 'anonymous-user';
+    const targetPost = posts.find(post => post.id === postId);
+    const isCurrentlyLiked = targetPost?.likedBy.includes(userId);
     
     setPosts(prevPosts =>
       prevPosts.map(post => {
@@ -395,10 +416,25 @@ const Forum = () => {
         return post;
       })
     );
+
+    // Show feedback notification
+    if (isCurrentlyLiked) {
+      toast("Like removed", {
+        description: `You've unliked "${targetPost?.title}".`,
+        duration: 2000
+      });
+    } else {
+      toast.success("Post liked!", {
+        description: `You liked "${targetPost?.title}".`,
+        duration: 2000
+      });
+    }
   };
 
   const handleBookmarkPost = (postId: string) => {
     const userId = user?.id || 'anonymous-user';
+    const targetPost = posts.find(post => post.id === postId);
+    const isCurrentlyBookmarked = targetPost?.bookmarkedBy.includes(userId);
     
     setPosts(prevPosts =>
       prevPosts.map(post => {
@@ -414,10 +450,26 @@ const Forum = () => {
         return post;
       })
     );
+
+    // Show feedback notification
+    if (isCurrentlyBookmarked) {
+      toast("Bookmark removed", {
+        description: `"${targetPost?.title}" has been removed from your bookmarks.`,
+        duration: 2000
+      });
+    } else {
+      toast.success("Post bookmarked!", {
+        description: `"${targetPost?.title}" has been saved to your bookmarks.`,
+        duration: 2000
+      });
+    }
   };
 
   const handleReply = (postId: string) => {
-    if (!replyContent.trim()) return;
+    if (!replyContent.trim()) {
+      toast.error("Please enter a reply before submitting.");
+      return;
+    }
 
     const reply: ForumReply = {
       id: Date.now().toString(),
@@ -427,6 +479,9 @@ const Forum = () => {
       timestamp: new Date(),
       likes: 0
     };
+
+    // Find the post to get its title for the notification
+    const targetPost = posts.find(post => post.id === postId);
 
     setPosts(prevPosts =>
       prevPosts.map(post =>
@@ -439,6 +494,12 @@ const Forum = () => {
     setReplyContent('');
     setReplyingTo(null);
     setIsReplyAnonymous(true);
+
+    // Success notification for reply
+    toast.success("Reply posted successfully!", {
+      description: `Your response has been added to "${targetPost?.title || 'the discussion'}".`,
+      duration: 3000
+    });
   };
 
   const togglePostExpansion = (postId: string) => {
@@ -659,7 +720,7 @@ const Forum = () => {
           const isBookmarked = post.bookmarkedBy.includes(user?.id || 'anonymous-user');
           
           return (
-            <Card key={post.id} className="enhanced-card group hover:shadow-aurora transition-all duration-500">
+            <Card key={post.id} id={`post-${post.id}`} className="enhanced-card group hover:shadow-aurora transition-all duration-500">
               {post.isPinned && (
                 <div className="bg-gradient-primary text-primary-foreground px-4 py-2 rounded-t-lg">
                   <div className="flex items-center space-x-2 text-sm font-medium">
