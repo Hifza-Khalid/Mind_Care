@@ -31,6 +31,7 @@ const NotificationSettings = lazy(() => import("./components/settings/Notificati
 const EnhancedThemeSettings = lazy(() => import("./components/settings/EnhancedThemeSettings"));
 const QuickMoodShowcase = lazy(() => import("./components/dashboard/QuickMoodShowcase"));
 const FeedbackDemo = lazy(() => import("./pages/FeedbackDemo"));
+const About = lazy(() => import("./pages/About"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
           <BrowserRouter>
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <Routes>
+              <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login />} />
               <Route path="/select-institution" element={<InstitutionSelection />} />
               <Route path="/" element={<Index />} />
