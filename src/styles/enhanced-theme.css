@@ -1,22 +1,12 @@
-/* Enhanced Theme Styles */
+/* Simplified Theme Styles for Mental Health Platform */
 
-/* High Contrast Mode */
+/* Essential High Contrast Mode */
 .high-contrast {
   --background: 255 255 255;
   --foreground: 0 0 0;
   --primary: 0 0 0;
   --primary-foreground: 255 255 255;
-  --secondary: 240 240 240;
-  --secondary-foreground: 0 0 0;
-  --muted: 245 245 245;
-  --muted-foreground: 64 64 64;
-  --accent: 240 240 240;
-  --accent-foreground: 0 0 0;
-  --destructive: 220 20 60;
-  --destructive-foreground: 255 255 255;
   --border: 128 128 128;
-  --input: 240 240 240;
-  --ring: 0 0 0;
 }
 
 .dark.high-contrast {
@@ -24,27 +14,50 @@
   --foreground: 255 255 255;
   --primary: 255 255 255;
   --primary-foreground: 0 0 0;
-  --secondary: 32 32 32;
-  --secondary-foreground: 255 255 255;
-  --muted: 16 16 16;
-  --muted-foreground: 192 192 192;
-  --accent: 32 32 32;
-  --accent-foreground: 255 255 255;
-  --destructive: 255 69 58;
-  --destructive-foreground: 0 0 0;
   --border: 128 128 128;
-  --input: 32 32 32;
-  --ring: 255 255 255;
 }
 
-/* Blue Light Reduction */
-.reduce-blue-light {
-  filter: sepia(10%) saturate(90%) hue-rotate(320deg);
+/* Gentle reduced motion */
+.reduce-motion,
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
-/* Smooth Transitions */
-.smooth-transitions * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+/* Simple focus indicators for accessibility */
+.focus-visible:focus {
+  outline: 2px solid hsl(var(--primary)) !important;
+  outline-offset: 2px !important;
+}
+
+/* Basic link styling */
+a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .calm-card {
+    padding: 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
 }
 
 /* Reading Mode Styles */

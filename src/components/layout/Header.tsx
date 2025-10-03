@@ -70,20 +70,19 @@ const Header = () => {
   const navItems = getNavItems();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-white/5 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-glass-card">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm shadow-subtle">
       <div className="container flex h-20 items-center px-6">
         {/* Logo */}
         <Link 
           to="/" 
-          className="flex items-center space-x-3 mr-10 group transition-all duration-300 hover:scale-105"
+          className="flex items-center space-x-3 mr-10 group gentle-transition gentle-hover"
         >
           <div className="relative">
-            <div className="p-2 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 backdrop-blur-sm border border-primary/20 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300">
-              <Heart className="h-8 w-8 text-primary group-hover:scale-110 transition-transform duration-300" />
+            <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 group-hover:bg-primary/15 gentle-transition">
+              <Heart className="h-8 w-8 text-primary" />
             </div>
-            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-all duration-300" />
           </div>
-          <span className="hidden font-bold text-2xl sm:inline-block bg-gradient-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent">
+          <span className="hidden font-bold text-2xl sm:inline-block text-primary">
             MindBuddy
           </span>
         </Link>
@@ -95,9 +94,9 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-muted-foreground hover:text-primary hover:bg-white/10 hover:backdrop-blur-sm transition-all duration-200 group"
+                className="flex items-center space-x-2 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-accent gentle-transition"
               >
-                <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                <item.icon className="h-5 w-5" />
                 <span className="font-medium">{item.name}</span>
               </Link>
             ))}
@@ -121,7 +120,7 @@ const Header = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden relative rounded-xl bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-200"
+            className="lg:hidden relative rounded-lg bg-muted/50 hover:bg-muted gentle-transition"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -131,56 +130,56 @@ const Header = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-12 w-12 rounded-2xl bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:scale-105 transition-all duration-200 group">
-                  <User className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" />
+                <Button variant="ghost" className="relative h-12 w-12 rounded-lg bg-muted/50 hover:bg-muted gentle-transition">
+                  <User className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-64 bg-white/10 backdrop-blur-2xl border-white/20 shadow-floating rounded-2xl" align="end" forceMount>
+              <DropdownMenuContent className="w-64 bg-popover backdrop-blur-sm border-border shadow-card rounded-lg" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal p-4">
                   <div className="flex flex-col space-y-2">
                     <p className="text-base font-semibold leading-none text-foreground">{user.name}</p>
-                    <p className="text-sm leading-none text-muted-foreground capitalize bg-primary/10 px-2 py-1 rounded-lg inline-block w-fit">
+                    <p className="text-sm leading-none text-muted-foreground capitalize bg-primary/10 px-2 py-1 rounded-md inline-block w-fit">
                       {user.role}
                     </p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/app/profile" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
-                    <User className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                  <Link to="/app/profile" className="flex items-center p-3 rounded-lg hover:bg-accent focus:bg-accent gentle-transition">
+                    <User className="mr-3 h-5 w-5" />
                     <span className="font-medium">Profile</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/app/notifications" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
-                    <Bell className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                  <Link to="/app/notifications" className="flex items-center p-3 rounded-lg hover:bg-accent focus:bg-accent gentle-transition">
+                    <Bell className="mr-3 h-5 w-5" />
                     <span className="font-medium">Notifications</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/app/theme-settings" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
-                    <Palette className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                  <Link to="/app/theme-settings" className="flex items-center p-3 rounded-lg hover:bg-accent focus:bg-accent gentle-transition">
+                    <Palette className="mr-3 h-5 w-5" />
                     <span className="font-medium">Theme & Reading</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/app/settings" className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group">
-                    <Settings className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                  <Link to="/app/settings" className="flex items-center p-3 rounded-lg hover:bg-accent focus:bg-accent gentle-transition">
+                    <Settings className="mr-3 h-5 w-5" />
                     <span className="font-medium">Settings</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   onClick={logout}
-                  className="text-destructive hover:text-destructive-foreground hover:bg-destructive/10 p-3 rounded-xl transition-all duration-200 group"
+                  className="text-destructive hover:text-destructive-foreground hover:bg-destructive/10 p-3 rounded-lg gentle-transition"
                 >
-                  <LogOut className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                  <LogOut className="mr-3 h-5 w-5" />
                   <span className="font-medium">Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild variant="premium" size="lg" className="shadow-floating hover:shadow-premium">
+            <Button asChild variant="default" size="lg" className="shadow-sm hover:shadow-card">
               <Link to="/login" className="font-semibold">Get Started</Link>
             </Button>
           )}
@@ -189,7 +188,7 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-white/10 bg-white/5 backdrop-blur-2xl animate-slide-down">
+        <div className="lg:hidden border-t bg-background/80 backdrop-blur-sm fade-in">
           <div className="container py-6 px-6">
             {user ? (
               <nav className="flex flex-col space-y-3">
@@ -198,21 +197,21 @@ const Header = () => {
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 rounded-2xl text-base font-medium text-muted-foreground hover:text-primary hover:bg-white/10 hover:backdrop-blur-sm transition-all duration-200 group animate-fade-in"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium text-muted-foreground hover:text-primary hover:bg-accent gentle-transition fade-in"
                     style={{animationDelay: `${index * 50}ms`}}
                   >
-                    <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    <item.icon className="h-5 w-5" />
                     <span>{item.name}</span>
                   </Link>
                 ))}
-                <div className="pt-4 border-t border-white/10">
+                <div className="pt-4 border-t">
                   <ThemeToggle />
                 </div>
               </nav>
             ) : (
               <div className="flex flex-col space-y-4">
                 <ThemeToggle />
-                <Button asChild variant="premium" size="lg" className="w-full shadow-floating hover:shadow-premium">
+                <Button asChild variant="default" size="lg" className="w-full shadow-sm hover:shadow-card">
                   <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Get Started</Link>
                 </Button>
               </div>

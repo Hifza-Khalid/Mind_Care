@@ -147,10 +147,10 @@ export const EnhancedDailyTips = () => {
           return (
             <Card 
               key={`${tip.title}-${refreshCount}-${index}`}
-              className={`enhanced-card group cursor-pointer transition-all duration-300 animate-in slide-in-from-bottom ${
+              className={`calm-card group cursor-pointer gentle-transition ${
                 isCompleted 
-                  ? 'bg-gradient-to-br from-green-50 to-green-100/50 border-green-200 scale-95 opacity-90 hover:opacity-100' 
-                  : 'hover:shadow-soft hover:-translate-y-1 hover:scale-105'
+                  ? 'bg-success/5 border-success/20 opacity-90 hover:opacity-100' 
+                  : 'hover:shadow-card'
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -165,7 +165,7 @@ export const EnhancedDailyTips = () => {
                         e.stopPropagation();
                         removeTip(index);
                       }}
-                      className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                      className="opacity-0 group-hover:opacity-100 gentle-transition"
                       title="Mark as incomplete"
                     >
                       <X className="h-3 w-3 text-gray-400 hover:text-red-500" />

@@ -132,7 +132,7 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
                       size="sm"
                       onClick={() => handleQuickMoodLog(Number(value))}
                       disabled={isLogging}
-                      className={`h-12 w-full p-0 ${bgColor} transition-all duration-200 hover:scale-105`}
+                      className={`h-12 w-full p-0 ${bgColor} gentle-transition gentle-hover`}
                     >
                       <span className="text-xl">{emoji}</span>
                     </Button>
@@ -151,14 +151,14 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
 
   // Default variant
   return (
-    <Card className={`enhanced-card hover:shadow-medium transition-all duration-300 ${
-      isAnimating ? 'scale-105 shadow-lg' : ''
+    <Card className={`calm-card ${
+      isAnimating ? 'shadow-card' : ''
     } ${className}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className={`p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/20 transition-all duration-300 ${
-              isAnimating ? 'scale-110' : ''
+            <div className={`p-2 rounded-lg bg-primary/5 ${
+              isAnimating ? 'bg-primary/10' : ''
             }`}>
               <Heart className="h-5 w-5 text-primary" />
             </div>

@@ -137,11 +137,9 @@ export const RatingComponent: React.FC<RatingComponentProps> = ({
                 onMouseEnter={() => !disabled && setHoverValue(rating)}
                 onMouseLeave={() => !disabled && setHoverValue(0)}
                 disabled={disabled}
-                className={`text-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg p-2 ${
-                  disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-125'
-                } ${isActive || isHovered ? 'bg-primary/10 scale-110' : 'hover:bg-gray-100'} ${
-                  isAnimating && rating === value ? 'animate-bounce' : ''
-                }`}
+                className={`text-2xl gentle-transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg p-2 ${
+                  disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-muted'
+                } ${isActive || isHovered ? 'bg-primary/10' : 'hover:bg-muted'}`}
               >
                 {ratingEmojis[rating as keyof typeof ratingEmojis]}
               </button>
@@ -169,8 +167,8 @@ export const RatingComponent: React.FC<RatingComponentProps> = ({
                 onMouseEnter={() => !disabled && setHoverValue(rating)}
                 onMouseLeave={() => !disabled && setHoverValue(0)}
                 disabled={disabled}
-                className={`transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full p-2 ${
-                  disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:scale-110'
+                className={`gentle-transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full p-2 ${
+                  disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-muted'
                 } ${isActive ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'} ${
                   isAnimating && rating <= value ? 'animate-pulse' : ''
                 }`}
