@@ -29,7 +29,8 @@ import {
   Quote,
   Play
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ComponentType, SVGProps } from 'react';
+import type { User } from '@/types/auth';
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -111,7 +112,7 @@ const AnimatedCounter = ({ end, duration = 2, suffix = "" }: { end: number; dura
 };
 
 // Authenticated Landing Page for returning users
-const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelcomeBack: boolean }) => {
+const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: User; showWelcomeBack: boolean }) => {
   const navigate = useNavigate();
   
   const getDashboardPath = () => {
@@ -318,7 +319,7 @@ const GuestHomePage = () => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials.length]);
 
   return (
     <div className="min-h-screen">
@@ -602,37 +603,72 @@ const GuestHomePage = () => {
         </div>
       </section>
 
-      {/* Final CTA Section */}
+      {/* Final CTA Section (enhanced layout + illustration) */}
       <section className="py-20 px-4 bg-gradient-aurora text-white">
-        <div className="container mx-auto text-center">
-          <div className="max-w-3xl mx-auto space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-5xl font-bold">
-                Your Mental Health Journey Starts Today
-              </h2>
-              <p className="text-xl opacity-90 leading-relaxed">
-                Join thousands of students who have already taken the first step towards better mental health. 
-                No stigma, no judgment, just professional support when you need it most.
-              </p>
+        <div className="container mx-auto">
+          <div className="max-w-5xl mx-auto bg-gradient-to-br from-primary/12 via-primary/6 to-secondary/12 rounded-3xl p-6 md:p-12 shadow-aurora relative overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 text-white drop-shadow-md">
+                  Start Your Wellness Journey Today
+                </h2>
+
+                <p className="text-base md:text-lg opacity-95 leading-relaxed mb-6 text-white/95">
+                  Join thousands of students for stigma-free, confidential mental health support — instantly accessible and backed by licensed professionals.
+                </p>
+
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-white mr-3 shadow-sm">
+                      <CheckCircle className="h-4 w-4" />
+                    </span>
+                    <span className="text-sm text-white/90">24/7 AI-assisted support and crisis detection</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-white mr-3 shadow-sm">
+                      <Shield className="h-4 w-4" />
+                    </span>
+                    <span className="text-sm text-white/90">HIPAA-compliant privacy and secure sessions</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-white mr-3 shadow-sm">
+                      <UserCheck className="h-4 w-4" />
+                    </span>
+                    <span className="text-sm text-white/90">Licensed counselors and a supportive peer community</span>
+                  </li>
+                </ul>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button asChild size="xl" className="text-lg text-white align-middle px-8 py-4 rounded-full shadow-md">
+                    <Link to="/login" aria-label="Get started - free">
+                      Get Started — It's Free
+                    </Link>
+                  </Button>
+
+                  <Button asChild variant="outline" size="xl" className="text-lg border-white/40 text-white hover:bg-white/10 px-8 py-4 rounded-full">
+                    <Link to="/about" aria-label="Learn about our mission">
+                      Our Mission
+                      <Target className="ml-3 h-5 w-5 text-white/90" />
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="pt-6 text-xs opacity-80 text-white/90">
+                  <p>Available 24/7 • HIPAA Compliant • Licensed Professionals</p>
+                </div>
+              </div>
+
+              <div className="flex justify-center md:justify-end">
+                <img
+                  src={heroImage}
+                  alt="Wellness illustration"
+                  className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] object-cover rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                />
+              </div>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button asChild size="xl" variant="secondary" className="text-lg bg-white text-primary hover:bg-white/90">
-                <Link to="/login">
-                  Start Free Today
-                  <Heart className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="xl" className="text-lg border-white/30 text-white hover:bg-white/10">
-                <Link to="/about">
-                  Learn About Our Mission
-                  <Target className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-            
-            <div className="pt-8 text-sm opacity-75">
-              <p>Available 24/7 • HIPAA Compliant • Licensed Professionals</p>
+
+            <div className="absolute -top-6 -right-6 opacity-6 pointer-events-none">
+              <Heart className="h-44 w-44 text-white" />
             </div>
           </div>
         </div>
@@ -644,9 +680,9 @@ const GuestHomePage = () => {
 interface ActionCardProps {
   title: string;
   description: string;
-  icon: any;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
   href: string;
-  variant?: any;
+  variant?: string;
   badge?: string;
 }
 
@@ -677,7 +713,7 @@ const ActionCard = ({ title, description, icon: Icon, href, variant = "default",
 };
 
 interface FeatureCardProps {
-  icon: any;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
   badge: string;
