@@ -1,4 +1,4 @@
-# 🧠 MInd_Care - Mental Health Support Platform
+# 🧠 Mind_Care - Mental Health Support Platform
 
 [![Hacktoberfest 2025](https://img.shields.io/badge/Hacktoberfest-2025-orange.svg)](https://hacktoberfest.com/)
 [![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
