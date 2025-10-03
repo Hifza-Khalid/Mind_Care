@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitlele } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import heroImage from '@/assets/freepik__retouch__90823.png';
@@ -32,7 +32,6 @@ import { useState, useEffect } from 'react';
 
 const Index = () => {
   const { user, isLoading } = useAuth();
-  const navigate = useNavigate();
   const [showWelcomeBack, setShowWelcomeBack] = useState(false);
 
   // Check if user just logged in and should see a welcome back message
@@ -203,7 +202,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
                 <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-primary/20 to-primary/30 w-fit group-hover:scale-110 transition-transform duration-300">
                   <MessageCircle className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-xl">AI Chat Support</CardTitle>
+                <CardTitlele className="text-xl">AI Chat Support</CardTitlele>
                 <CardDescription>24/7 intelligent mental health assistance</CardDescription>
               </CardHeader>
               <CardContent>
@@ -218,7 +217,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
                 <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/30 w-fit group-hover:scale-110 transition-transform duration-300">
                   <Calendar className="h-8 w-8 text-secondary" />
                 </div>
-                <CardTitle className="text-xl">Book Session</CardTitle>
+                <CardTitlele className="text-xl">Book Session</CardTitlele>
                 <CardDescription>Schedule with professional counselors</CardDescription>
               </CardHeader>
               <CardContent>
@@ -233,7 +232,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
                 <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-accent/20 to-accent/30 w-fit group-hover:scale-110 transition-transform duration-300">
                   <BookOpen className="h-8 w-8 text-accent" />
                 </div>
-                <CardTitle className="text-xl">Resources</CardTitle>
+                <CardTitlele className="text-xl">Resources</CardTitlele>
                 <CardDescription>Self-help materials and wellness tools</CardDescription>
               </CardHeader>
               <CardContent>
@@ -248,7 +247,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
                 <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-purple-200 to-purple-300 w-fit group-hover:scale-110 transition-transform duration-300">
                   <Users className="h-8 w-8 text-purple-600" />
                 </div>
-                <CardTitle className="text-xl">Community</CardTitle>
+                <CardTitlele className="text-xl">Community</CardTitlele>
                 <CardDescription>Connect with supportive peer network</CardDescription>
               </CardHeader>
               <CardContent>
@@ -648,7 +647,7 @@ const ActionCard = ({ title, description, icon: Icon, href, variant = "default",
             </Badge>
           )}
         </div>
-        <CardTitle className="text-lg mt-3">{title}</CardTitle>
+        <CardTitlele className="text-lg mt-3">{title}</CardTitlele>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
@@ -678,7 +677,7 @@ const FeatureCard = ({ icon: Icon, title, description, badge, features }: Featur
         <Badge variant="secondary" className="absolute top-4 right-4 text-xs bg-gradient-primary text-white">
           {badge}
         </Badge>
-        <CardTitle className="text-xl mb-3">{title}</CardTitle>
+        <CardTitlele className="text-xl mb-3">{title}</CardTitlele>
         <CardDescription className="text-center leading-relaxed">{description}</CardDescription>
         
         {features && (
@@ -713,7 +712,7 @@ const StatsCard = ({ title, stats }: StatsCardProps) => {
   return (
     <Card className="enhanced-card">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-center">{title}</CardTitle>
+        <CardTitlele className="text-lg text-center">{title}</CardTitlele>
       </CardHeader>
       <CardContent className="space-y-3">
         {stats.map((stat, index) => (
