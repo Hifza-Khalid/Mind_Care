@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { MusicProvider } from "@/contexts/MusicContext";
 import Layout from "@/components/layout/Layout";
 import ChatWidget from "@/components/chat/ChatWidget";
 import NotificationContainer from "@/components/notifications/NotificationContainer";
@@ -38,10 +39,11 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <AuthProvider>
-        <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+        <MusicProvider>
+          <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -74,6 +76,7 @@ const App = () => (
           <NotificationContainer />
         </BrowserRouter>
         </TooltipProvider>
+        </MusicProvider>
       </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>

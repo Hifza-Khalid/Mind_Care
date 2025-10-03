@@ -17,7 +17,8 @@ import {
   Users,
   BarChart,
   Palette,
-  Bell
+  Bell,
+  Music2
 } from 'lucide-react';
 import {
   DropdownMenu,
