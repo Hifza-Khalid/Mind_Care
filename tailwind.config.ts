@@ -13,6 +13,9 @@ export default {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      sans: ['SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -120,6 +123,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        tilt: {
+          '0%, 100%': { transform: 'rotate(-1deg)' },
+          '50%': { transform: 'rotate(1deg)' },
+        },
         "accordion-down": {
           from: {
             height: "0",
@@ -175,6 +182,7 @@ export default {
         },
       },
       animation: {
+        'tilt': 'tilt 3s ease-in-out infinite',
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         // Modern UI animations
