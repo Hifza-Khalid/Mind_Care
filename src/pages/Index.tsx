@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import heroImage from '@/assets/freepik__retouch__90823.png';
 import { 
   MessageCircle, 
@@ -321,8 +322,24 @@ const GuestHomePage = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Guest Header with Theme Toggle */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center justify-between px-4">
+          <div className="flex items-center space-x-2">
+            <Heart className="h-8 w-8 text-primary" />
+            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">MindBuddy</span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            <Button asChild variant="default" className="bg-gradient-primary hover:shadow-glow">
+              <Link to="/login">Get Started</Link>
+            </Button>
+          </div>
+        </div>
+      </header>
+
       {/* Enhanced Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-mesh">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-mesh pt-16">
         <FloatingParticles />
         
         {/* Background Image with Overlay */}

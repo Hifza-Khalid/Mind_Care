@@ -188,26 +188,35 @@ const Header = () => {
       </div>
 
       {/* Mobile Navigation */}
-      {isMobileMenuOpen && user && (
+      {isMobileMenuOpen && (
         <div className="lg:hidden border-t border-white/10 bg-white/5 backdrop-blur-2xl animate-slide-down">
           <div className="container py-6 px-6">
-            <nav className="flex flex-col space-y-3">
-              {navItems.map((item, index) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3 rounded-2xl text-base font-medium text-muted-foreground hover:text-primary hover:bg-white/10 hover:backdrop-blur-sm transition-all duration-200 group animate-fade-in"
-                  style={{animationDelay: `${index * 50}ms`}}
-                >
-                  <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-              <div className="pt-4 border-t border-white/10">
+            {user ? (
+              <nav className="flex flex-col space-y-3">
+                {navItems.map((item, index) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-2xl text-base font-medium text-muted-foreground hover:text-primary hover:bg-white/10 hover:backdrop-blur-sm transition-all duration-200 group animate-fade-in"
+                    style={{animationDelay: `${index * 50}ms`}}
+                  >
+                    <item.icon className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span>{item.name}</span>
+                  </Link>
+                ))}
+                <div className="pt-4 border-t border-white/10">
+                  <ThemeToggle />
+                </div>
+              </nav>
+            ) : (
+              <div className="flex flex-col space-y-4">
                 <ThemeToggle />
+                <Button asChild variant="premium" size="lg" className="w-full shadow-floating hover:shadow-premium">
+                  <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>Get Started</Link>
+                </Button>
               </div>
-            </nav>
+            )}
           </div>
         </div>
       )}
