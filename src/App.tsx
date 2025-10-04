@@ -10,6 +10,7 @@ import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
 import { lazy, Suspense } from 'react';
+import ScrollToTop from "./components/layout/scrollToTop";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import('./pages/Index'));
@@ -84,6 +85,8 @@ const App = () => (
               </Suspense>
               <ChatWidget />
               <NotificationContainer />
+              {/* Scroll-to-Top button */}
+              <ScrollToTop />
             </BrowserRouter>
           </TooltipProvider>
         </MusicProvider>
