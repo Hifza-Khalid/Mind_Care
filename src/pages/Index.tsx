@@ -383,7 +383,11 @@ const GuestHomePage = () => {
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <Button asChild variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button
+              asChild
+              variant="default"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
               <Link to="/login">Get Started</Link>
             </Button>
           </div>
@@ -419,9 +423,7 @@ const GuestHomePage = () => {
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
               Your Mental Health
               <br />
-              <span className="bg-gradient-aurora bg-clip-text text-transparent">
-                Matters Most
-              </span>
+              <span className="bg-gradient-aurora bg-clip-text text-transparent">Matters Most</span>
             </h1>
 
             <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed">

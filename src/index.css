@@ -221,7 +221,8 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
     font-size: var(--font-size-lg);
   }
 
-  h5, h6 {
+  h5,
+  h6 {
     font-size: var(--font-size-base);
   }
 
@@ -288,8 +289,14 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
 
   /* Mobile responsive text */
   @media (max-width: 640px) {
-    h1 { font-size: var(--font-size-2xl); }
-    h2 { font-size: var(--font-size-xl); }
-    h3 { font-size: var(--font-size-lg); }
+    h1 {
+      font-size: var(--font-size-2xl);
+    }
+    h2 {
+      font-size: var(--font-size-xl);
+    }
+    h3 {
+      font-size: var(--font-size-lg);
+    }
   }
 }

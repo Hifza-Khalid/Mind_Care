@@ -70,8 +70,8 @@ export default {
           high: 'hsl(var(--severity-high))',
           crisis: 'hsl(var(--severity-crisis))',
         },
-        success: "hsl(var(--success))",
-        warning: "hsl(var(--warning))",
+        success: 'hsl(var(--success))',
+        warning: 'hsl(var(--warning))',
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',

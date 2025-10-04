@@ -83,9 +83,7 @@ const Header = () => {
               <Heart className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <span className="hidden font-bold text-2xl sm:inline-block text-primary">
-            MindBuddy
-          </span>
+          <span className="hidden font-bold text-2xl sm:inline-block text-primary">MindBuddy</span>
         </Link>
 
         {/* Desktop Navigation */}
