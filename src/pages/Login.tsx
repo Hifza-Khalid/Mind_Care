@@ -83,8 +83,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-calm p-4">
-      <div className="w-full max-w-md space-y-6">
+    // Make the main area fill the viewport so the footer sits below the
+    // fold and is visible only after scrolling.
+    <div className="flex flex-col bg-gradient-calm">
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md space-y-6">
         {/* Logo & Title */}
         <div className="text-center space-y-2">
           <Link to="/" className="flex items-center justify-center space-x-2 group">
@@ -216,12 +219,15 @@ const Login = () => {
         </Card>
 
         {/* Trust Indicators */}
-        <div className="text-center space-y-2 text-xs text-muted-foreground">
+        <div className="text-center space-y-2 text-sm md:text-base text-muted-foreground">
           <p>🔒 Your privacy is protected with end-to-end encryption</p>
           <p>💬 Confidential support available 24/7</p>
           <p>🏥 HIPAA compliant and stigma-free environment</p>
         </div>
-      </div>
+        </div>
+      </main>
+
+      {/* Footer should be outside the centered main area so it does not overlap */}
       <Footer />
     </div>
   );
