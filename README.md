@@ -35,6 +35,27 @@ Let’s make mental health support **accessible**, **inclusive**, and **tech-pow
 
 ---
 
+## Project Structure
+```
+MInd_Care/
+├── public/                 # Static assets
+├── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── chat/          # Chat-related components
+│   │   ├── dashboard/     # Dashboard widgets
+│   │   ├── layout/        # Layout components
+│   │   ├── ui/            # shadcn/ui components
+│   │   └── video/         # Video call components
+│   ├── contexts/          # React contexts
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility libraries
+│   ├── pages/             # Application pages
+│   ├── styles/            # Global styles
+│   └── types/             # TypeScript type definitions
+├── tailwind.config.ts     # Tailwind configuration
+├── vite.config.ts         # Vite configuration
+└── package.json           # Dependencies and scripts
+```
 ## **Core Features**
 
 | Category | Description |
@@ -113,11 +134,44 @@ Submit your PR to the main branch and wait for review!
 
 <p align="center"> <img src="https://img.shields.io/github/stars/AbhishekChamp879/Mind_Care?color=ff69b4&style=for-the-badge" /> <img src="https://img.shields.io/github/forks/AbhishekChamp879/Mind_Care?color=00bcd4&style=for-the-badge" /> <img src="https://img.shields.io/github/issues/AbhishekChamp879/Mind_Care?color=00e676&style=for-the-badge" />  <img src="https://img.shields.io/github/contributors/AbhishekChamp879/Mind_Care?color=9c27b0&style=for-the-badge" /> </p>
 
+---
+
+## 📜 License  
+<p>
+  This project is licensed under the  
+  <a href="LICENSE"><b>MIT License</b></a>  
+  - feel free to use, modify, and share with proper attribution.
+</p>
+
+---
+
+## 🤝 Support  
+<p 
+  If you find this project helpful, please consider  
+  <b>⭐By starring it on GitHub</b> and <b>contributing</b> to its growth.  
+</p>
+<p Have questions or ideas?<br>
+   <a href="https://github.com/AbhishekChamp879/Mind_Care/issues"><b>Open an Issue</b></a>  
+  or reach out to the maintainers directly!
+</p>
+
+---
+
 🙏 Acknowledgments
 
 Thanks to every contributor working to make mental health support accessible through open-source innovation.
 Special appreciation for Hacktoberfest participants - your contributions truly make a difference.
 
+
+
 <p align="center"> <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=00E676&center=true&vCenter=true&width=600&lines=Together%2C+we+build+for+a+healthier+future.;Happy+Hacktoberfest+💚" /> </p>
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&height=120&color=0:00E676,100:1E88E5&text=Together%20We%20Build%20For%20Better%20Minds!&fontColor=ffffff&fontSize=22&animation=twinkling&section=footer" alt="Footer Banner" />
+
+<br>
+
+<strong>🌼 “Together, we can make mental health support accessible to everyone!” 🌼</strong>  
 
 <p align="center"> <sub> Made with ❤️ by <b>Abhishek</b> and fellow contributors of the Mind_Care community.</sub> </p>
