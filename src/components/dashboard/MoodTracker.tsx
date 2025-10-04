@@ -153,7 +153,7 @@ export const MoodTracker = () => {
                       className={`p-3 rounded-lg border-2 transition-all duration-200 ${
                         selectedMood === Number(value)
                           ? 'border-primary bg-primary/10 scale-110'
-                          : 'border-gray-200 hover:border-gray-300 hover:scale-105'
+                          : 'border-gray-200 hover:border-primary'
                       }`}
                     >
                       <div className="text-2xl mb-1">{emoji}</div>
@@ -177,7 +177,7 @@ export const MoodTracker = () => {
                   <Button
                     onClick={handleMoodSubmit}
                     disabled={!selectedMood}
-                    className="flex-1 bg-gradient-primary hover:shadow-glow"
+                    className="flex-1 bg-primary"
                   >
                     Save Mood
                   </Button>
@@ -201,7 +201,7 @@ export const MoodTracker = () => {
       <CardContent className="space-y-4">
         <div className="space-y-3">
           {todayMood ? (
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">{moodEmojis[todayMood.mood].emoji}</span>
                 <div>
@@ -222,13 +222,13 @@ export const MoodTracker = () => {
           )}
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-lg transition-all duration-300 hover:scale-105">
+            <div className="text-center p-3 bg-muted rounded-lg">
               <div className="font-semibold text-primary">
                 <AnimatedCounter value={weeklyAverage || 0} duration={800} />
               </div>
               <div className="text-xs text-muted-foreground">Weekly Average</div>
             </div>
-            <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100/50 rounded-lg transition-all duration-300 hover:scale-105">
+            <div className="text-center p-3 bg-muted rounded-lg">
               <div className="flex items-center justify-center space-x-1 font-semibold text-primary">
                 {getTrendIcon()}
                 <span className="text-sm">{getTrendText()}</span>

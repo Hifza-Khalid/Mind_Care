@@ -51,7 +51,7 @@ const Index = () => {
   // Show loading spinner while auth is loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-mesh">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading MindBuddy...</p>
@@ -77,7 +77,7 @@ const FloatingParticles = () => {
       {particles.map((i) => (
         <div
           key={i}
-          className="absolute animate-float opacity-20"
+          className="absolute opacity-10"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
@@ -180,7 +180,7 @@ const AuthenticatedHomePage = ({
         <div className="container mx-auto px-4">
           <div className="text-center space-y-8">
             {showWelcomeBack && (
-              <Badge className="animate-pulse bg-gradient-primary text-white shadow-soft text-sm px-4 py-2">
+              <Badge className="bg-primary text-primary-foreground text-sm px-4 py-2">
                 <Heart className="h-4 w-4 mr-2" />
                 Welcome back to your wellness journey!
               </Badge>
@@ -241,24 +241,24 @@ const AuthenticatedHomePage = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="enhanced-card group hover:shadow-aurora transition-all duration-500">
+            <Card className="calm-card group">
               <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-primary/20 to-primary/30 w-fit group-hover:scale-110 transition-transform duration-300">
+                <div className="mx-auto mb-4 p-4 rounded-full bg-primary/10 w-fit">
                   <MessageCircle className="h-8 w-8 text-primary" />
                 </div>
                 <CardTitle className="text-xl">AI Chat Support</CardTitle>
                 <CardDescription>24/7 intelligent mental health assistance</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild className="w-full bg-gradient-primary hover:shadow-glow">
+                <Button asChild className="w-full bg-primary">
                   <Link to="/app/chat">Start Chatting</Link>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="enhanced-card group hover:shadow-aurora transition-all duration-500">
+            <Card className="calm-card group">
               <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/30 w-fit group-hover:scale-110 transition-transform duration-300">
+                <div className="mx-auto mb-4 p-4 rounded-full bg-secondary/10 w-fit">
                   <Calendar className="h-8 w-8 text-secondary" />
                 </div>
                 <CardTitle className="text-xl">Book Session</CardTitle>
@@ -271,10 +271,10 @@ const AuthenticatedHomePage = ({
               </CardContent>
             </Card>
 
-            <Card className="enhanced-card group hover:shadow-aurora transition-all duration-500">
+            <Card className="calm-card group">
               <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-accent/20 to-accent/30 w-fit group-hover:scale-110 transition-transform duration-300">
-                  <BookOpen className="h-8 w-8 text-accent" />
+                <div className="mx-auto mb-4 p-4 rounded-full bg-primary/10 w-fit">
+                  <BookOpen className="h-8 w-8 text-primary" />
                 </div>
                 <CardTitle className="text-xl">Resources</CardTitle>
                 <CardDescription>Self-help materials and wellness tools</CardDescription>
@@ -286,10 +286,10 @@ const AuthenticatedHomePage = ({
               </CardContent>
             </Card>
 
-            <Card className="enhanced-card group hover:shadow-aurora transition-all duration-500">
+            <Card className="calm-card group">
               <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-purple-200 to-purple-300 w-fit group-hover:scale-110 transition-transform duration-300">
-                  <Users className="h-8 w-8 text-purple-600" />
+                <div className="mx-auto mb-4 p-4 rounded-full bg-secondary/10 w-fit">
+                  <Users className="h-8 w-8 text-secondary" />
                 </div>
                 <CardTitle className="text-xl">Community</CardTitle>
                 <CardDescription>Connect with supportive peer network</CardDescription>
@@ -383,7 +383,7 @@ const GuestHomePage = () => {
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <Button asChild variant="default" className="bg-gradient-primary hover:shadow-glow">
+            <Button asChild variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90">
               <Link to="/login">Get Started</Link>
             </Button>
           </div>
@@ -391,7 +391,7 @@ const GuestHomePage = () => {
       </header>
 
       {/* Enhanced Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-mesh pt-16">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-24 pb-20 px-4 sm:px-6 lg:px-8 sm:pt-28 lg:pt-32 sm:pb-24 lg:pb-28">
         <FloatingParticles />
 
         {/* Background Image with Overlay */}
@@ -419,7 +419,7 @@ const GuestHomePage = () => {
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
               Your Mental Health
               <br />
-              <span className="bg-gradient-aurora bg-clip-text text-transparent animate-pulse">
+              <span className="bg-gradient-aurora bg-clip-text text-transparent">
                 Matters Most
               </span>
             </h1>
@@ -445,7 +445,7 @@ const GuestHomePage = () => {
           </div>
 
           {/* Enhanced Trust Indicators */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pt-6 sm:pt-8 pb-8 sm:pb-12 max-w-4xl mx-auto px-2 sm:px-4">
             {[
               { icon: Shield, text: 'HIPAA Compliant', desc: 'Privacy Protected' },
               { icon: Clock, text: '24/7 Available', desc: 'Always Here' },
@@ -464,7 +464,7 @@ const GuestHomePage = () => {
           </div>
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
             <ChevronDown className="h-6 w-6 text-primary" />
           </div>
         </div>
@@ -695,12 +695,12 @@ const GuestHomePage = () => {
       </section>
 
       {/* Final CTA Section (enhanced layout + illustration) */}
-      <section className="py-20 px-4 bg-gradient-aurora text-white">
+      <section className="py-20 px-4 bg-primary/5 dark:bg-primary/10">
         <div className="container mx-auto">
-          <div className="max-w-5xl mx-auto bg-gradient-to-br from-primary/12 via-primary/6 to-secondary/12 rounded-3xl p-6 md:p-12 shadow-aurora relative overflow-hidden">
+          <div className="max-w-5xl mx-auto bg-card border border-border rounded-3xl p-6 md:p-12 shadow-card relative overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 text-white drop-shadow-md">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 text-foreground">
                   Start Your Wellness Journey Today
                 </h2>
 
@@ -711,7 +711,7 @@ const GuestHomePage = () => {
 
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
-                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-white mr-3 shadow-sm">
+                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <CheckCircle className="h-4 w-4" />
                     </span>
                     <span className="text-sm text-white/90">
@@ -719,7 +719,7 @@ const GuestHomePage = () => {
                     </span>
                   </li>
                   <li className="flex items-start">
-                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-white mr-3 shadow-sm">
+                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <Shield className="h-4 w-4" />
                     </span>
                     <span className="text-sm text-white/90">
@@ -727,7 +727,7 @@ const GuestHomePage = () => {
                     </span>
                   </li>
                   <li className="flex items-start">
-                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-white mr-3 shadow-sm">
+                    <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <UserCheck className="h-4 w-4" />
                     </span>
                     <span className="text-sm text-white/90">
@@ -755,12 +755,12 @@ const GuestHomePage = () => {
                   >
                     <Link to="/about" aria-label="Learn about our mission">
                       Our Mission
-                      <Target className="ml-3 h-5 w-5 text-white/90" />
+                      <Target className="ml-3 h-5 w-5 text-muted-foreground" />
                     </Link>
                   </Button>
                 </div>
 
-                <div className="pt-6 text-xs opacity-80 text-white/90">
+                <div className="pt-6 text-xs text-muted-foreground">
                   <p>Available 24/7 • HIPAA Compliant • Licensed Professionals</p>
                 </div>
               </div>
@@ -769,13 +769,13 @@ const GuestHomePage = () => {
                 <img
                   src={heroImage}
                   alt="Wellness illustration"
-                  className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] object-cover rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                  className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] object-cover rounded-xl shadow-card gentle-transition gentle-hover"
                 />
               </div>
             </div>
 
-            <div className="absolute -top-6 -right-6 opacity-6 pointer-events-none">
-              <Heart className="h-44 w-44 text-white" />
+            <div className="absolute -top-6 -right-6 opacity-10 pointer-events-none">
+              <Heart className="h-44 w-44 text-primary/20" />
             </div>
           </div>
         </div>

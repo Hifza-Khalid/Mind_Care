@@ -130,24 +130,15 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
     --font-size-xl: 1.25rem;
     --font-size-2xl: 1.5rem;
     --font-size-3xl: 1.875rem;
-    --font-size-4xl: 2.25rem;
 
-    /* Spacing System */
-    --spacing-xs: 0.25rem;
+    /* Spacing System - Essential Only */
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
 
-    --radius: 0.75rem;
-    --radius-sm: 0.5rem;
-    --radius-lg: 1rem;
-    --radius-full: 9999px;
-
-    /* Destructive */
-    --destructive: 0 65% 58%;
-    --destructive-foreground: 0 0% 100%;
+    --radius: 0.5rem;
+    --radius-lg: 0.75rem;
   }
 
   .dark {
@@ -215,84 +206,56 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
-    background: linear-gradient(135deg, hsl(var(--heading)), hsl(var(--heading-light)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: var(--font-size-3xl);
   }
 
   h2 {
-    @apply text-2xl md:text-3xl lg:text-4xl;
+    font-size: var(--font-size-2xl);
   }
 
   h3 {
-    @apply text-xl md:text-2xl lg:text-3xl;
+    font-size: var(--font-size-xl);
   }
 
   h4 {
-    @apply text-lg md:text-xl lg:text-2xl;
+    font-size: var(--font-size-lg);
   }
 
-  h5 {
-    @apply text-base md:text-lg lg:text-xl;
+  h5, h6 {
+    font-size: var(--font-size-base);
   }
 
-  h6 {
-    @apply text-sm md:text-base lg:text-lg;
+  /* Simplified Card Styling */
+  .calm-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-gentle);
   }
 
-  /* Enhanced Card and Component Styling */
-  .enhanced-card {
-    @apply bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50;
-    @apply backdrop-blur-sm border border-border/60;
-    @apply shadow-soft hover:shadow-medium transition-all duration-300;
-    @apply hover:scale-[1.02] hover:-translate-y-1;
+  .calm-card:hover {
+    box-shadow: var(--shadow-subtle);
   }
 
-  /* Glass morphism effect */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  }
-
-  /* Improved animations */
+  /* Simple animations */
   .fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-  }
-
-  .slide-up {
-    animation: slideUp 0.8s ease-out forwards;
-  }
-
-  /* New floating animation for particles */
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+    animation: fadeIn 0.3s ease-out forwards;
   }
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(20px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
     }
   }
 
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Gentle focus states */
+  .focus-ring:focus {
+    outline: none;
+    box-shadow: var(--shadow-focus);
   }
 
   @keyframes float {
@@ -311,44 +274,22 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
     }
   }
 
-  /* Enhanced focus states */
-  .focus-enhanced:focus {
-    @apply outline-none ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
+  .btn-calm:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card);
   }
 
-  /* Improved button hover effects */
-  .btn-enhanced {
-    @apply transition-all duration-300 ease-in-out;
-    @apply hover:shadow-elegant hover:scale-105 active:scale-95;
-  }
-
-  /* Line clamp utilities for text overflow */
-  .line-clamp-1 {
+  /* Essential utilities */
+  .text-truncate {
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  .line-clamp-3 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-  }
-
-  /* Mobile specific utilities */
+  /* Mobile responsive text */
   @media (max-width: 640px) {
-    .mobile-text-sm {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-    }
+    h1 { font-size: var(--font-size-2xl); }
+    h2 { font-size: var(--font-size-xl); }
+    h3 { font-size: var(--font-size-lg); }
   }
 }

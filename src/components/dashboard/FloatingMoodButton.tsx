@@ -164,10 +164,10 @@ export const FloatingMoodButton: React.FC<FloatingMoodButtonProps> = ({
                       size="lg"
                       onClick={() => handleQuickMoodLog(Number(value))}
                       disabled={isLogging}
-                      className={`h-16 w-full p-0 ${bgColor} transition-all duration-200 hover:scale-105 focus:scale-105 group`}
+                      className={`h-16 w-full p-0 ${bgColor} gentle-transition gentle-hover group`}
                     >
                       <div className="text-center">
-                        <div className="text-2xl mb-1 group-hover:scale-110 transition-transform duration-200">
+                        <div className="text-2xl mb-1 group-hover:text-3xl gentle-transition">
                           {emoji}
                         </div>
                         <div className="text-xs font-medium">{label.split(' ')[0]}</div>
