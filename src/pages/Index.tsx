@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import Footer from '@/components/layout/Footer';
 import heroImage from '@/assets/freepik__retouch__90823.png';
 import {
   MessageCircle,
@@ -332,6 +333,7 @@ const AuthenticatedHomePage = ({
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
@@ -777,6 +779,7 @@ const GuestHomePage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
