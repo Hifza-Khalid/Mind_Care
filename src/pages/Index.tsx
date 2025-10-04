@@ -383,7 +383,7 @@ const GuestHomePage = () => {
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <Button asChild variant="default" className="bg-gradient-primary hover:shadow-glow">
+            <Button asChild variant="default" className="bg-gradient-primary hover:shadow-glow ">
               <Link to="/login">Get Started</Link>
             </Button>
           </div>
@@ -435,7 +435,7 @@ const GuestHomePage = () => {
             <Button
               asChild
               size="xl"
-              className="text-lg bg-gradient-primary hover:shadow-glow btn-enhanced"
+              className="text-lg bg-gradient-primary hover:shadow-glow btn-enhanced "
             >
               <Link to="/login">
                 Get Started Free
@@ -742,7 +742,7 @@ const GuestHomePage = () => {
                     size="xl"
                     className="text-lg text-white align-middle px-8 py-4 rounded-full shadow-md"
                   >
-                    <Link to="/login" aria-label="Get started - free">
+                    <Link to="/login" className='bg-gradient-primary' aria-label="Get started - free">
                       Get Started — It's Free
                     </Link>
                   </Button>

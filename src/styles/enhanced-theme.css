@@ -194,11 +194,16 @@
 }
 
 /* Reading Mode Link Styling */
-.reading-mode a {
+.reading-mode a:not([class*="bg-gradient-primary"]) {
   color: hsl(var(--primary)) !important;
   text-decoration: underline !important;
   text-decoration-thickness: 2px !important;
   text-underline-offset: 2px !important;
+}
+
+.reading-mode .bg-gradient-primary a {
+  color: hsl(var(--primary-foreground)) !important;
+  text-decoration: none !important;
 }
 
 .reading-mode a:hover {
@@ -310,6 +315,8 @@
   animation: reading-mode-enter 0.3s ease-out;
 }
 
+
+
 /* Responsive Reading Mode */
 @media (max-width: 768px) {
   .reading-mode .prose,
@@ -342,3 +349,4 @@
     border: none !important;
   }
 }
+
