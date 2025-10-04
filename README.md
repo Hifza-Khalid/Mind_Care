@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=rect&color=0:0d47a1,100:1976d2&height=150&section=header&text=MindCare%20-%20Hacktoberfest%202025&fontSize=35&fontColor=ffffff&animation=fadeIn" />
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=0:006400,100:00FF00&height=150&section=header&text=MindCare%20-%20Hacktoberfest%202025&fontSize=35&fontColor=ffffff&animation=fadeIn" />
 </p>
 
 <div align="center">
