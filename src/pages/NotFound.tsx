@@ -22,9 +22,7 @@ export default function NotFound() {
           </div>
 
           {/* Message */}
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Page Not Found
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Page Not Found</h2>
           <p className="text-lg text-slate-400 mb-8 max-w-md mx-auto">
             We couldn't find the page you're looking for. It might have been moved or doesn't exist.
           </p>
@@ -32,14 +30,14 @@ export default function NotFound() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
-              onClick={() => window.location.href = '/'}
+              onClick={() => (window.location.href = '/')}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-medium hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-cyan-500/50"
             >
               <Home className="w-5 h-5" />
               Back to Home
             </button>
             <button
-              onClick={() => window.location.href = '/contact'}
+              onClick={() => (window.location.href = '/contact')}
               className="flex items-center gap-2 px-6 py-3 bg-slate-700 rounded-lg font-medium hover:bg-slate-600 transition-all duration-300"
             >
               Contact Support
@@ -54,15 +52,24 @@ export default function NotFound() {
                 Home
               </a>
               <span className="text-slate-600">•</span>
-              <a href="/counseling" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">
+              <a
+                href="/counseling"
+                className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+              >
                 Counseling
               </a>
               <span className="text-slate-600">•</span>
-              <a href="/resources" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">
+              <a
+                href="/resources"
+                className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+              >
                 Resources
               </a>
               <span className="text-slate-600">•</span>
-              <a href="/community" className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors">
+              <a
+                href="/community"
+                className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+              >
                 Community
               </a>
             </div>

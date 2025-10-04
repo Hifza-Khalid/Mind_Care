@@ -33,7 +33,7 @@ const QuickMoodShowcase = lazy(() => import('./components/dashboard/QuickMoodSho
 const FeedbackDemo = lazy(() => import('./pages/FeedbackDemo'));
 const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
-const ContactUs = lazy(()=>import('./pages/ContactUs'))
+const ContactUs = lazy(() => import('./pages/ContactUs'));
 
 const queryClient = new QueryClient();
 
@@ -76,7 +76,7 @@ const App = () => (
                     <Route path="users" element={<UserManagement />} />
                     <Route path="moderation" element={<ContentModeration />} />
                     <Route path="chat" element={<AIChat />} />
-                  
+
                     <Route path="*" element={<NotFound />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   </Route>

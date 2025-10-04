@@ -7,7 +7,7 @@ export default function ContactUs() {
     email: '',
     subject: '',
     message: '',
-    category: 'general'
+    category: 'general',
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -17,10 +17,12 @@ export default function ContactUs() {
     setTimeout(() => setSubmitted(false), 5000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -33,7 +35,7 @@ export default function ContactUs() {
             <span className="text-xl font-semibold">MindBuddy</span>
           </div>
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={() => (window.location.href = '/')}
             className="text-slate-400 hover:text-white transition-colors"
           >
             Back to Home
@@ -46,7 +48,7 @@ export default function ContactUs() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Get In <span className="text-cyan-400">Touch</span>
@@ -65,7 +67,10 @@ export default function ContactUs() {
             </div>
             <h3 className="text-xl font-semibold mb-2">Email Us</h3>
             <p className="text-slate-400 text-sm mb-3">Get a response within 24 hours</p>
-            <a href="mailto:support@mindbuddy.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+            <a
+              href="mailto:support@mindbuddy.com"
+              className="text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
               support@mindbuddy.com
             </a>
           </div>
@@ -76,7 +81,10 @@ export default function ContactUs() {
             </div>
             <h3 className="text-xl font-semibold mb-2">Call Us</h3>
             <p className="text-slate-400 text-sm mb-3">Mon-Fri from 8am to 8pm</p>
-            <a href="tel:+1234567890" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+            <a
+              href="tel:+1234567890"
+              className="text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
               +1 (234) 567-890
             </a>
           </div>
@@ -96,7 +104,7 @@ export default function ContactUs() {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8">
             <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
-            
+
             {submitted ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -222,11 +230,15 @@ export default function ContactUs() {
               <div className="space-y-2">
                 <p className="text-sm">
                   <span className="font-medium">Crisis Hotline:</span>{' '}
-                  <a href="tel:988" className="text-cyan-400 hover:text-cyan-300">988</a>
+                  <a href="tel:988" className="text-cyan-400 hover:text-cyan-300">
+                    988
+                  </a>
                 </p>
                 <p className="text-sm">
                   <span className="font-medium">Emergency:</span>{' '}
-                  <a href="tel:911" className="text-cyan-400 hover:text-cyan-300">911</a>
+                  <a href="tel:911" className="text-cyan-400 hover:text-cyan-300">
+                    911
+                  </a>
                 </p>
               </div>
             </div>
@@ -238,8 +250,10 @@ export default function ContactUs() {
                 <div>
                   <p className="text-slate-300">MindBuddy Headquarters</p>
                   <p className="text-slate-400 text-sm">
-                    123 Wellness Street<br />
-                    San Francisco, CA 94102<br />
+                    123 Wellness Street
+                    <br />
+                    San Francisco, CA 94102
+                    <br />
                     United States
                   </p>
                 </div>
