@@ -182,7 +182,7 @@ export const EnhancedDailyTips = () => {
                         e.stopPropagation();
                         removeTip(index);
                       }}
-                      className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                      className="opacity-0 group-hover:opacity-100 gentle-transition"
                       title="Mark as incomplete"
                     >
                       <X className="h-3 w-3 text-gray-400 hover:text-red-500" />

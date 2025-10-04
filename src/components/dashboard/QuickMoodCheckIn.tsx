@@ -169,7 +169,7 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
                       size="sm"
                       onClick={() => handleQuickMoodLog(Number(value))}
                       disabled={isLogging}
-                      className={`h-12 w-full p-0 ${bgColor} transition-all duration-200 hover:scale-105`}
+                      className={`h-12 w-full p-0 ${bgColor} gentle-transition gentle-hover`}
                     >
                       <span className="text-xl">{emoji}</span>
                     </Button>

@@ -17,9 +17,9 @@ export function ThemeToggle() {
 
   const getThemeIcon = () => {
     if (actualTheme === 'dark') {
-      return <Moon className="h-6 w-6 rotate-0 scale-100 transition-all group-hover:scale-110" />;
+      return <Moon className="h-6 w-6 gentle-transition" />;
     }
-    return <Sun className="h-6 w-6 rotate-0 scale-100 transition-all group-hover:scale-110" />;
+    return <Sun className="h-6 w-6 gentle-transition" />;
   };
 
   return (
@@ -45,7 +45,7 @@ export function ThemeToggle() {
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Theme: {actualTheme}</span>
             {isScheduledTime && (
-              <Badge variant="outline" className="text-xs bg-blue-100 text-blue-800">
+              <Badge variant="outline" className="text-xs">
                 <Clock className="h-3 w-3 mr-1" />
                 Auto
               </Badge>
@@ -100,7 +100,7 @@ export function ThemeToggle() {
           <BookOpen className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
           <span className="font-medium">Reading Mode</span>
           {readingMode && (
-            <Badge variant="outline" className="ml-auto text-xs bg-green-100 text-green-800">
+            <Badge variant="outline" className="ml-auto text-xs">
               ON
             </Badge>
           )}
@@ -113,7 +113,7 @@ export function ThemeToggle() {
           className="p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group"
         >
           <Link to="/app/theme-settings">
-            <Settings className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+            <Settings className="mr-3 h-5 w-5" />
             <span className="font-medium">Advanced Settings</span>
           </Link>
         </DropdownMenuItem>
