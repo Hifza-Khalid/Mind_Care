@@ -33,6 +33,7 @@ const QuickMoodShowcase = lazy(() => import('./components/dashboard/QuickMoodSho
 const FeedbackDemo = lazy(() => import('./pages/FeedbackDemo'));
 const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const ContactUs = lazy(()=>import('./pages/ContactUs'))
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,8 @@ const App = () => (
                   <Route path="/login" element={<Login />} />
                   <Route path="/select-institution" element={<InstitutionSelection />} />
                   <Route path="/" element={<Index />} />
+                  <Route path="contact" element={<ContactUs />} />
+                  <Route path="*" element={<NotFound />} />
                   <Route path="/app" element={<Layout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="dashboard" element={<Dashboard />} />
@@ -73,8 +76,9 @@ const App = () => (
                     <Route path="users" element={<UserManagement />} />
                     <Route path="moderation" element={<ContentModeration />} />
                     <Route path="chat" element={<AIChat />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  
                     <Route path="*" element={<NotFound />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   </Route>
                 </Routes>
               </Suspense>
