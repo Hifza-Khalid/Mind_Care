@@ -83,11 +83,10 @@ const Login = () => {
   };
 
   return (
-    // Make the page a column that fills the viewport. The main content
-    // (centered card) will take available space and the Footer will sit
-    // at the bottom without overlapping.
-    <div className="min-h-screen flex flex-col bg-gradient-calm">
-      <main className="flex-1 flex items-center justify-center p-4">
+    // Make the main area fill the viewport so the footer sits below the
+    // fold and is visible only after scrolling.
+    <div className="flex flex-col bg-gradient-calm">
+      <main className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-md space-y-6">
         {/* Logo & Title */}
         <div className="text-center space-y-2">
