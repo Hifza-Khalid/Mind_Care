@@ -10,13 +10,7 @@ export type MusicTrack = {
   description: string;
 };
 
-export type MusicCategory = 
-  | 'nature'
-  | 'ambient'
-  | 'classical'
-  | 'meditation'
-  | 'lofi'
-  | 'binaural';
+export type MusicCategory = 'nature' | 'ambient' | 'classical' | 'meditation' | 'lofi' | 'binaural';
 
 export type MusicPlayerState = {
   isPlaying: boolean;
@@ -42,11 +36,11 @@ export const CALMING_MUSIC_TRACKS: MusicTrack[] = [
     icon: '🎧',
     color: 'bg-blue-500',
     description: 'Chill lo-fi beats for relaxation and focus',
-    url: '/music/lofi-study.mp3'
-  }
+    url: '/music/lofi-study.mp3',
+  },
 ];
 
 export const MUSIC_CATEGORIES: { label: string; value: MusicCategory; icon: string }[] = [
   { label: 'All', value: 'lofi', icon: '🌍' },
-  { label: 'Lo-Fi', value: 'lofi', icon: '🎧' }
+  { label: 'Lo-Fi', value: 'lofi', icon: '🎧' },
 ];

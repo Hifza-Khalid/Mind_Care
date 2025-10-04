@@ -15,16 +15,16 @@ const Layout = () => {
       <main className="flex-1">
         <Outlet />
       </main>
-      
+
       {/* Floating Chat Widget - only show for authenticated users */}
       {user && <ChatWidget />}
-      
+
       {/* Background Music Player - only show for authenticated users */}
       {user && <BackgroundMusicPlayer />}
-      
+
       {/* Achievement Notifications - only show for authenticated users */}
       {user && <AchievementNotificationManager />}
-      
+
       {/* Real-time Feedback Notifications - only show for authenticated users */}
       {user && <RealTimeNotificationManager />}
     </div>

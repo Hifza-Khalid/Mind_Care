@@ -4,17 +4,46 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useMoodTracking } from '@/hooks/useDashboardFeatures';
-import { useRealTimeUpdates, useSmoothAnimations, useStreakTracking } from '@/hooks/useRealTimeFeatures';
+import {
+  useRealTimeUpdates,
+  useSmoothAnimations,
+  useStreakTracking,
+} from '@/hooks/useRealTimeFeatures';
 import { showRealTimeNotification, AnimatedCounter } from '@/components/dashboard/RealTimeFeedback';
 import notificationService from '@/services/notificationService';
 import { Heart, Zap, Clock, CheckCircle2 } from 'lucide-react';
 
 const moodEmojis = {
-  1: { emoji: '😢', label: 'Very Sad', color: 'text-red-500', bgColor: 'bg-red-50 hover:bg-red-100' },
-  2: { emoji: '😕', label: 'Sad', color: 'text-orange-500', bgColor: 'bg-orange-50 hover:bg-orange-100' },
-  3: { emoji: '😐', label: 'Neutral', color: 'text-yellow-500', bgColor: 'bg-yellow-50 hover:bg-yellow-100' },
-  4: { emoji: '😊', label: 'Happy', color: 'text-green-500', bgColor: 'bg-green-50 hover:bg-green-100' },
-  5: { emoji: '😄', label: 'Very Happy', color: 'text-blue-500', bgColor: 'bg-blue-50 hover:bg-blue-100' }
+  1: {
+    emoji: '😢',
+    label: 'Very Sad',
+    color: 'text-red-500',
+    bgColor: 'bg-red-50 hover:bg-red-100',
+  },
+  2: {
+    emoji: '😕',
+    label: 'Sad',
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-50 hover:bg-orange-100',
+  },
+  3: {
+    emoji: '😐',
+    label: 'Neutral',
+    color: 'text-yellow-500',
+    bgColor: 'bg-yellow-50 hover:bg-yellow-100',
+  },
+  4: {
+    emoji: '😊',
+    label: 'Happy',
+    color: 'text-green-500',
+    bgColor: 'bg-green-50 hover:bg-green-100',
+  },
+  5: {
+    emoji: '😄',
+    label: 'Very Happy',
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-50 hover:bg-blue-100',
+  },
 };
 
 interface QuickMoodCheckInProps {
@@ -30,7 +59,7 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
   showStreak = true,
   showTitle = true,
   onMoodLogged,
-  className = ''
+  className = '',
 }) => {
   const { addMoodEntry, getTodayMood } = useMoodTracking();
   const { triggerUpdate } = useRealTimeUpdates();
@@ -43,23 +72,26 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
 
   const handleQuickMoodLog = async (mood: number) => {
     if (isLogging) return;
-    
+
     setIsLogging(true);
-    
+
     try {
       await smoothTransition(() => {
         addMoodEntry(mood);
-        
+
         // Update streak and trigger real-time updates
         const newStreak = updateStreak('mood_tracking');
         triggerUpdate('mood_logged', { mood: mood, streak: newStreak });
-        
+
         // Mark mood reminder notification as acted upon if present
         notificationService.markNotificationAsActedUpon('mood-reminder');
-        
+
         // Show success notification
-        showRealTimeNotification('success', `Mood logged! ${moodEmojis[mood as keyof typeof moodEmojis].label}`);
-        
+        showRealTimeNotification(
+          'success',
+          `Mood logged! ${moodEmojis[mood as keyof typeof moodEmojis].label}`
+        );
+
         // Check for streak milestones
         if (newStreak > 0 && newStreak % 3 === 0) {
           showRealTimeNotification('milestone', `🔥 ${newStreak} day mood tracking streak!`);
@@ -110,17 +142,22 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
               <span className="font-medium text-sm">Quick Mood Check</span>
             </div>
             {showStreak && moodStreak > 0 && (
-              <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">
+              <Badge
+                variant="outline"
+                className="text-xs bg-orange-50 text-orange-700 border-orange-200"
+              >
                 <Zap className="h-3 w-3 mr-1" />
                 <AnimatedCounter value={moodStreak} suffix=" day" />
               </Badge>
             )}
           </div>
-          
+
           {todayMood ? (
             <div className="flex items-center justify-center p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
               <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
-              <span className="text-sm font-medium">Today's mood: {moodEmojis[todayMood.mood].emoji} {moodEmojis[todayMood.mood].label}</span>
+              <span className="text-sm font-medium">
+                Today's mood: {moodEmojis[todayMood.mood].emoji} {moodEmojis[todayMood.mood].label}
+              </span>
             </div>
           ) : (
             <div className="grid grid-cols-5 gap-1">
@@ -151,15 +188,19 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
 
   // Default variant
   return (
-    <Card className={`enhanced-card hover:shadow-medium transition-all duration-300 ${
-      isAnimating ? 'scale-105 shadow-lg' : ''
-    } ${className}`}>
+    <Card
+      className={`enhanced-card hover:shadow-medium transition-all duration-300 ${
+        isAnimating ? 'scale-105 shadow-lg' : ''
+      } ${className}`}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className={`p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/20 transition-all duration-300 ${
-              isAnimating ? 'scale-110' : ''
-            }`}>
+            <div
+              className={`p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/20 transition-all duration-300 ${
+                isAnimating ? 'scale-110' : ''
+              }`}
+            >
               <Heart className="h-5 w-5 text-primary" />
             </div>
             {showTitle && (
@@ -169,16 +210,19 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
               </div>
             )}
           </div>
-          
+
           {showStreak && moodStreak > 0 && (
-            <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">
+            <Badge
+              variant="outline"
+              className="text-xs bg-orange-50 text-orange-700 border-orange-200"
+            >
               <Zap className="h-3 w-3 mr-1" />
               <AnimatedCounter value={moodStreak} suffix=" day streak" />
             </Badge>
           )}
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {todayMood ? (
           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
@@ -191,7 +235,10 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
                 </div>
                 <div className="flex items-center text-xs text-muted-foreground mt-1">
                   <Clock className="h-3 w-3 mr-1" />
-                  {new Date(todayMood.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(todayMood.timestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </div>
               </div>
             </div>
@@ -217,9 +264,7 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
                         <div className="text-2xl mb-1 group-hover:scale-110 transition-transform duration-200">
                           {emoji}
                         </div>
-                        <div className={`text-xs font-medium ${color}`}>
-                          {label}
-                        </div>
+                        <div className={`text-xs font-medium ${color}`}>{label}</div>
                       </div>
                     </Button>
                   </TooltipTrigger>
@@ -230,9 +275,7 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
               ))}
             </div>
             {isLogging && (
-              <div className="text-center text-sm text-muted-foreground">
-                Logging your mood...
-              </div>
+              <div className="text-center text-sm text-muted-foreground">Logging your mood...</div>
             )}
           </div>
         )}

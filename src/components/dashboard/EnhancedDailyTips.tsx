@@ -5,9 +5,20 @@ import { Badge } from '@/components/ui/badge';
 import { useDailyTips } from '@/hooks/useDashboardFeatures';
 import { useRealTimeUpdates, useSmoothAnimations } from '@/hooks/useRealTimeFeatures';
 import { ProgressFeedback, AnimatedCounter } from '@/components/dashboard/RealTimeFeedback';
-import { 
-  Target, Timer, Heart, Smile, Coffee, Moon, Brain, Activity, 
-  Lightbulb, RefreshCw, CheckCircle, X, Sparkles 
+import {
+  Target,
+  Timer,
+  Heart,
+  Smile,
+  Coffee,
+  Moon,
+  Brain,
+  Activity,
+  Lightbulb,
+  RefreshCw,
+  CheckCircle,
+  X,
+  Sparkles,
 } from 'lucide-react';
 
 const iconMap = {
@@ -18,14 +29,14 @@ const iconMap = {
   Coffee,
   Moon,
   Brain,
-  Activity
+  Activity,
 };
 
 const colorClasses = {
   primary: 'from-primary/10 to-primary/20 text-primary border-primary/20',
   secondary: 'from-secondary/10 to-secondary/20 text-secondary border-secondary/20',
   accent: 'from-accent/10 to-accent/20 text-accent border-accent/20',
-  success: 'from-green-100/50 to-green-200/50 text-green-600 border-green-200/50'
+  success: 'from-green-100/50 to-green-200/50 text-green-600 border-green-200/50',
 };
 
 interface CompletedTip {
@@ -37,16 +48,16 @@ export const EnhancedDailyTips = () => {
   const { getDailyTips } = useDailyTips();
   const { triggerUpdate } = useRealTimeUpdates();
   const { smoothTransition } = useSmoothAnimations();
-  
+
   const [completedTips, setCompletedTips] = useState<CompletedTip[]>(() => {
     const stored = localStorage.getItem('completed_daily_tips');
     const today = new Date().toDateString();
-    
+
     if (stored) {
       const parsed = JSON.parse(stored);
       // Filter out tips completed on previous days
-      return parsed.filter((tip: CompletedTip) => 
-        new Date(tip.completedAt).toDateString() === today
+      return parsed.filter(
+        (tip: CompletedTip) => new Date(tip.completedAt).toDateString() === today
       );
     }
     return [];
@@ -58,7 +69,7 @@ export const EnhancedDailyTips = () => {
   const markTipCompleted = async (tipIndex: number) => {
     const tipId = `${new Date().toDateString()}-${tipIndex}`;
     const newCompleted = [...completedTips, { id: tipId, completedAt: Date.now() }];
-    
+
     await smoothTransition(() => {
       setCompletedTips(newCompleted);
       localStorage.setItem('completed_daily_tips', JSON.stringify(newCompleted));
@@ -68,8 +79,8 @@ export const EnhancedDailyTips = () => {
 
   const removeTip = async (tipIndex: number) => {
     const tipId = `${new Date().toDateString()}-${tipIndex}`;
-    const newCompleted = completedTips.filter(tip => tip.id !== tipId);
-    
+    const newCompleted = completedTips.filter((tip) => tip.id !== tipId);
+
     await smoothTransition(() => {
       setCompletedTips(newCompleted);
       localStorage.setItem('completed_daily_tips', JSON.stringify(newCompleted));
@@ -79,11 +90,11 @@ export const EnhancedDailyTips = () => {
 
   const isTipCompleted = (tipIndex: number) => {
     const tipId = `${new Date().toDateString()}-${tipIndex}`;
-    return completedTips.some(tip => tip.id === tipId);
+    return completedTips.some((tip) => tip.id === tipId);
   };
 
   const refreshTips = () => {
-    setRefreshCount(prev => prev + 1);
+    setRefreshCount((prev) => prev + 1);
     triggerUpdate('tips_refreshed', { count: refreshCount + 1 });
   };
 
@@ -99,17 +110,23 @@ export const EnhancedDailyTips = () => {
             <span>Daily Wellness Tips</span>
           </h3>
           <p className="text-sm text-muted-foreground">
-            <AnimatedCounter value={completedCount} suffix={` of ${dailyTips.length} completed today`} />
+            <AnimatedCounter
+              value={completedCount}
+              suffix={` of ${dailyTips.length} completed today`}
+            />
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
-          <ProgressFeedback 
+          <ProgressFeedback
             progress={(completedCount / dailyTips.length) * 100}
             label={`${completedCount}/${dailyTips.length}`}
             isAnimating={completedCount > 0}
           />
-          <Badge variant="secondary" className="bg-gradient-to-r from-primary/10 to-secondary/10 animate-in slide-in-from-right duration-300">
+          <Badge
+            variant="secondary"
+            className="bg-gradient-to-r from-primary/10 to-secondary/10 animate-in slide-in-from-right duration-300"
+          >
             <Lightbulb className="h-3 w-3 mr-1" />
             {completedCount}/{dailyTips.length}
           </Badge>
@@ -128,7 +145,7 @@ export const EnhancedDailyTips = () => {
 
       {/* Enhanced Progress Bar with Animation */}
       <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-        <div 
+        <div
           className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-700 ease-out relative"
           style={{ width: `${(completedCount / dailyTips.length) * 100}%` }}
         >
@@ -143,13 +160,13 @@ export const EnhancedDailyTips = () => {
         {dailyTips.map((tip, index) => {
           const IconComponent = iconMap[tip.icon as keyof typeof iconMap];
           const isCompleted = isTipCompleted(index);
-          
+
           return (
-            <Card 
+            <Card
               key={`${tip.title}-${refreshCount}-${index}`}
               className={`enhanced-card group cursor-pointer transition-all duration-300 animate-in slide-in-from-bottom ${
-                isCompleted 
-                  ? 'bg-gradient-to-br from-green-50 to-green-100/50 border-green-200 scale-95 opacity-90 hover:opacity-100' 
+                isCompleted
+                  ? 'bg-gradient-to-br from-green-50 to-green-100/50 border-green-200 scale-95 opacity-90 hover:opacity-100'
                   : 'hover:shadow-soft hover:-translate-y-1 hover:scale-105'
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
@@ -172,33 +189,37 @@ export const EnhancedDailyTips = () => {
                     </button>
                   </>
                 )}
-                
-                <div 
+
+                <div
                   className="flex items-start space-x-3 h-full"
                   onClick={() => !isCompleted && markTipCompleted(index)}
                 >
-                  <div className={`p-2 rounded-xl bg-gradient-to-br ${colorClasses[tip.color as keyof typeof colorClasses]} flex-shrink-0 ${
-                    !isCompleted ? 'group-hover:scale-110 group-hover:rotate-3' : 'opacity-75'
-                  } transition-all duration-300`}>
+                  <div
+                    className={`p-2 rounded-xl bg-gradient-to-br ${colorClasses[tip.color as keyof typeof colorClasses]} flex-shrink-0 ${
+                      !isCompleted ? 'group-hover:scale-110 group-hover:rotate-3' : 'opacity-75'
+                    } transition-all duration-300`}
+                  >
                     <IconComponent className="h-5 w-5" />
                   </div>
-                  
+
                   <div className="space-y-1 min-w-0 flex-1">
-                    <h4 className={`font-semibold text-sm leading-tight transition-all duration-300 ${
-                      isCompleted 
-                        ? 'text-green-700 line-through' 
-                        : 'group-hover:text-primary'
-                    }`}>
+                    <h4
+                      className={`font-semibold text-sm leading-tight transition-all duration-300 ${
+                        isCompleted ? 'text-green-700 line-through' : 'group-hover:text-primary'
+                      }`}
+                    >
                       {tip.title}
                     </h4>
-                    <p className={`text-xs leading-relaxed transition-colors duration-300 ${
-                      isCompleted ? 'text-green-600' : 'text-muted-foreground'
-                    }`}>
+                    <p
+                      className={`text-xs leading-relaxed transition-colors duration-300 ${
+                        isCompleted ? 'text-green-600' : 'text-muted-foreground'
+                      }`}
+                    >
                       {tip.description}
                     </p>
                   </div>
                 </div>
-                
+
                 {!isCompleted && (
                   <div className="mt-3 pt-2 border-t border-gray-100">
                     <Button
@@ -241,11 +262,7 @@ export const EnhancedDailyTips = () => {
             <p className="text-sm text-green-600 mb-3">
               Great job prioritizing your wellness today! Come back tomorrow for new tips.
             </p>
-            <ProgressFeedback 
-              progress={100}
-              label="Perfect Day!"
-              isAnimating={true}
-            />
+            <ProgressFeedback progress={100} label="Perfect Day!" isAnimating={true} />
           </CardContent>
         </Card>
       )}

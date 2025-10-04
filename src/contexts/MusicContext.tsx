@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
-import { MusicTrack, MusicPlayerState, MusicPreferences, CALMING_MUSIC_TRACKS } from '@/types/music';
+import {
+  MusicTrack,
+  MusicPlayerState,
+  MusicPreferences,
+  CALMING_MUSIC_TRACKS,
+} from '@/types/music';
 
 interface MusicContextType {
   playerState: MusicPlayerState;
@@ -36,7 +41,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       autoPlay: false,
       defaultVolume: 30,
       lastPlayedTrackId: null,
-      enabled: true
+      enabled: true,
     };
   };
 
@@ -46,7 +51,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     currentTrack: null,
     volume: preferences.defaultVolume,
     isMuted: false,
-    isMinimized: true
+    isMinimized: true,
   });
 
   // HTML5 Audio element ref
@@ -58,15 +63,15 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audioRef.current = new Audio();
       audioRef.current.loop = true;
       audioRef.current.volume = preferences.defaultVolume / 100;
-      
+
       // Add event listeners
       audioRef.current.addEventListener('ended', () => {
-        setPlayerState(prev => ({ ...prev, isPlaying: false }));
+        setPlayerState((prev) => ({ ...prev, isPlaying: false }));
       });
-      
+
       audioRef.current.addEventListener('error', (e) => {
         console.error('Audio playback error:', e);
-        setPlayerState(prev => ({ ...prev, isPlaying: false }));
+        setPlayerState((prev) => ({ ...prev, isPlaying: false }));
       });
     }
 
@@ -94,53 +99,56 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [playerState.volume, playerState.isMuted]);
 
-  const playTrack = useCallback((track: MusicTrack) => {
-    if (!audioRef.current || !track.url) return;
+  const playTrack = useCallback(
+    (track: MusicTrack) => {
+      if (!audioRef.current || !track.url) return;
 
-    try {
-      // Stop current audio
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      
-      // Load new track
-      audioRef.current.src = track.url;
-      audioRef.current.volume = playerState.volume / 100;
-      audioRef.current.loop = true; // Ensure looping is enabled
-      
-      // Play the audio
-      const playPromise = audioRef.current.play();
-      
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setPlayerState(prev => ({
-              ...prev,
-              currentTrack: track,
-              isPlaying: true
-            }));
+      try {
+        // Stop current audio
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
 
-            setPreferences(prev => ({
-              ...prev,
-              lastPlayedTrackId: track.id
-            }));
-          })
-          .catch((error) => {
-            console.error('Error playing audio:', error);
-            setPlayerState(prev => ({ ...prev, isPlaying: false }));
-          });
+        // Load new track
+        audioRef.current.src = track.url;
+        audioRef.current.volume = playerState.volume / 100;
+        audioRef.current.loop = true; // Ensure looping is enabled
+
+        // Play the audio
+        const playPromise = audioRef.current.play();
+
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setPlayerState((prev) => ({
+                ...prev,
+                currentTrack: track,
+                isPlaying: true,
+              }));
+
+              setPreferences((prev) => ({
+                ...prev,
+                lastPlayedTrackId: track.id,
+              }));
+            })
+            .catch((error) => {
+              console.error('Error playing audio:', error);
+              setPlayerState((prev) => ({ ...prev, isPlaying: false }));
+            });
+        }
+      } catch (error) {
+        console.error('Error loading track:', error);
       }
-    } catch (error) {
-      console.error('Error loading track:', error);
-    }
-  }, [playerState.volume]);
+    },
+    [playerState.volume]
+  );
 
   const pauseMusic = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    setPlayerState(prev => ({
+    setPlayerState((prev) => ({
       ...prev,
-      isPlaying: false
+      isPlaying: false,
     }));
   }, []);
 
@@ -154,7 +162,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
-            setPlayerState(prev => ({ ...prev, isPlaying: true }));
+            setPlayerState((prev) => ({ ...prev, isPlaying: true }));
           })
           .catch((error) => {
             console.error('Error playing audio:', error);
@@ -169,70 +177,73 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setVolume = useCallback((volume: number) => {
     const newVolume = Math.max(0, Math.min(100, volume));
-    
+
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
     }
-    
-    setPlayerState(prev => ({
+
+    setPlayerState((prev) => ({
       ...prev,
       volume: newVolume,
-      isMuted: false
+      isMuted: false,
     }));
-    
-    setPreferences(prev => ({
+
+    setPreferences((prev) => ({
       ...prev,
-      defaultVolume: newVolume
+      defaultVolume: newVolume,
     }));
   }, []);
 
   const toggleMute = useCallback(() => {
-    setPlayerState(prev => ({
+    setPlayerState((prev) => ({
       ...prev,
-      isMuted: !prev.isMuted
+      isMuted: !prev.isMuted,
     }));
   }, []);
 
   const toggleMinimize = useCallback(() => {
-    setPlayerState(prev => ({
+    setPlayerState((prev) => ({
       ...prev,
-      isMinimized: !prev.isMinimized
+      isMinimized: !prev.isMinimized,
     }));
   }, []);
 
   const nextTrack = useCallback(() => {
-    const currentIndex = playerState.currentTrack 
-      ? CALMING_MUSIC_TRACKS.findIndex(t => t.id === playerState.currentTrack?.id)
+    const currentIndex = playerState.currentTrack
+      ? CALMING_MUSIC_TRACKS.findIndex((t) => t.id === playerState.currentTrack?.id)
       : -1;
-    
+
     const nextIndex = (currentIndex + 1) % CALMING_MUSIC_TRACKS.length;
     playTrack(CALMING_MUSIC_TRACKS[nextIndex]);
   }, [playerState.currentTrack, playTrack]);
 
   const previousTrack = useCallback(() => {
-    const currentIndex = playerState.currentTrack 
-      ? CALMING_MUSIC_TRACKS.findIndex(t => t.id === playerState.currentTrack?.id)
+    const currentIndex = playerState.currentTrack
+      ? CALMING_MUSIC_TRACKS.findIndex((t) => t.id === playerState.currentTrack?.id)
       : -1;
-    
+
     const prevIndex = currentIndex <= 0 ? CALMING_MUSIC_TRACKS.length - 1 : currentIndex - 1;
     playTrack(CALMING_MUSIC_TRACKS[prevIndex]);
   }, [playerState.currentTrack, playTrack]);
 
-  const setEnabled = useCallback((enabled: boolean) => {
-    setPreferences(prev => ({
-      ...prev,
-      enabled
-    }));
-    
-    if (!enabled && playerState.isPlaying) {
-      pauseMusic();
-    }
-  }, [playerState.isPlaying, pauseMusic]);
+  const setEnabled = useCallback(
+    (enabled: boolean) => {
+      setPreferences((prev) => ({
+        ...prev,
+        enabled,
+      }));
+
+      if (!enabled && playerState.isPlaying) {
+        pauseMusic();
+      }
+    },
+    [playerState.isPlaying, pauseMusic]
+  );
 
   const updatePreferences = useCallback((prefs: Partial<MusicPreferences>) => {
-    setPreferences(prev => ({
+    setPreferences((prev) => ({
       ...prev,
-      ...prefs
+      ...prefs,
     }));
   }, []);
 
@@ -249,7 +260,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     nextTrack,
     previousTrack,
     setEnabled,
-    updatePreferences
+    updatePreferences,
   };
 
   return <MusicContext.Provider value={value}>{children}</MusicContext.Provider>;

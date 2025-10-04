@@ -1,25 +1,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Play,
-  Pause,
-  Music2
-} from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Play, Pause, Music2 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useMusic } from '@/contexts/MusicContext';
 import { cn } from '@/lib/utils';
 
 export const BackgroundMusicPlayer: React.FC = () => {
-  const {
-    playerState,
-    preferences,
-    togglePlay
-  } = useMusic();
+  const { playerState, preferences, togglePlay } = useMusic();
 
   const { isPlaying, currentTrack } = playerState;
 
@@ -36,10 +23,12 @@ export const BackgroundMusicPlayer: React.FC = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="relative px-1">
-                <Music2 className={cn(
-                  "h-4 w-4 transition-all",
-                  isPlaying ? "text-primary" : "text-muted-foreground"
-                )} />
+                <Music2
+                  className={cn(
+                    'h-4 w-4 transition-all',
+                    isPlaying ? 'text-primary' : 'text-muted-foreground'
+                  )}
+                />
                 {isPlaying && (
                   <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                 )}
@@ -59,8 +48,8 @@ export const BackgroundMusicPlayer: React.FC = () => {
                 size="sm"
                 onClick={togglePlay}
                 className={cn(
-                  "h-8 w-8 p-0 rounded-full transition-all",
-                  isPlaying ? "bg-primary hover:bg-primary/90" : "bg-primary/20 hover:bg-primary/30"
+                  'h-8 w-8 p-0 rounded-full transition-all',
+                  isPlaying ? 'bg-primary hover:bg-primary/90' : 'bg-primary/20 hover:bg-primary/30'
                 )}
                 variant="ghost"
               >
@@ -82,11 +71,22 @@ export const BackgroundMusicPlayer: React.FC = () => {
           <div className="mt-1.5 text-center animate-in fade-in slide-in-from-bottom-1">
             <div className="inline-flex items-center gap-1.5 bg-black/70 backdrop-blur-sm px-2 py-0.5 rounded-full border border-white/10">
               <span className="flex gap-0.5">
-                <span className="w-0.5 h-2 bg-primary animate-pulse" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-0.5 h-2 bg-primary animate-pulse" style={{ animationDelay: '150ms' }}></span>
-                <span className="w-0.5 h-2 bg-primary animate-pulse" style={{ animationDelay: '300ms' }}></span>
+                <span
+                  className="w-0.5 h-2 bg-primary animate-pulse"
+                  style={{ animationDelay: '0ms' }}
+                ></span>
+                <span
+                  className="w-0.5 h-2 bg-primary animate-pulse"
+                  style={{ animationDelay: '150ms' }}
+                ></span>
+                <span
+                  className="w-0.5 h-2 bg-primary animate-pulse"
+                  style={{ animationDelay: '300ms' }}
+                ></span>
               </span>
-              <span className="text-[10px] font-medium text-white/90">{currentTrack.icon} {currentTrack.title}</span>
+              <span className="text-[10px] font-medium text-white/90">
+                {currentTrack.icon} {currentTrack.title}
+              </span>
             </div>
           </div>
         )}
