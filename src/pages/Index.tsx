@@ -462,11 +462,6 @@ const GuestHomePage = () => {
               </div>
             ))}
           </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-            <ChevronDown className="h-6 w-6 text-primary" />
-          </div>
         </div>
       </section>
 
