@@ -1,5 +1,22 @@
 import { Link } from 'react-router-dom';
-import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube, Shield, Lock, Users, MessageCircle, Calendar, BookOpen, Globe } from 'lucide-react';
+import {
+  Heart,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Shield,
+  Lock,
+  Users,
+  MessageCircle,
+  Calendar,
+  BookOpen,
+  Globe,
+} from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -51,10 +68,10 @@ const Footer = () => {
               </div>
               <span className="font-bold text-2xl text-primary">MindBuddy</span>
             </Link>
-            
+
             <p className="text-muted-foreground leading-relaxed max-w-sm">
-              Supporting students' mental health with AI-powered assistance, professional counseling, 
-              and a safe community environment.
+              Supporting students' mental health with AI-powered assistance, professional
+              counseling, and a safe community environment.
             </p>
 
             {/* Trust Indicators */}
@@ -125,7 +142,10 @@ const Footer = () => {
             <div className="pt-4 space-y-2">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <a href="mailto:support@mindbuddy.com" className="hover:text-primary gentle-transition">
+                <a
+                  href="mailto:support@mindbuddy.com"
+                  className="hover:text-primary gentle-transition"
+                >
                   support@mindbuddy.com
                 </a>
               </div>
@@ -194,13 +214,22 @@ const Footer = () => {
 
             {/* Additional Links */}
             <div className="flex items-center space-x-6 text-sm">
-              <Link to="/privacy" className="text-muted-foreground hover:text-primary gentle-transition">
+              <Link
+                to="/privacy"
+                className="text-muted-foreground hover:text-primary gentle-transition"
+              >
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-muted-foreground hover:text-primary gentle-transition">
+              <Link
+                to="/terms"
+                className="text-muted-foreground hover:text-primary gentle-transition"
+              >
                 Terms of Service
               </Link>
-              <Link to="/cookies" className="text-muted-foreground hover:text-primary gentle-transition">
+              <Link
+                to="/cookies"
+                className="text-muted-foreground hover:text-primary gentle-transition"
+              >
                 Cookie Policy
               </Link>
             </div>
