@@ -22,13 +22,19 @@ jobs:
                   ref: ${{ github.head_ref || github.ref_name }}
                   fetch-depth: 0
 
-            - name: Prettify code
-              uses: creyD/prettier_action@v4.6
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
               with:
-                  prettier_options: --write .
+                  node-version: '18'
+
+            - name: Install Prettier
+              run: npm install -g prettier
+
+            - name: Run Prettier
+              run: prettier --write .
 
             - name: commit changes
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              if: github.event_name == 'push'
               uses: stefanzweifel/git-auto-commit-action@v6
               with:
                   commit_message: "chore: format code with Prettier"
