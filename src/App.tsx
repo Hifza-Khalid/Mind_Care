@@ -35,6 +35,9 @@ const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 
+// ✅ New: MentalHealthBlog
+const MentalHealthBlog = lazy(() => import('./pages/MentalHealthBlog'));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -64,6 +67,7 @@ const App = () => (
                     <Route path="student-dashboard" element={<StudentDashboard />} />
                     <Route path="resources" element={<Resources />} />
                     <Route path="forum" element={<Forum />} />
+                    <Route path="blog" element={<MentalHealthBlog />} />
                     <Route path="booking" element={<Booking />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="sessions" element={<Sessions />} />

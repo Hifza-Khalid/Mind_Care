@@ -19,6 +19,8 @@ import {
   Palette,
   Bell,
   Music2,
+  FileText, // ✅ icon for blog
+  LucideIcon,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -29,14 +31,21 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+type NavItem = {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+};
+
 const Header = () => {
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const getNavItems = () => {
-    const baseItems = [
+  const getNavItems = (): NavItem[] => {
+    const baseItems: NavItem[] = [
       { name: 'Resources', href: '/app/resources', icon: BookOpen },
       { name: 'Forum', href: '/app/forum', icon: Users },
+      { name: 'Blog', href: '/app/blog', icon: FileText }, 
     ];
 
     if (user?.role === 'student') {
