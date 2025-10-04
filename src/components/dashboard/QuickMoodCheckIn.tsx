@@ -188,15 +188,6 @@ export const QuickMoodCheckIn: React.FC<QuickMoodCheckInProps> = ({
 
   // Default variant
   return (
-    <Card className={`calm-card ${
-      isAnimating ? 'shadow-card' : ''
-    } ${className}`}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className={`p-2 rounded-lg bg-primary/5 ${
-              isAnimating ? 'bg-primary/10' : ''
-            }`}>
     <Card
       className={`enhanced-card hover:shadow-medium transition-all duration-300 ${
         isAnimating ? 'scale-105 shadow-lg' : ''
