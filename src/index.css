@@ -9,7 +9,15 @@
 
 /* Apply SF Pro Display font to all elements */
 * {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    'SF Pro Display',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
 }
 
 /* MindBuddy Design System - Mental Health Platform
@@ -19,52 +27,103 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
 @layer base {
   :root {
     /* Font Family */
-    --font-sans: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    
-    /* Simplified Calming Color Palette */
-    --background: 210 20% 98%;        /* Clean off-white */
-    --foreground: 210 15% 20%;        /* Soft charcoal */
+    --font-sans:
+      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+      Arial, sans-serif;
 
-    /* Calming Primary - Soft Blue */
-    --primary: 210 60% 55%;           /* Calming blue */
-    --primary-foreground: 0 0% 100%;  /* White text on primary */
-    
-    /* Gentle Secondary - Sage Green */
-    --secondary: 150 30% 60%;         /* Soft sage green */
-    --secondary-foreground: 150 30% 15%; /* Dark green text */
-    
-    /* Minimal Accent - Warm Gray */
-    --accent: 30 10% 85%;             /* Warm light gray */
-    --accent-foreground: 30 10% 25%;  /* Dark warm gray text */
+    /* Core MindBuddy Colors - Ocean Coral Gold Theme */
+    --background: 200 20% 98%; /* Clean off-white with cool undertone */
+    --foreground: 200 15% 15%; /* Deep charcoal blue */
 
-    /* Simplified Neutral System */
-    --muted: 210 15% 95%;             /* Very light gray */
-    --muted-foreground: 210 10% 40%;  /* Medium gray */
-    --card: 210 20% 99%;              /* Almost white cards */
-    --card-foreground: 210 15% 20%;   /* Soft charcoal text */
-    --popover: 210 20% 99%;           /* Light popover */
-    --popover-foreground: 210 15% 20%; /* Soft charcoal text */
+    /* Heading Colors - Deep Ocean for Authority */
+    --heading: 200 85% 25%; /* Deep ocean blue for headings */
+    --heading-light: 200 75% 35%; /* Lighter ocean blue variant */
 
-    /* Minimal Interactive Elements */
-    --border: 210 15% 88%;            /* Soft border */
-    --input: 210 15% 96%;             /* Light input background */
-    --ring: 210 60% 55%;              /* Primary color for focus rings */
+    /* Primary colors - Deep Ocean Blue */
+    --primary: 200 85% 45%; /* Deep ocean blue #1B4D72 */
+    --primary-light: 200 75% 55%; /* Lighter ocean blue */
+    --primary-glow: 200 60% 75%; /* Light blue glow effect */
+    --primary-variant: 190 80% 50%; /* Teal-ocean variant */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
 
-    /* Essential Status Colors Only */
-    --success: 140 40% 55%;           /* Gentle green */
-    --warning: 35 60% 60%;            /* Soft amber */
-    --destructive: 0 50% 60%;         /* Soft red */
-    --destructive-foreground: 0 0% 100%;
+    /* Secondary colors - Living Coral */
+    --secondary: 16 85% 65%; /* Living coral #FF6F61 */
+    --secondary-light: 16 75% 72%; /* Lighter coral */
+    --secondary-variant: 25 75% 60%; /* Peach-coral variant */
+    --secondary-foreground: 0 0% 100%; /* White text on secondary */
 
-    /* Minimal Shadows Only */
-    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    /* Accent color - Golden Amber */
+    --accent: 45 90% 55%; /* Golden amber #F0B429 */
+    --accent-light: 45 85% 65%; /* Lighter golden amber */
+    --accent-variant: 35 85% 60%; /* Warm gold variant */
+    --accent-foreground: 200 15% 15%; /* Dark text on accent */
 
-    /* Calm Transitions */
-    --transition-gentle: all 0.2s ease;
+    /* Trust & Safety Colors */
+    --trust: 200 70% 45%; /* Ocean blue for trust */
+    --trust-foreground: 0 0% 100%;
+    --safety: 140 60% 45%; /* Forest green for safety */
+    --safety-foreground: 0 0% 100%;
 
-    /* Typography Scale - Simplified */
+    /* Neutral System */
+    --muted: 200 15% 94%; /* Cool light gray */
+    --muted-foreground: 200 10% 45%; /* Medium gray */
+    --card: 200 25% 99%; /* Very light cool white */
+    --card-foreground: 200 15% 15%; /* Updated to match new foreground */
+    --popover: 200 25% 99%; /* Cool white popover */
+    --popover-foreground: 200 15% 15%; /* Updated to match new foreground */
+
+    /* Interactive Elements */
+    --border: 200 20% 85%; /* Cool light border */
+    --input: 200 15% 96%; /* Cool input background */
+    --ring: 200 85% 45%; /* Primary color for focus rings */
+
+    /* Severity Indicators - Ocean Theme */
+    --severity-low: 140 50% 55%; /* Muted green for low severity */
+    --severity-medium: 35 75% 60%; /* Warm amber for medium */
+    --severity-high: 16 75% 60%; /* Coral for high severity */
+    --severity-crisis: 0 70% 50%; /* Deep red for crisis */
+
+    /* Enhanced gradients for beautiful visual effects - Ocean Coral Gold */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-variant)));
+    --gradient-secondary: linear-gradient(
+      135deg,
+      hsl(var(--secondary)),
+      hsl(var(--secondary-variant))
+    );
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-calm: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    --gradient-warm: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-variant)));
+    --gradient-aurora: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 50%,
+      hsl(var(--secondary)) 100%
+    );
+    --gradient-glass: linear-gradient(
+      135deg,
+      rgba(240, 248, 255, 0.1) 0%,
+      rgba(240, 248, 255, 0.05) 100%
+    );
+    --gradient-mesh:
+      radial-gradient(circle at 20% 80%, hsl(var(--primary) / 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--accent) / 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, hsl(var(--secondary) / 0.1) 0%, transparent 50%);
+
+    /* Enhanced shadow system */
+    --shadow-soft: 0 2px 12px -2px hsl(var(--foreground) / 0.08);
+    --shadow-medium: 0 6px 20px -4px hsl(var(--foreground) / 0.12);
+    --shadow-strong: 0 12px 40px -8px hsl(var(--foreground) / 0.16);
+    --shadow-elegant: 0 15px 40px -10px hsl(var(--primary) / 0.25);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.3);
+    --shadow-aurora: 0 8px 32px -8px hsl(var(--accent) / 0.4);
+    --shadow-glass: 0 8px 32px -8px rgba(31, 38, 135, 0.37);
+
+    /* Animations & Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Typography Scale */
+    --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.125rem;
@@ -83,31 +142,43 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
   }
 
   .dark {
-    --background: 210 25% 10%;        /* Dark blue-gray background */
-    --foreground: 210 15% 85%;        /* Light text */
+    --background: 200 25% 8%; /* Deep ocean dark background */
+    --foreground: 200 15% 90%; /* Light cool text */
 
-    --primary: 210 60% 65%;           /* Lighter blue for dark mode */
-    --primary-foreground: 210 25% 10%; /* Dark background as text */
+    /* Dark mode heading colors - Ocean theme */
+    --heading: 200 60% 70%; /* Ocean blue for dark mode headers */
+    --heading-light: 200 50% 60%; /* Lighter ocean blue */
 
-    --secondary: 150 25% 55%;         /* Muted sage for dark mode */
-    --secondary-foreground: 150 25% 15%; /* Dark text */
+    --primary: 200 70% 55%; /* Brighter ocean for dark mode */
+    --primary-foreground: 200 25% 8%; /* Dark background as text */
+    --primary-light: 200 50% 35%; /* Darker ocean variant */
+    --primary-glow: 200 55% 40%; /* Ocean glow for dark */
 
-    --accent: 30 8% 20%;              /* Dark warm gray */
-    --accent-foreground: 30 8% 80%;   /* Light warm gray text */
+    --secondary: 16 70% 60%; /* Brighter coral for dark mode */
+    --secondary-foreground: 200 25% 8%; /* Dark background as text */
+    --secondary-light: 16 45% 35%; /* Darker coral variant */
 
-    --muted: 210 15% 15%;             /* Dark muted */
-    --muted-foreground: 210 10% 60%;  /* Light muted text */
-    --card: 210 20% 12%;              /* Dark card */
-    --card-foreground: 210 15% 85%;   /* Light text on card */
-    --popover: 210 20% 12%;           /* Dark popover */
-    --popover-foreground: 210 15% 85%; /* Light text on popover */
+    --accent: 45 80% 60%; /* Brighter gold for dark mode */
+    --accent-foreground: 200 25% 8%; /* Dark background as text */
+    --accent-light: 45 55% 35%; /* Darker gold variant */
 
-    --border: 210 15% 20%;            /* Dark border */
-    --input: 210 15% 18%;             /* Dark input */
-    --ring: 210 60% 65%;              /* Primary color for focus rings */
+    --muted: 200 20% 12%; /* Cool dark muted */
+    --muted-foreground: 200 10% 65%; /* Cool muted text */
+    --card: 200 20% 10%; /* Cool dark card */
+    --card-foreground: 200 15% 90%; /* Light text on card */
+    --popover: 200 20% 10%; /* Cool dark popover */
+    --popover-foreground: 200 15% 90%; /* Light text on popover */
 
-    --destructive: 0 50% 70%;         /* Softer destructive for dark */
+    --border: 200 15% 20%; /* Cool dark border */
+    --input: 200 15% 15%; /* Cool dark input */
+    --ring: 200 70% 55%; /* Primary color for focus rings */
+
+    --destructive: 0 60% 60%; /* Softer destructive for dark */
     --destructive-foreground: 0 0% 100%;
+
+    /* Dark mode trust and safety colors */
+    --trust: 200 55% 50%; /* Ocean blue trust for dark */
+    --safety: 140 45% 45%; /* Forest green safety for dark */
   }
 }
 
@@ -118,15 +189,20 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
-  /* Simplified Heading Styles */
-  h1, h2, h3, h4, h5, h6 {
-    color: hsl(var(--foreground));
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
+  /* Enhanced Heading Styles - Dark Blue Theme */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: hsl(var(--heading));
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
   }
 
   h1 {
@@ -182,9 +258,20 @@ All colors MUST be HSL. Calming, accessible, stigma-free design.
     box-shadow: var(--shadow-focus);
   }
 
-  /* Simplified button effects */
-  .btn-calm {
-    transition: var(--transition-gentle);
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-20px) rotate(90deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(180deg);
+    }
+    75% {
+      transform: translateY(-30px) rotate(270deg);
+    }
   }
 
   .btn-calm:hover {

@@ -51,13 +51,12 @@ a:hover {
   }
 }
 
-/* Print styles */
-@media print {
-  * {
-    background: white !important;
-    color: black !important;
-    box-shadow: none !important;
-  }
+/* Smooth Transitions */
+.smooth-transitions * {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Reading Mode Styles */
@@ -194,7 +193,7 @@ a:hover {
 }
 
 .reading-mode.leading-loose {
-  --reading-line-height: 2.0;
+  --reading-line-height: 2;
 }
 
 /* Reading Mode Focus Indicators */
@@ -328,7 +327,7 @@ a:hover {
     padding: 1rem !important;
     font-size: calc(var(--reading-font-size) * 0.9) !important;
   }
-  
+
   .reading-mode-toggle {
     right: 0.5rem;
     width: 40px;
@@ -342,11 +341,11 @@ a:hover {
     background: white !important;
     color: black !important;
   }
-  
+
   .reading-mode-toggle {
     display: none !important;
   }
-  
+
   .reading-mode .reading-content {
     box-shadow: none !important;
     border: none !important;

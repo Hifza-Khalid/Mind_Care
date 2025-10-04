@@ -5,13 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import heroImage from '@/assets/freepik__retouch__90823.png';
-import { 
-  MessageCircle, 
-  Calendar, 
-  BookOpen, 
-  Users, 
-  Shield, 
-  Lock, 
+import {
+  MessageCircle,
+  Calendar,
+  BookOpen,
+  Users,
+  Shield,
+  Lock,
   Heart,
   CheckCircle,
   Phone,
@@ -27,7 +27,7 @@ import {
   Sparkles,
   ArrowRight,
   Quote,
-  Play
+  Play,
 } from 'lucide-react';
 import { useState, useEffect, ComponentType, SVGProps } from 'react';
 import type { User } from '@/types/auth';
@@ -61,13 +61,17 @@ const Index = () => {
   }
 
   // Always show the landing page, but customize content based on auth status
-  return user ? <AuthenticatedHomePage user={user} showWelcomeBack={showWelcomeBack} /> : <GuestHomePage />;
+  return user ? (
+    <AuthenticatedHomePage user={user} showWelcomeBack={showWelcomeBack} />
+  ) : (
+    <GuestHomePage />
+  );
 };
 
 // Floating particles component
 const FloatingParticles = () => {
   const particles = Array.from({ length: 12 }, (_, i) => i);
-  
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {particles.map((i) => (
@@ -89,7 +93,15 @@ const FloatingParticles = () => {
 };
 
 // Animated counter component
-const AnimatedCounter = ({ end, duration = 2, suffix = "" }: { end: number; duration?: number; suffix?: string }) => {
+const AnimatedCounter = ({
+  end,
+  duration = 2,
+  suffix = '',
+}: {
+  end: number;
+  duration?: number;
+  suffix?: string;
+}) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -108,35 +120,54 @@ const AnimatedCounter = ({ end, duration = 2, suffix = "" }: { end: number; dura
     return () => clearInterval(timer);
   }, [end, duration]);
 
-  return <span>{count}{suffix}</span>;
+  return (
+    <span>
+      {count}
+      {suffix}
+    </span>
+  );
 };
 
 // Authenticated Landing Page for returning users
-const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: User; showWelcomeBack: boolean }) => {
+const AuthenticatedHomePage = ({
+  user,
+  showWelcomeBack,
+}: {
+  user: User;
+  showWelcomeBack: boolean;
+}) => {
   const navigate = useNavigate();
-  
+
   const getDashboardPath = () => {
     switch (user.role) {
-      case 'student': return '/app/student-dashboard';
-      case 'counselor': return '/app/sessions';
-      case 'admin': return '/app/dashboard';
-      default: return '/app/dashboard';
+      case 'student':
+        return '/app/student-dashboard';
+      case 'counselor':
+        return '/app/sessions';
+      case 'admin':
+        return '/app/dashboard';
+      default:
+        return '/app/dashboard';
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-mesh">
       <FloatingParticles />
-      
+
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">MindBuddy</span>
+            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              MindBuddy
+            </span>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">Welcome back, {user.name.split(' ')[0]}</span>
+            <span className="text-sm text-muted-foreground">
+              Welcome back, {user.name.split(' ')[0]}
+            </span>
             <Button asChild className="bg-gradient-primary hover:shadow-glow">
               <Link to={getDashboardPath()}>Go to Dashboard</Link>
             </Button>
@@ -154,7 +185,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: User; showWelc
                 Welcome back to your wellness journey!
               </Badge>
             )}
-            
+
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="text-heading">Ready to continue your</span>
@@ -163,20 +194,29 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: User; showWelc
                   mental wellness journey?
                 </span>
               </h1>
-              
+
               <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Your personalized mental health support system is ready. Access AI chat, book sessions, 
-                and connect with your supportive community.
+                Your personalized mental health support system is ready. Access AI chat, book
+                sessions, and connect with your supportive community.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-                <Button asChild size="lg" className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-4 rounded-full">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-4 rounded-full"
+                >
                   <Link to={getDashboardPath()}>
                     Go to My Dashboard
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4 rounded-full">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 py-4 rounded-full"
+                >
                   <Link to="/app/chat">
                     <MessageCircle className="mr-2 h-5 w-5" />
                     Quick AI Chat
@@ -192,12 +232,14 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: User; showWelc
       <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-4">Your Wellness Tools</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-4">
+              Your Wellness Tools
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Quick access to all your mental health resources
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <Card className="calm-card group">
               <CardHeader className="text-center">
@@ -278,7 +320,11 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: User; showWelc
                 <Phone className="mr-2 h-5 w-5" />
                 Crisis Line: 988
               </Button>
-              <Button variant="outline" size="lg" className="border-red-300 text-red-700 hover:bg-red-50 text-lg px-8">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-red-300 text-red-700 hover:bg-red-50 text-lg px-8"
+              >
                 <MessageCircle className="mr-2 h-5 w-5" />
                 Emergency Chat
               </Button>
@@ -295,21 +341,24 @@ const GuestHomePage = () => {
 
   const testimonials = [
     {
-      name: "Anonymous",
-      role: "Computer Science Student",
-      content: "MindBuddy helped me through my toughest semester. The AI chat was there when I needed it most at 3 AM during finals week.",
+      name: 'Anonymous',
+      role: 'Computer Science Student',
+      content:
+        'MindBuddy helped me through my toughest semester. The AI chat was there when I needed it most at 3 AM during finals week.',
       rating: 5,
     },
     {
-      name: "Anonymous",
-      role: "Psychology Major",
-      content: "The counseling sessions are incredibly professional and confidential. It removed the stigma I felt about seeking help.",
+      name: 'Anonymous',
+      role: 'Psychology Major',
+      content:
+        'The counseling sessions are incredibly professional and confidential. It removed the stigma I felt about seeking help.',
       rating: 5,
     },
     {
-      name: "Anonymous",
-      role: "Engineering Student",
-      content: "The peer support forum connected me with others who understood what I was going through. I'm not alone anymore.",
+      name: 'Anonymous',
+      role: 'Engineering Student',
+      content:
+        "The peer support forum connected me with others who understood what I was going through. I'm not alone anymore.",
       rating: 5,
     },
   ];
@@ -328,7 +377,9 @@ const GuestHomePage = () => {
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold text-primary">MindBuddy</span>
+            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              MindBuddy
+            </span>
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
@@ -342,26 +393,29 @@ const GuestHomePage = () => {
       {/* Enhanced Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-24 pb-20 px-4 sm:px-6 lg:px-8 sm:pt-28 lg:pt-32 sm:pb-24 lg:pb-28">
         <FloatingParticles />
-        
+
         {/* Background Image with Overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-30"
           style={{
             backgroundImage: `url(${heroImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
+            backgroundRepeat: 'no-repeat',
           }}
         />
         <div className="absolute inset-0 bg-gradient-hero opacity-20" />
-        
-        <div className="relative z-10 container mx-auto text-center space-y-12 py-8 sm:py-12 lg:py-16 max-w-7xl">
-          <div className="space-y-8 fade-in">
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+
+        <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
+          <div className="space-y-6 fade-in">
+            <Badge
+              variant="secondary"
+              className="animate-pulse bg-primary/10 text-primary border-primary/20"
+            >
               <Sparkles className="h-4 w-4 mr-2" />
               Trusted by 10,000+ Students
             </Badge>
-            
+
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
               Your Mental Health
               <br />
@@ -369,15 +423,20 @@ const GuestHomePage = () => {
                 Matters Most
               </span>
             </h1>
-            
-            <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed px-2 sm:px-4 lg:px-6">
-              Experience stigma-free, confidential mental health support designed specifically for students. 
-              Get immediate AI assistance, book professional counseling, and connect with a supportive community.
+
+            <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed">
+              Experience stigma-free, confidential mental health support designed specifically for
+              students. Get immediate AI assistance, book professional counseling, and connect with
+              a supportive community.
             </p>
           </div>
 
-          <div className="flex justify-center items-center slide-up py-6">
-            <Button asChild size="lg" className="text-lg bg-primary text-primary-foreground hover:bg-primary/90 btn-calm">
+          <div className="flex justify-center items-center slide-up">
+            <Button
+              asChild
+              size="xl"
+              className="text-lg bg-gradient-primary hover:shadow-glow btn-enhanced"
+            >
               <Link to="/login">
                 Get Started Free
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -388,14 +447,17 @@ const GuestHomePage = () => {
           {/* Enhanced Trust Indicators */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pt-6 sm:pt-8 pb-8 sm:pb-12 max-w-4xl mx-auto px-2 sm:px-4">
             {[
-              { icon: Shield, text: "HIPAA Compliant", desc: "Privacy Protected" },
-              { icon: Clock, text: "24/7 Available", desc: "Always Here" },
-              { icon: Heart, text: "Stigma-Free", desc: "Safe Space" },
-              { icon: UserCheck, text: "Licensed Staff", desc: "Professional Care" },
+              { icon: Shield, text: 'HIPAA Compliant', desc: 'Privacy Protected' },
+              { icon: Clock, text: '24/7 Available', desc: 'Always Here' },
+              { icon: Heart, text: 'Stigma-Free', desc: 'Safe Space' },
+              { icon: UserCheck, text: 'Licensed Staff', desc: 'Professional Care' },
             ].map((item, index) => (
-              <div key={index} className="calm-card p-3 sm:p-4 lg:p-6 rounded-lg text-center gentle-hover">
-                <item.icon className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 text-primary" />
-                <div className="text-xs sm:text-sm font-semibold">{item.text}</div>
+              <div
+                key={index}
+                className="glass-card p-4 rounded-lg text-center hover:scale-105 transition-all duration-300"
+              >
+                <item.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <div className="text-sm font-semibold">{item.text}</div>
                 <div className="text-xs text-muted-foreground">{item.desc}</div>
               </div>
             ))}
@@ -417,13 +479,37 @@ const GuestHomePage = () => {
               See how MindBuddy is transforming student mental health support across campuses.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { icon: Users, number: 10000, suffix: "+", label: "Students Helped", description: "Across 200+ Universities" },
-              { icon: MessageCircle, number: 95, suffix: "%", label: "Crisis Detection Rate", description: "AI-Powered Screening" },
-              { icon: Heart, number: 4.9, suffix: "/5", label: "Satisfaction Rating", description: "From Our Students" },
-              { icon: TrendingUp, number: 78, suffix: "%", label: "Improved Wellbeing", description: "Within First Month" },
+              {
+                icon: Users,
+                number: 10000,
+                suffix: '+',
+                label: 'Students Helped',
+                description: 'Across 200+ Universities',
+              },
+              {
+                icon: MessageCircle,
+                number: 95,
+                suffix: '%',
+                label: 'Crisis Detection Rate',
+                description: 'AI-Powered Screening',
+              },
+              {
+                icon: Heart,
+                number: 4.9,
+                suffix: '/5',
+                label: 'Satisfaction Rating',
+                description: 'From Our Students',
+              },
+              {
+                icon: TrendingUp,
+                number: 78,
+                suffix: '%',
+                label: 'Improved Wellbeing',
+                description: 'Within First Month',
+              },
             ].map((stat, index) => (
               <div key={index} className="enhanced-card p-6 text-center">
                 <stat.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
@@ -446,10 +532,12 @@ const GuestHomePage = () => {
               <Award className="h-4 w-4 mr-2" />
               Award-Winning Platform
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-bold">Everything You Need for Mental Wellness</h2>
+            <h2 className="text-3xl md:text-5xl font-bold">
+              Everything You Need for Mental Wellness
+            </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive, evidence-based support designed specifically for students, 
-              backed by mental health professionals and cutting-edge AI technology.
+              Comprehensive, evidence-based support designed specifically for students, backed by
+              mental health professionals and cutting-edge AI technology.
             </p>
           </div>
 
@@ -459,28 +547,28 @@ const GuestHomePage = () => {
               title="AI Crisis Detection"
               description="Advanced PHQ-9 and GAD-7 screening with immediate crisis intervention and professional referrals"
               badge="Instant Help"
-              features={["24/7 Availability", "Crisis Detection", "Immediate Response"]}
+              features={['24/7 Availability', 'Crisis Detection', 'Immediate Response']}
             />
             <FeatureCard
               icon={Calendar}
               title="Professional Counseling"
               description="Licensed therapists and counselors available for confidential sessions with flexible scheduling"
               badge="Licensed Care"
-              features={["Licensed Therapists", "Flexible Scheduling", "Complete Privacy"]}
+              features={['Licensed Therapists', 'Flexible Scheduling', 'Complete Privacy']}
             />
             <FeatureCard
               icon={BookOpen}
               title="Wellness Resources"
               description="Evidence-based materials, guided meditations, stress management tools, and academic support"
               badge="Self-Help Tools"
-              features={["Guided Meditation", "Study Tips", "Stress Management"]}
+              features={['Guided Meditation', 'Study Tips', 'Stress Management']}
             />
             <FeatureCard
               icon={Users}
               title="Peer Community"
               description="Anonymous support groups, peer mentorship, and moderated discussions in a safe environment"
               badge="Safe Community"
-              features={["Anonymous Groups", "Peer Mentors", "Moderated Chats"]}
+              features={['Anonymous Groups', 'Peer Mentors', 'Moderated Chats']}
             />
           </div>
 
@@ -491,7 +579,8 @@ const GuestHomePage = () => {
                 Ready to Start Your Wellness Journey?
               </h3>
               <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
-                Join thousands of students who have found support, community, and professional care through MindBuddy.
+                Join thousands of students who have found support, community, and professional care
+                through MindBuddy.
               </p>
               <Button asChild size="lg" variant="secondary" className="text-lg">
                 <Link to="/login">
@@ -513,28 +602,32 @@ const GuestHomePage = () => {
               Real experiences from students who found support through MindBuddy.
             </p>
           </div>
-          
+
           <div className="max-w-4xl mx-auto">
             <div className="enhanced-card p-8 md:p-12 text-center relative overflow-hidden">
               <Quote className="h-16 w-16 text-primary/20 absolute top-4 left-4" />
-              
+
               <div className="space-y-6">
                 <div className="flex justify-center mb-4">
                   {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
                     <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                
+
                 <blockquote className="text-xl md:text-2xl font-medium leading-relaxed">
                   "{testimonials[activeTestimonial].content}"
                 </blockquote>
-                
+
                 <div className="pt-4 border-t">
-                  <div className="font-semibold text-lg">{testimonials[activeTestimonial].name}</div>
-                  <div className="text-muted-foreground">{testimonials[activeTestimonial].role}</div>
+                  <div className="font-semibold text-lg">
+                    {testimonials[activeTestimonial].name}
+                  </div>
+                  <div className="text-muted-foreground">
+                    {testimonials[activeTestimonial].role}
+                  </div>
                 </div>
               </div>
-              
+
               {/* Testimonial Indicators */}
               <div className="flex justify-center space-x-2 mt-8">
                 {testimonials.map((_, index) => (
@@ -561,7 +654,7 @@ const GuestHomePage = () => {
               Everything you need to know about MindBuddy's mental health support services.
             </p>
           </div>
-          
+
           <div className="space-y-4">
             <FAQItem
               question="Is MindBuddy completely confidential?"
@@ -588,11 +681,9 @@ const GuestHomePage = () => {
               answer="If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations."
             />
           </div>
-          
+
           <div className="text-center mt-12">
-            <p className="text-muted-foreground mb-6">
-              Still have questions? We're here to help.
-            </p>
+            <p className="text-muted-foreground mb-6">Still have questions? We're here to help.</p>
             <Button asChild variant="outline" size="lg">
               <Link to="/contact">
                 Contact Support
@@ -613,8 +704,9 @@ const GuestHomePage = () => {
                   Start Your Wellness Journey Today
                 </h2>
 
-                <p className="text-base md:text-lg leading-relaxed mb-6 text-muted-foreground">
-                  Join thousands of students for stigma-free, confidential mental health support — instantly accessible and backed by licensed professionals.
+                <p className="text-base md:text-lg opacity-95 leading-relaxed mb-6 text-white/95">
+                  Join thousands of students for stigma-free, confidential mental health support —
+                  instantly accessible and backed by licensed professionals.
                 </p>
 
                 <ul className="space-y-3 mb-6">
@@ -622,30 +714,45 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <CheckCircle className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-foreground">24/7 AI-assisted support and crisis detection</span>
+                    <span className="text-sm text-white/90">
+                      24/7 AI-assisted support and crisis detection
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <Shield className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-foreground">HIPAA-compliant privacy and secure sessions</span>
+                    <span className="text-sm text-white/90">
+                      HIPAA-compliant privacy and secure sessions
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <UserCheck className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-foreground">Licensed counselors and a supportive peer community</span>
+                    <span className="text-sm text-white/90">
+                      Licensed counselors and a supportive peer community
+                    </span>
                   </li>
                 </ul>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild size="lg" className="text-lg bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-lg shadow-sm">
+                  <Button
+                    asChild
+                    size="xl"
+                    className="text-lg text-white align-middle px-8 py-4 rounded-full shadow-md"
+                  >
                     <Link to="/login" aria-label="Get started - free">
                       Get Started — It's Free
                     </Link>
                   </Button>
 
-                  <Button asChild variant="outline" size="lg" className="text-lg border-border hover:bg-accent px-8 py-4 rounded-lg">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="xl"
+                    className="text-lg border-white/40 text-white hover:bg-white/10 px-8 py-4 rounded-full"
+                  >
                     <Link to="/about" aria-label="Learn about our mission">
                       Our Mission
                       <Target className="ml-3 h-5 w-5 text-muted-foreground" />
@@ -686,7 +793,14 @@ interface ActionCardProps {
   badge?: string;
 }
 
-const ActionCard = ({ title, description, icon: Icon, href, variant = "default", badge }: ActionCardProps) => {
+const ActionCard = ({
+  title,
+  description,
+  icon: Icon,
+  href,
+  variant = 'default',
+  badge,
+}: ActionCardProps) => {
   return (
     <Card className="enhanced-card fade-in">
       <CardHeader className="pb-3">
@@ -727,16 +841,22 @@ const FeatureCard = ({ icon: Icon, title, description, badge, features }: Featur
         <div className="mx-auto mb-4 p-4 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 w-fit group-hover:scale-110 transition-transform duration-300">
           <Icon className="h-8 w-8 text-primary" />
         </div>
-        <Badge variant="secondary" className="absolute top-4 right-4 text-xs bg-gradient-primary text-white">
+        <Badge
+          variant="secondary"
+          className="absolute top-4 right-4 text-xs bg-gradient-primary text-white"
+        >
           {badge}
         </Badge>
         <CardTitle className="text-xl mb-3">{title}</CardTitle>
         <CardDescription className="text-center leading-relaxed">{description}</CardDescription>
-        
+
         {features && (
           <div className="mt-4 space-y-2">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-center justify-center text-sm text-muted-foreground">
+              <div
+                key={index}
+                className="flex items-center justify-center text-sm text-muted-foreground"
+              >
                 <CheckCircle className="h-4 w-4 text-primary mr-2" />
                 {feature}
               </div>
@@ -745,7 +865,11 @@ const FeatureCard = ({ icon: Icon, title, description, badge, features }: Featur
         )}
       </CardHeader>
       <CardContent className="pt-0">
-        <Button asChild variant="outline" className="w-full group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+        <Button
+          asChild
+          variant="outline"
+          className="w-full group-hover:bg-primary group-hover:text-white transition-colors duration-300"
+        >
           <Link to="/login">
             Learn More
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -802,9 +926,7 @@ const FAQItem = ({ question, answer }: FAQItemProps) => {
       </button>
       {isOpen && (
         <div className="px-6 pb-6 pt-0">
-          <div className="text-muted-foreground leading-relaxed border-t pt-4">
-            {answer}
-          </div>
+          <div className="text-muted-foreground leading-relaxed border-t pt-4">{answer}</div>
         </div>
       )}
     </div>

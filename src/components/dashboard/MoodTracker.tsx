@@ -1,12 +1,27 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { useMoodTracking } from '@/hooks/useDashboardFeatures';
-import { useRealTimeUpdates, useSmoothAnimations, useStreakTracking } from '@/hooks/useRealTimeFeatures';
-import { showRealTimeNotification, AnimatedCounter, ProgressFeedback } from '@/components/dashboard/RealTimeFeedback';
+import {
+  useRealTimeUpdates,
+  useSmoothAnimations,
+  useStreakTracking,
+} from '@/hooks/useRealTimeFeatures';
+import {
+  showRealTimeNotification,
+  AnimatedCounter,
+  ProgressFeedback,
+} from '@/components/dashboard/RealTimeFeedback';
 import notificationService from '@/services/notificationService';
 import { Smile, Frown, Meh, Heart, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
@@ -15,11 +30,12 @@ const moodEmojis = {
   2: { emoji: '😕', label: 'Sad', color: 'text-orange-500' },
   3: { emoji: '😐', label: 'Neutral', color: 'text-yellow-500' },
   4: { emoji: '😊', label: 'Happy', color: 'text-green-500' },
-  5: { emoji: '😄', label: 'Very Happy', color: 'text-blue-500' }
+  5: { emoji: '😄', label: 'Very Happy', color: 'text-blue-500' },
 };
 
 export const MoodTracker = () => {
-  const { moods, addMoodEntry, getTodayMood, getWeeklyMoodAverage, getMoodTrend } = useMoodTracking();
+  const { moods, addMoodEntry, getTodayMood, getWeeklyMoodAverage, getMoodTrend } =
+    useMoodTracking();
   const { triggerUpdate } = useRealTimeUpdates();
   const { smoothTransition, isAnimating } = useSmoothAnimations();
   const { updateStreak, getStreak } = useStreakTracking();
@@ -36,22 +52,25 @@ export const MoodTracker = () => {
     if (selectedMood) {
       smoothTransition(() => {
         addMoodEntry(selectedMood, moodNote);
-        
+
         // Update streak and trigger real-time updates
         const newStreak = updateStreak('mood_tracking');
         triggerUpdate('mood_logged', { mood: selectedMood, streak: newStreak });
-        
+
         // Mark mood reminder notification as acted upon if present
         notificationService.markNotificationAsActedUpon('mood-reminder');
-        
+
         // Show success notification
-        showRealTimeNotification('success', `Mood logged! ${moodEmojis[selectedMood as keyof typeof moodEmojis].label}`);
-        
+        showRealTimeNotification(
+          'success',
+          `Mood logged! ${moodEmojis[selectedMood as keyof typeof moodEmojis].label}`
+        );
+
         // Check for streak milestones
         if (newStreak > 0 && newStreak % 7 === 0) {
           showRealTimeNotification('milestone', `🔥 ${newStreak} day mood tracking streak!`);
         }
-        
+
         setSelectedMood(null);
         setMoodNote('');
         setIsDialogOpen(false);
@@ -61,43 +80,56 @@ export const MoodTracker = () => {
 
   const getTrendIcon = () => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'declining': return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return <Minus className="h-4 w-4 text-gray-500" />;
+      case 'improving':
+        return <TrendingUp className="h-4 w-4 text-green-500" />;
+      case 'declining':
+        return <TrendingDown className="h-4 w-4 text-red-500" />;
+      default:
+        return <Minus className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getTrendText = () => {
     switch (trend) {
-      case 'improving': return 'Improving ↗';
-      case 'declining': return 'Needs attention ↘';
-      default: return 'Stable →';
+      case 'improving':
+        return 'Improving ↗';
+      case 'declining':
+        return 'Needs attention ↘';
+      default:
+        return 'Stable →';
     }
   };
 
   return (
-    <Card className={`calm-card ${
-      isAnimating ? 'shadow-card' : ''
-    }`}>
+    <Card
+      className={`enhanced-card hover:shadow-medium transition-all duration-300 ${
+        isAnimating ? 'scale-105 shadow-lg' : ''
+      }`}
+    >
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className={`p-2 rounded-lg bg-primary/5 ${
-              isAnimating ? 'bg-primary/10' : ''
-            }`}>
+            <div
+              className={`p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/20 transition-all duration-300 ${
+                isAnimating ? 'scale-110' : ''
+              }`}
+            >
               <Heart className="h-5 w-5 text-primary" />
             </div>
             <div>
               <CardTitle className="text-lg">Mood Tracker</CardTitle>
               {moodStreak > 0 && (
-                <Badge variant="outline" className="text-xs mt-1 bg-orange-50 text-orange-700 border-orange-200">
+                <Badge
+                  variant="outline"
+                  className="text-xs mt-1 bg-orange-50 text-orange-700 border-orange-200"
+                >
                   <Smile className="h-3 w-3 mr-1" />
                   <AnimatedCounter value={moodStreak} suffix=" day streak" />
                 </Badge>
               )}
             </div>
           </div>
-          
+
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline" className="text-xs">
@@ -111,7 +143,7 @@ export const MoodTracker = () => {
                   Track your daily mood to better understand your wellbeing patterns.
                 </DialogDescription>
               </DialogHeader>
-              
+
               <div className="space-y-6">
                 <div className="grid grid-cols-5 gap-2">
                   {Object.entries(moodEmojis).map(([value, { emoji, label, color }]) => (
@@ -129,7 +161,7 @@ export const MoodTracker = () => {
                     </button>
                   ))}
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Optional note:</label>
                   <Textarea
@@ -140,7 +172,7 @@ export const MoodTracker = () => {
                     rows={3}
                   />
                 </div>
-                
+
                 <div className="flex gap-2">
                   <Button
                     onClick={handleMoodSubmit}
@@ -165,7 +197,7 @@ export const MoodTracker = () => {
           </Dialog>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         <div className="space-y-3">
           {todayMood ? (
@@ -188,7 +220,7 @@ export const MoodTracker = () => {
               Track your mood today to start building insights
             </div>
           )}
-          
+
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center p-3 bg-muted rounded-lg">
               <div className="font-semibold text-primary">
@@ -204,7 +236,7 @@ export const MoodTracker = () => {
               <div className="text-xs text-muted-foreground">Trend</div>
             </div>
           </div>
-          
+
           {moods.length > 0 && (
             <div className="pt-2 border-t">
               <div className="text-xs text-muted-foreground mb-2">Recent entries:</div>
