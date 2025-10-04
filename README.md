@@ -4,13 +4,13 @@
 
 <div align="center">
 
-### Your Mental Health Support Platform  
+### Your Mental Health Support Platform
+
 </div>
 
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=22&pause=1000&color=00E676&center=true&vCenter=true&width=600&lines=Open+Source.+Open+Minds.+Open+Hearts.;Contribute%2C+Collaborate%2C+Create+Impact." />
 </p>
-
 
 ---
 
@@ -36,6 +36,7 @@ Let’s make mental health support **accessible**, **inclusive**, and **tech-pow
 ---
 
 ## Project Structure
+
 ```
 MInd_Care/
 ├── public/                 # Static assets
@@ -56,43 +57,44 @@ MInd_Care/
 ├── vite.config.ts         # Vite configuration
 └── package.json           # Dependencies and scripts
 ```
+
 ## **Core Features**
 
-| Category | Description |
-|-------------|----------------|
+| Category                | Description                                        |
+| ----------------------- | -------------------------------------------------- |
 | **Dashboard Analytics** | Visualize mood patterns and mental health progress |
-| **AI-Powered Chat** | Smart support system using AI for real-time help |
-| **Video Consultations** | Secure video therapy sessions |
-| **Resource Library** | Curated educational content on mental health |
-| **Community Forum** | Peer-to-peer discussions and group chats |
-| **Appointment Booking** | Easy scheduling with healthcare professionals |
-| **Goal Tracking** | Set and achieve your personal wellness goals |
-| **Mood Tracking** | Daily mood logging with insights and analysis |
+| **AI-Powered Chat**     | Smart support system using AI for real-time help   |
+| **Video Consultations** | Secure video therapy sessions                      |
+| **Resource Library**    | Curated educational content on mental health       |
+| **Community Forum**     | Peer-to-peer discussions and group chats           |
+| **Appointment Booking** | Easy scheduling with healthcare professionals      |
+| **Goal Tracking**       | Set and achieve your personal wellness goals       |
+| **Mood Tracking**       | Daily mood logging with insights and analysis      |
 
 ---
 
 ## Issue Labels
 
-| Label | Description |
-| :-- | :-- |
-| `hacktoberfest` | Official Hacktoberfest-tagged issues |
-| `good first issue` | Ideal for first-time contributors |
-| `enhancement` | Suggest new features or improvements |
-| `bug` | Fix broken or inconsistent behavior |
-| `documentation` | Update or improve project docs |
-| `ui/ux` | Visual or design-related enhancements |
+| Label              | Description                           |
+| :----------------- | :------------------------------------ |
+| `hacktoberfest`    | Official Hacktoberfest-tagged issues  |
+| `good first issue` | Ideal for first-time contributors     |
+| `enhancement`      | Suggest new features or improvements  |
+| `bug`              | Fix broken or inconsistent behavior   |
+| `documentation`    | Update or improve project docs        |
+| `ui/ux`            | Visual or design-related enhancements |
 
 ---
 
 ## Contribution Ideas
 
-- Add new mental health resources  
-- Improve accessibility (a11y)  
-- Add dashboard widgets  
-- Enhance AI chat responses  
-- Implement internationalization (i18n)  
-- Improve mobile responsiveness  
-- Add themes, tests, or animations  
+- Add new mental health resources
+- Improve accessibility (a11y)
+- Add dashboard widgets
+- Enhance AI chat responses
+- Implement internationalization (i18n)
+- Improve mobile responsiveness
+- Add themes, tests, or animations
 
 ---
 
@@ -101,15 +103,17 @@ MInd_Care/
 1. **Fork** this repository  
    Click the “Fork” button at the top-right of the page.
 
-2. **Clone** your fork  
+2. **Clone** your fork
    ```
    git clone https://github.com/your-username/your-repo.git
    cd your-repo
    ``
-3.  **Create** a new branch
    ```
-   git checkout -b feature/your-feature-name
-   ```
+3. **Create** a new branch
+
+```
+git checkout -b feature/your-feature-name
+```
 
 4. **Make your changes**
 
@@ -119,8 +123,8 @@ MInd_Care/
    git commit -m "Added: your change summary"
    git push origin feature/your-feature-name
    ```
- 6. **Create a Pull Request (PR)**
-Submit your PR to the main branch and wait for review!
+6. **Create a Pull Request (PR)**
+   Submit your PR to the main branch and wait for review!
 
 7. **Testing**
    ```
@@ -136,7 +140,8 @@ Submit your PR to the main branch and wait for review!
 
 ---
 
-## 📜 License  
+## 📜 License
+
 <p>
   This project is licensed under the  
   <a href="LICENSE"><b>MIT License</b></a>  
@@ -145,7 +150,8 @@ Submit your PR to the main branch and wait for review!
 
 ---
 
-## 🤝 Support  
+## 🤝 Support
+
 <p 
   If you find this project helpful, please consider  
   <b>⭐By starring it on GitHub</b> and <b>contributing</b> to its growth.  
@@ -162,8 +168,6 @@ Submit your PR to the main branch and wait for review!
 Thanks to every contributor working to make mental health support accessible through open-source innovation.
 Special appreciation for Hacktoberfest participants - your contributions truly make a difference.
 
-
-
 <p align="center"> <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=00E676&center=true&vCenter=true&width=600&lines=Together%2C+we+build+for+a+healthier+future.;Happy+Hacktoberfest+💚" /> </p>
 
 <div align="center">
@@ -172,6 +176,6 @@ Special appreciation for Hacktoberfest participants - your contributions truly m
 
 <br>
 
-<strong>🌼 “Together, we can make mental health support accessible to everyone!” 🌼</strong>  
+<strong>🌼 “Together, we can make mental health support accessible to everyone!” 🌼</strong>
 
 <p align="center"> <sub> Made with ❤️ by <b>Abhishek</b> and fellow contributors of the Mind_Care community.</sub> </p>
