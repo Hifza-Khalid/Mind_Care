@@ -3,6 +3,8 @@ node_modules/
 bun.lockb
 package-lock.json
 yarn.lock
+.git/
+.github/
 
 # Build outputs
 dist/
