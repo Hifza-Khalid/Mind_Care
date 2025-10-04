@@ -10,7 +10,7 @@ import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
 import { lazy, Suspense } from 'react';
-import ScrollToTop from "./components/layout/scrollToTop";
+import ScrollToTop from './components/layout/scrollToTop';
 
 // Lazy load pages for better performance
 const Index = lazy(() => import('./pages/Index'));
