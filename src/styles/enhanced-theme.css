@@ -203,7 +203,7 @@ a:hover {
 }
 
 /* Reading Mode Link Styling */
-.reading-mode a:not([class*="bg-gradient-primary"]) {
+.reading-mode a:not([class*='bg-gradient-primary']) {
   color: hsl(var(--primary)) !important;
   text-decoration: underline !important;
   text-decoration-thickness: 2px !important;
@@ -324,8 +324,6 @@ a:hover {
   animation: reading-mode-enter 0.3s ease-out;
 }
 
-
-
 /* Responsive Reading Mode */
 @media (max-width: 768px) {
   .reading-mode .prose,
@@ -358,4 +356,3 @@ a:hover {
     border: none !important;
   }
 }
-

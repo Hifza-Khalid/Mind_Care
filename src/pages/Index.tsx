@@ -735,7 +735,11 @@ const GuestHomePage = () => {
                     size="xl"
                     className="text-lg text-white align-middle px-8 py-4 rounded-full shadow-md"
                   >
-                    <Link to="/login" className='bg-gradient-primary' aria-label="Get started - free">
+                    <Link
+                      to="/login"
+                      className="bg-gradient-primary"
+                      aria-label="Get started - free"
+                    >
                       Get Started — It's Free
                     </Link>
                   </Button>
