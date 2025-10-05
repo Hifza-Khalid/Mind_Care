@@ -40,8 +40,37 @@ const AIChat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (smooth = true) => {
+    const endEl = messagesEndRef.current;
+    if (!endEl) return;
+
+    // Find the nearest scrollable ancestor (the chat ScrollArea viewport)
+    let node: HTMLElement | null = endEl.parentElement as HTMLElement | null;
+    while (node) {
+      try {
+        const style = window.getComputedStyle(node);
+        const overflowY = style.overflowY;
+        // Explicitly type the node so TypeScript knows about scrollTop/scrollHeight
+        const el = node as HTMLElement & { scrollTo?: (options?: ScrollToOptions) => void };
+        const isScrollable = el.scrollHeight > el.clientHeight;
+
+        if (isScrollable && (overflowY === 'auto' || overflowY === 'scroll')) {
+          // Scroll the chat container only (prevents window/page scroll)
+          if (typeof el.scrollTo === 'function') {
+            el.scrollTo({ top: el.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+          } else {
+            el.scrollTop = el.scrollHeight;
+          }
+          return;
+        }
+      } catch (e) {
+        // continue climbing if accessing computed style fails for any reason
+      }
+      node = node.parentElement as HTMLElement | null;
+    }
+
+    // Fallback: scroll the element into view (last resort)
+    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
   };
 
   useEffect(() => {
