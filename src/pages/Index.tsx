@@ -722,7 +722,7 @@ const GuestHomePage = () => {
                   Start Your Wellness Journey Today
                 </h2>
 
-                <p className="text-base md:text-lg opacity-95 leading-relaxed mb-6 text-white/95">
+                <p className="text-base md:text-lg opacity-95 leading-relaxed mb-6 text-muted-foreground dark:text-white/95">
                   Join thousands of students for stigma-free, confidential mental health support —
                   instantly accessible and backed by licensed professionals.
                 </p>
@@ -732,7 +732,7 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <CheckCircle className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-white/90">
+                    <span className="text-sm text-foreground dark:text-white/90">
                       24/7 AI-assisted support and crisis detection
                     </span>
                   </li>
@@ -740,7 +740,7 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <Shield className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-white/90">
+                    <span className="text-sm text-foreground dark:text-white/90">
                       HIPAA-compliant privacy and secure sessions
                     </span>
                   </li>
@@ -748,7 +748,7 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <UserCheck className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-white/90">
+                    <span className="text-sm text-foreground dark:text-white/90">
                       Licensed counselors and a supportive peer community
                     </span>
                   </li>
@@ -773,7 +773,9 @@ const GuestHomePage = () => {
                     asChild
                     variant="outline"
                     size="xl"
-                    className="text-lg border-white/40 text-white hover:bg-white/10 px-8 py-4 rounded-full"
+                    className="text-lg px-8 py-4 rounded-full
+                    border-primary text-primary hover:bg-primary/10 
+                    dark:border-white/40 dark:text-white dark:hover:bg-white/10" 
                   >
                     <Link to="/about" aria-label="Learn about our mission">
                       Our Mission

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, Brain, Users, BookOpen, Calendar, Clock, ArrowRight } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface CarouselSlide {
   id: number;
@@ -22,6 +23,8 @@ interface BlogPost {
 }
 
 const MentalHealthBlog: React.FC = () => {
+  const { actualTheme } = useTheme();
+  const isDark = actualTheme === 'dark';
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -89,7 +92,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. Sarah Mitchell",
       date: "Oct 1, 2025",
       readTime: "8 min read",
-      image: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLNZgQYTQXBn6N6YNDhRJvsE7Ha8P9BScHWg&s"
     },
     {
       id: 2,
@@ -99,7 +102,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Anonymous Contributor",
       date: "Sep 28, 2025",
       readTime: "6 min read",
-      image: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+      image: "https://www.teachhub.com/wp-content/uploads/2025/02/Feb-27-Beyond-Tired-Recognizing-Teacher-Burnout-Symptoms-resize.jpg"
     },
     {
       id: 3,
@@ -109,7 +112,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. James Chen",
       date: "Sep 25, 2025",
       readTime: "10 min read",
-      image: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+      image: "https://ahead-app.com/_next/image?url=https%3A%2F%2Fstorage.googleapis.com%2Fweb-api-media-uploads%2Fmedia%2Ftmppmkmfhjh_c0876cca63%2Ftmppmkmfhjh_c0876cca63.png&w=3840&q=75"
     },
     {
       id: 4,
@@ -119,7 +122,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. Maria Rodriguez",
       date: "Sep 22, 2025",
       readTime: "7 min read",
-      image: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+      image: "https://miro.medium.com/v2/1*S4iF4s81OqYLf-cyPXsmyw.jpeg"
     },
     {
       id: 5,
@@ -129,7 +132,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Editorial Team",
       date: "Sep 20, 2025",
       readTime: "12 min read",
-      image: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+      image: "https://www.youngminds.org.uk/media/nk4haxiy/0481-jpg.png"
     },
     {
       id: 6,
@@ -139,7 +142,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. Emily Thompson",
       date: "Sep 18, 2025",
       readTime: "9 min read",
-      image: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)"
+      image: "https://jedfoundation.org/wp-content/uploads/2021/03/How-to-Help-a-Friend-Reach-Out-for-Support-scaled.jpeg"
     }
   ];
 
@@ -175,7 +178,7 @@ const MentalHealthBlog: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
+  <div className={`min-h-screen ${isDark ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white' : 'bg-white text-slate-900'}`}>
       {/* Hero Section */}
       
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -190,26 +193,28 @@ const MentalHealthBlog: React.FC = () => {
 
       {/* Carousel Section */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 mb-16">
-        <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+  <div className={`${isDark ? 'bg-gray-800/80 border border-gray-700' : 'bg-white/60 border border-slate-200'} backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden`}>
           <div className="relative">
             <div className={`bg-gradient-to-r ${carouselSlides[currentSlide].color} p-8 sm:p-12`}>
               <div className="flex items-center justify-center mb-6">
                 {carouselSlides[currentSlide].icon}
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-200 text-center mb-2">
+              <h2 className={`text-3xl sm:text-4xl font-bold text-center mb-2 ${isDark ? 'text-gray-200' : 'text-sky-400 drop-shadow-lg'}`}>
                 {carouselSlides[currentSlide].title}
               </h2>
-              <p className="text-xl text-gray-300 text-center mb-6">
+              <p className={`text-xl text-center mb-6 ${isDark ? 'text-gray-300' : 'text-gray-300 drop-shadow-md'}`}>
                 {carouselSlides[currentSlide].description}
               </p>
               <div className="grid sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
                 {carouselSlides[currentSlide].tips.map((tip, idx) => (
-                  <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 transform hover:scale-105 transition-transform border border-white/20">
+                  <div
+                    key={idx}
+                    className={`rounded-xl p-4 transform hover:scale-105 transition-transform ${isDark ? 'bg-white/10 border border-white/20' : 'bg-white border border-slate-200'} ${!isDark ? 'shadow-sm' : ''}`}>
                     <div className="flex items-start">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white/30 flex items-center justify-center text-neutral-100 font-bold text-sm mr-3 mt-0.5">
                         {idx + 1}
                       </span>
-                      <p className="text-neutral-200 font-medium">{tip}</p>
+                      <p className={`font-medium ${isDark ? 'text-neutral-200' : 'text-slate-900'}`}>{tip}</p>
                     </div>
                   </div>
                 ))}
@@ -219,17 +224,17 @@ const MentalHealthBlog: React.FC = () => {
             {/* Carousel Controls */}
             <button
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-900/50 hover:bg-gray-900/70 backdrop-blur-sm rounded-full p-3 transition-all border border-gray-700"
+              className={`absolute left-4 top-1/2 -translate-y-1/2 rounded-full p-3 transition-all ${isDark ? 'bg-gray-900/50 hover:bg-gray-900/70 border border-gray-700' : 'bg-white/60 hover:bg-white/80 border border-slate-200'}`}
               aria-label="Previous slide"
             >
-              <ChevronLeft className="w-6 h-6 text-white" />
+              <ChevronLeft className={`w-6 h-6 ${isDark ? 'text-white' : 'text-slate-900'}`} />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-900/50 hover:bg-gray-900/70 backdrop-blur-sm rounded-full p-3 transition-all border border-gray-700"
+              className={`absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-3 transition-all ${isDark ? 'bg-gray-900/50 hover:bg-gray-900/70 border border-gray-700' : 'bg-white/60 hover:bg-white/80 border border-slate-200'}`}
               aria-label="Next slide"
             >
-              <ChevronRight className="w-6 h-6 text-white" />
+              <ChevronRight className={`w-6 h-6 ${isDark ? 'text-white' : 'text-slate-900'}`} />
             </button>
 
             {/* Carousel Indicators */}
@@ -241,9 +246,7 @@ const MentalHealthBlog: React.FC = () => {
                     setCurrentSlide(idx);
                     setIsAutoPlaying(false);
                   }}
-                  className={`h-2 rounded-full transition-all ${
-                    idx === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/50'
-                  }`}
+                  className={`h-2 rounded-full transition-all ${idx === currentSlide ? (isDark ? 'w-8 bg-white' : 'w-8 bg-slate-900') : (isDark ? 'w-2 bg-white/50' : 'w-2 bg-slate-400/50')}`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
@@ -256,7 +259,7 @@ const MentalHealthBlog: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground/80 bg-clip-text text-transparent leading-tight mb-4">Latest Articles & Stories</h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+          <p className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'} max-w-2xl mx-auto`}>
             Explore real experiences, expert insights, and evidence-based strategies
           </p>
         </div>
@@ -265,25 +268,29 @@ const MentalHealthBlog: React.FC = () => {
           {blogPosts.map((post) => (
             <article
               key={post.id}
-              className="bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group border border-gray-700"
+              className={`${isDark ? 'bg-gray-800/80 border border-gray-700 text-white' : 'bg-white/60 border border-slate-200 text-slate-900'} backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group`}
             >
               <div
-                className="h-48 relative"
-                style={{ background: post.image }}
+                className="h-48 relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-                <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-semibold ${getCategoryColor(post.category)}`}>
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover object-center absolute inset-0 z-0"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors z-10" />
+                <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-semibold z-20 ${getCategoryColor(post.category)}`}>
                   {post.category}
                 </span>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-400 transition-colors">
+                <h3 className={`${isDark ? 'text-white' : 'text-slate-900'} text-xl font-bold mb-3 group-hover:text-indigo-400 transition-colors`}>
                   {post.title}
                 </h3>
-                <p className="text-gray-400 mb-4 line-clamp-3">
+                <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} mb-4 line-clamp-3`}>
                   {post.excerpt}
                 </p>
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <div className={`flex items-center justify-between text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} mb-4`}>
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
@@ -295,7 +302,7 @@ const MentalHealthBlog: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                <div className={`flex items-center justify-between pt-4 border-t ${isDark ? 'border-gray-700' : 'border-slate-200'}`}>
                   <span className="text-sm font-medium text-gray-300">{post.author}</span>
                   <button className="flex items-center gap-1 text-indigo-400 font-semibold group-hover:gap-2 transition-all">
                     Read More
@@ -309,21 +316,21 @@ const MentalHealthBlog: React.FC = () => {
       </div>
 
       {/* Resources Section */}
-      <div className="bg-gradient-to-r from-indigo-950 to-purple-950 border-t border-gray-700">
+      <div className={`${isDark ? 'bg-gradient-to-r from-indigo-950 to-purple-950 border-t border-gray-700 text-white' : 'bg-indigo-50 border-t border-slate-200'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-foreground via-primary to-foreground/80 bg-clip-text text-transparent leading-tight">Need Immediate Support?</h2>
-            <p className="text-xl text-indigo-100 mb-8">
+            <p className={`text-xl ${isDark ? 'text-indigo-100' : 'text-slate-700'} mb-8`}>
               If you're experiencing a mental health crisis, please reach out to these resources:
             </p>
             <div className="grid sm:grid-cols-2 gap-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="font-bold text-lg mb-2 text-white">Crisis Helpline</h3>
-                <p className="text-indigo-100">Available 24/7 for immediate support</p>
+              <div className={`${isDark ? 'bg-white/10 border border-white/20 text-white' : 'bg-white/60 border border-slate-200 text-slate-900'} backdrop-blur-sm rounded-xl p-6`}>
+                <h3 className="font-bold text-lg mb-2">Crisis Helpline</h3>
+                <p className={`${isDark ? 'text-indigo-100' : 'text-slate-600'}`}>Available 24/7 for immediate support</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="font-bold text-lg mb-2 text-white">Find a Therapist</h3>
-                <p className="text-indigo-100">Connect with licensed professionals</p>
+              <div className={`${isDark ? 'bg-white/10 border border-white/20 text-white' : 'bg-white/60 border border-slate-200 text-slate-900'} backdrop-blur-sm rounded-xl p-6`}>
+                <h3 className="font-bold text-lg mb-2">Find a Therapist</h3>
+                <p className={`${isDark ? 'text-indigo-100' : 'text-slate-600'}`}>Connect with licensed professionals</p>
               </div>
             </div>
           </div>

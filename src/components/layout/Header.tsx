@@ -15,6 +15,8 @@ import {
   Calendar,
   BookOpen,
   Users,
+  Globe,
+  Phone,
   BarChart,
   Palette,
   Bell,
@@ -42,10 +44,11 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const getNavItems = (): NavItem[] => {
-    const baseItems: NavItem[] = [
+      const baseItems: NavItem[] = [
       { name: 'Resources', href: '/app/resources', icon: BookOpen },
       { name: 'Forum', href: '/app/forum', icon: Users },
       { name: 'Blog', href: '/app/blog', icon: FileText }, 
+      { name: 'About', href: '/about', icon: Globe },
     ];
 
     if (user?.role === 'student') {
@@ -186,6 +189,15 @@ const Header = () => {
                   >
                     <Palette className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
                     <span className="font-medium">Theme & Reading</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/contact"
+                    className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group"
+                  >
+                    <Phone className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span className="font-medium">Contact</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
