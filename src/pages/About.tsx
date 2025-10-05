@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
 import heroImage from '@/assets/freepik__retouch__90823.png';
 import { Shield, Heart, UserCheck, CheckCircle, Play } from 'lucide-react';
 import { useEffect } from 'react';
@@ -13,6 +14,8 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
+      <div className="h-20" />
       <section className="relative py-20 md:py-28">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-6">
