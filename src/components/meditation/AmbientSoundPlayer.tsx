@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { logAudioError } from '@/services/logger';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -250,7 +251,7 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
         setError(null);
       } catch (err) {
         setError('Failed to play audio');
-        console.error('Audio error:', err);
+        logAudioError('Ambient sound playback error', err as Error, { soundType: selectedSound });
       }
     },
     [initAudioContext, createNoiseBuffer]

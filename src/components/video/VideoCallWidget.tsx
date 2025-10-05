@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { logVideoCall, logVideoCallError } from '@/services/logger';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -143,7 +144,7 @@ const VideoCallWidget = ({
       dataChannelRef.current = dataChannel;
 
       dataChannel.onopen = () => {
-        console.log('Data channel opened');
+        logVideoCall('Data channel opened for chat communication');
       };
 
       dataChannel.onmessage = (event) => {
@@ -196,7 +197,7 @@ const VideoCallWidget = ({
 
       setInterval(checkConnectionQuality, 5000);
     } catch (error) {
-      console.error('Error initializing WebRTC:', error);
+      logVideoCallError('Failed to initialize WebRTC connection', error as Error, { sessionId, counselorName });
       alert(
         'Failed to initialize video call. Please check your camera and microphone permissions.'
       );
@@ -260,7 +261,7 @@ const VideoCallWidget = ({
         setIsScreenSharing(true);
       }
     } catch (error) {
-      console.error('Error sharing screen:', error);
+      logVideoCallError('Failed to start screen sharing', error as Error, { sessionId });
     }
   };
 
