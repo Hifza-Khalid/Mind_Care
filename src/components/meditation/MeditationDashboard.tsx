@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { logMeditation } from '@/services/logger';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -130,12 +131,14 @@ export const MeditationDashboard: React.FC<MeditationDashboardProps> = ({
 
   const endSession = () => {
     if (activeSession) {
-      // In a real app, you would save the session data here
-      console.log('Session completed:', {
+      // Save the session data
+      const sessionData = {
         type: activeSession.type,
         duration: Math.floor((new Date().getTime() - activeSession.startTime.getTime()) / 1000),
         technique: activeSession.technique,
-      });
+      };
+      
+      logMeditation('Meditation session completed', sessionData);
 
       setActiveSession(null);
       setCurrentTab('progress');
@@ -341,7 +344,7 @@ export const MeditationDashboard: React.FC<MeditationDashboardProps> = ({
         <TabsContent value="timer" className="space-y-6">
           <MeditationTimer
             onSessionComplete={(session) => {
-              console.log('Timer session completed:', session);
+              logMeditation('Timer-based meditation session completed', session);
               setCurrentTab('progress');
             }}
             className="max-w-2xl mx-auto"
@@ -399,7 +402,7 @@ export const MeditationDashboard: React.FC<MeditationDashboardProps> = ({
             {/* Breathing Animation */}
             <BreathingAnimation
               onSessionComplete={(session) => {
-                console.log('Breathing session completed:', session);
+                logMeditation('Breathing exercise session completed', session);
                 setActiveSession(null);
                 setCurrentTab('progress');
               }}
@@ -470,7 +473,7 @@ export const MeditationDashboard: React.FC<MeditationDashboardProps> = ({
           <MindfulnessProgressTracker
             userId={userId}
             onGoalUpdate={(goal) => {
-              console.log('Weekly goal updated:', goal);
+              logMeditation('Weekly meditation goal updated', { userId, goal });
             }}
           />
         </TabsContent>

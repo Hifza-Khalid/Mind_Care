@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { logStudyGroup } from '@/services/logger';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -381,12 +382,12 @@ export const StudyGroupSystem: React.FC<StudyGroupSystemProps> = ({
 
   const joinGroup = (groupId: string) => {
     onGroupJoin?.(groupId);
-    console.log('Joining group:', groupId);
+    logStudyGroup('User requested to join study group', { groupId, userId: currentUser?.id });
   };
 
   const joinSession = (sessionId: string) => {
     onSessionJoin?.(sessionId);
-    console.log('Joining session:', sessionId);
+    logStudyGroup('User joined study group session', { sessionId, userId: currentUser?.id });
   };
 
   const renderGroupCard = (group: StudyGroup, showJoinButton = true) => (
