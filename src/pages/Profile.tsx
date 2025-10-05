@@ -72,7 +72,6 @@ const Profile = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validar tipo de arquivo
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       toast({
