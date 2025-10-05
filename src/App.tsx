@@ -9,7 +9,7 @@ import { MusicProvider } from '@/contexts/MusicContext';
 import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import ScrollToTop from './components/layout/scrollToTop';
 
 // Lazy load pages for better performance
@@ -60,7 +60,7 @@ const App = () => (
                   <Route path="/login" element={<Login />} />
                   <Route path="/select-institution" element={<InstitutionSelection />} />
                   <Route path="/" element={<Index />} />
-                  <Route path="contact" element={<ContactUs />} />
+                  <Route path="/contact" element={<ContactUs />} />
                   <Route path="*" element={<NotFound />} />
                   <Route path="/app" element={<Layout />}>
                     <Route index element={<Dashboard />} />
@@ -98,5 +98,6 @@ const App = () => (
     </ThemeProvider>
   </QueryClientProvider>
 );
+
 
 export default App;
