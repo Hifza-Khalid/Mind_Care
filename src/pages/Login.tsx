@@ -227,8 +227,6 @@ const Login = () => {
         </div>
       </main>
 
-      {/* Footer should be outside the centered main area so it does not overlap */}
-      <Footer />
     </div>
   );
 };
