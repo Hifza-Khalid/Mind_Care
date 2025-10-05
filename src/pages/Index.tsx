@@ -152,6 +152,7 @@ const AuthenticatedHomePage = ({
     }
   };
 
+  
   return (
     <div className="min-h-screen bg-gradient-mesh">
       <FloatingParticles />
@@ -338,6 +339,7 @@ const AuthenticatedHomePage = ({
   );
 };
 
+
 const GuestHomePage = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
@@ -371,6 +373,42 @@ const GuestHomePage = () => {
     }, 4000);
     return () => clearInterval(timer);
   }, [testimonials.length]);
+
+
+  // adding questions here 
+  const faqs = [
+            {
+              question:"Is MindBuddy completely confidential?",
+              answer:"Absolutely. We adhere to strict HIPAA compliance standards. Your conversations with our AI chat, counseling sessions, and forum participation are completely confidential. We never share personal information without your explicit consent."
+            },
+            {
+              question:"How does the AI crisis detection work?",
+              answer:"Our AI uses validated screening tools like PHQ-9 and GAD-7 to assess your responses during chat sessions. If crisis indicators are detected, we immediately connect you with emergency resources and licensed counselors who can provide immediate support."
+            },
+            {
+              question:"Are the counselors real licensed professionals?",
+              answer:"Yes, all our counselors and therapists are licensed mental health professionals. They undergo rigorous background checks and are specifically trained to work with college students and young adults."
+            },
+            {
+              question:"Is MindBuddy free for students?",
+              answer:"We offer a comprehensive free tier that includes AI chat support, basic resources, and forum access. Premium features like one-on-one counseling sessions may have associated costs, but we work with universities to provide these at reduced rates."
+            },
+            {
+              question:"Can I remain anonymous on the platform?",
+              answer:"Yes, especially in our peer support forums. While we need some basic information for safety and crisis prevention, you can participate in community discussions anonymously while still receiving the support you need."
+            },
+            {
+              question:"What if I'm having a mental health emergency?",
+              answer:"If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations."
+            },
+          ]
+
+  // faq rendering 
+  const [openIndex, setOpenIndex]= useState <number | null > (null);
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
 
   return (
     <div className="min-h-screen">
@@ -651,31 +689,16 @@ const GuestHomePage = () => {
           </div>
 
           <div className="space-y-4">
-            <FAQItem
-              question="Is MindBuddy completely confidential?"
-              answer="Absolutely. We adhere to strict HIPAA compliance standards. Your conversations with our AI chat, counseling sessions, and forum participation are completely confidential. We never share personal information without your explicit consent."
+          {faqs.map((faq, index) => (
+            <FAQItem key={index}
+            question={faq.question}
+            answer={faq.answer}
+            isOpen={openIndex === index}
+            onClick={() =>setOpenIndex(openIndex === index ? null : index)}
             />
-            <FAQItem
-              question="How does the AI crisis detection work?"
-              answer="Our AI uses validated screening tools like PHQ-9 and GAD-7 to assess your responses during chat sessions. If crisis indicators are detected, we immediately connect you with emergency resources and licensed counselors who can provide immediate support."
-            />
-            <FAQItem
-              question="Are the counselors real licensed professionals?"
-              answer="Yes, all our counselors and therapists are licensed mental health professionals. They undergo rigorous background checks and are specifically trained to work with college students and young adults."
-            />
-            <FAQItem
-              question="Is MindBuddy free for students?"
-              answer="We offer a comprehensive free tier that includes AI chat support, basic resources, and forum access. Premium features like one-on-one counseling sessions may have associated costs, but we work with universities to provide these at reduced rates."
-            />
-            <FAQItem
-              question="Can I remain anonymous on the platform?"
-              answer="Yes, especially in our peer support forums. While we need some basic information for safety and crisis prevention, you can participate in community discussions anonymously while still receiving the support you need."
-            />
-            <FAQItem
-              question="What if I'm having a mental health emergency?"
-              answer="If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations."
-            />
+          ))}
           </div>
+          {/* updates done till here  */}
 
           <div className="text-center mt-12">
             <p className="text-muted-foreground mb-6">Still have questions? We're here to help.</p>
@@ -903,32 +926,34 @@ const StatsCard = ({ title, stats }: StatsCardProps) => {
   );
 };
 
+// new updated one 
 interface FAQItemProps {
   question: string;
   answer: string;
+  isOpen: boolean;
+  onClick: () => void;
 }
 
-const FAQItem = ({ question, answer }: FAQItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
 
   return (
-    <div className="enhanced-card">
+    <div className={`enhanced-card ${(isOpen) ? 'border border-black rounded-lg': 'border border-white rounded-lg'}`}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onClick}
         className="w-full p-6 text-left flex justify-between items-center hover:bg-muted/10 transition-colors duration-200"
       >
-        <h3 className="font-semibold text-lg pr-4">{question}</h3>
+        <span className="font-medium text-lg pr-4">{question}</span>
         <ChevronDown
-          className={`h-5 w-5 text-muted-foreground transition-transform duration-200 flex-shrink-0 ${
+          className={`h-5 w-5 text-muted-foreground transition-transform duration-400 flex-shrink-0 ${
             isOpen ? 'transform rotate-180' : ''
           }`}
         />
       </button>
-      {isOpen && (
-        <div className="px-6 pb-6 pt-0">
+      
+        <div className={`overflow-hidden transition-all duration-400 ease-in-out ${ isOpen ? "max-h-40 p-5 opacity-100": "max-h-0 opacity-0 p-0"}`}>
           <div className="text-muted-foreground leading-relaxed border-t pt-4">{answer}</div>
         </div>
-      )}
+      
     </div>
   );
 };
