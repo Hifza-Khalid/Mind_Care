@@ -104,7 +104,7 @@ const categories = {
     hi: 'अवसाद सहायता',
     es: 'Apoyo para la Depresión',
     ta: 'மன அழுத்தத்திற்கான ஆதரவு',
-    color: 'bg-gray-100 text-gray-800',
+    color: 'bg-blue-200 text-black dark:text-white',
     icon: Heart,
   },
   study: {
