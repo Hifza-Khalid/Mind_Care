@@ -92,7 +92,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. Sarah Mitchell",
       date: "Oct 1, 2025",
       readTime: "8 min read",
-      image: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLNZgQYTQXBn6N6YNDhRJvsE7Ha8P9BScHWg&s"
     },
     {
       id: 2,
@@ -102,7 +102,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Anonymous Contributor",
       date: "Sep 28, 2025",
       readTime: "6 min read",
-      image: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+      image: "https://www.teachhub.com/wp-content/uploads/2025/02/Feb-27-Beyond-Tired-Recognizing-Teacher-Burnout-Symptoms-resize.jpg"
     },
     {
       id: 3,
@@ -112,7 +112,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. James Chen",
       date: "Sep 25, 2025",
       readTime: "10 min read",
-      image: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+      image: "https://ahead-app.com/_next/image?url=https%3A%2F%2Fstorage.googleapis.com%2Fweb-api-media-uploads%2Fmedia%2Ftmppmkmfhjh_c0876cca63%2Ftmppmkmfhjh_c0876cca63.png&w=3840&q=75"
     },
     {
       id: 4,
@@ -122,7 +122,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. Maria Rodriguez",
       date: "Sep 22, 2025",
       readTime: "7 min read",
-      image: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+      image: "https://miro.medium.com/v2/1*S4iF4s81OqYLf-cyPXsmyw.jpeg"
     },
     {
       id: 5,
@@ -132,7 +132,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Editorial Team",
       date: "Sep 20, 2025",
       readTime: "12 min read",
-      image: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+      image: "https://www.youngminds.org.uk/media/nk4haxiy/0481-jpg.png"
     },
     {
       id: 6,
@@ -142,7 +142,7 @@ const MentalHealthBlog: React.FC = () => {
       author: "Dr. Emily Thompson",
       date: "Sep 18, 2025",
       readTime: "9 min read",
-      image: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)"
+      image: "https://jedfoundation.org/wp-content/uploads/2021/03/How-to-Help-a-Friend-Reach-Out-for-Support-scaled.jpeg"
     }
   ];
 
@@ -178,7 +178,7 @@ const MentalHealthBlog: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white' : 'bg-white text-slate-900'}`}>
+  <div className={`min-h-screen ${isDark ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white' : 'bg-white text-slate-900'}`}>
       {/* Hero Section */}
       
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -193,28 +193,28 @@ const MentalHealthBlog: React.FC = () => {
 
       {/* Carousel Section */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 mb-16">
-        <div className={`${isDark ? 'bg-gray-800/80 border border-gray-700' : 'bg-white/60 border border-slate-200'} backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden`}>
+  <div className={`${isDark ? 'bg-gray-800/80 border border-gray-700' : 'bg-white/60 border border-slate-200'} backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden`}>
           <div className="relative">
             <div className={`bg-gradient-to-r ${carouselSlides[currentSlide].color} p-8 sm:p-12`}>
               <div className="flex items-center justify-center mb-6">
                 {carouselSlides[currentSlide].icon}
               </div>
-              <h2 className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-gray-200' : 'text-slate-900'} text-center mb-2`}>
+              <h2 className={`text-3xl sm:text-4xl font-bold text-center mb-2 ${isDark ? 'text-gray-200' : 'text-sky-400 drop-shadow-lg'}`}>
                 {carouselSlides[currentSlide].title}
               </h2>
-              <p className={`text-xl ${isDark ? 'text-gray-300' : 'text-gray-600'} text-center mb-6`}>
+              <p className={`text-xl text-center mb-6 ${isDark ? 'text-gray-300' : 'text-gray-300 drop-shadow-md'}`}>
                 {carouselSlides[currentSlide].description}
               </p>
               <div className="grid sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
                 {carouselSlides[currentSlide].tips.map((tip, idx) => (
                   <div
                     key={idx}
-                    className={`rounded-xl p-4 transform hover:scale-105 transition-transform ${isDark ? 'bg-white/10 border border-white/20' : 'bg-white border border-slate-200'}`}>
+                    className={`rounded-xl p-4 transform hover:scale-105 transition-transform ${isDark ? 'bg-white/10 border border-white/20' : 'bg-white border border-slate-200'} ${!isDark ? 'shadow-sm' : ''}`}>
                     <div className="flex items-start">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white/30 flex items-center justify-center text-neutral-100 font-bold text-sm mr-3 mt-0.5">
                         {idx + 1}
                       </span>
-                      <p className={`${isDark ? 'text-neutral-200' : 'text-slate-900'} font-medium`}>{tip}</p>
+                      <p className={`font-medium ${isDark ? 'text-neutral-200' : 'text-slate-900'}`}>{tip}</p>
                     </div>
                   </div>
                 ))}
@@ -271,11 +271,15 @@ const MentalHealthBlog: React.FC = () => {
               className={`${isDark ? 'bg-gray-800/80 border border-gray-700 text-white' : 'bg-white/60 border border-slate-200 text-slate-900'} backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group`}
             >
               <div
-                className="h-48 relative"
-                style={{ background: post.image }}
+                className="h-48 relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-                <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-semibold ${getCategoryColor(post.category)}`}>
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover object-center absolute inset-0 z-0"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors z-10" />
+                <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-semibold z-20 ${getCategoryColor(post.category)}`}>
                   {post.category}
                 </span>
               </div>
