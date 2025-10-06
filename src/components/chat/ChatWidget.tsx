@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   MessageCircle,
@@ -554,6 +554,9 @@ const ChatWidget = () => {
     Array<{ message: string; severity: string; timestamp: Date }>
   >([]);
 
+ 
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+
   // Action handlers for enhanced crisis intervention
   const handleAction = (action: {
     type: 'emergency' | 'counselor' | 'resources' | 'followup';
@@ -631,6 +634,18 @@ const ChatWidget = () => {
       setOfflineMessages([]);
     }
   }, [isOnline, offlineMessages]);
+
+  
+  useEffect(() => {
+    const node = messagesRef.current;
+    if (!node) return;
+    const el = node as HTMLElement & { scrollTo?: (opts?: ScrollToOptions) => void };
+    if (typeof el.scrollTo === 'function') {
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    } else {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [messages]);
 
   // Enhanced AI Analysis with better crisis detection
   const analyzeMessage = (
@@ -1056,7 +1071,7 @@ const ChatWidget = () => {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto space-y-3 mb-4">
+            <div ref={messagesRef} className="flex-1 overflow-y-auto space-y-3 mb-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
