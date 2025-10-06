@@ -80,7 +80,7 @@ export interface ActivityLog {
   timestamp: string;
   userId?: string;
   severity: 'info' | 'warning' | 'error' | 'success';
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 interface AdminDataContextType {
@@ -100,7 +100,7 @@ interface AdminDataContextType {
   handleCrisisAlert: (
     alertId: string,
     action: 'acknowledge' | 'assign' | 'resolve',
-    data?: any
+    data?: Record<string, unknown>
   ) => void;
   updateStudentRiskLevel: (
     studentAnonymousId: string,
@@ -348,16 +348,16 @@ export const AdminDataProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const handleCrisisAlert = useCallback(
-    (alertId: string, action: 'acknowledge' | 'assign' | 'resolve', data?: any) => {
+    (alertId: string, action: 'acknowledge' | 'assign' | 'resolve', data?: Record<string, unknown>) => {
       setCrisisAlerts((prev) =>
         prev.map((alert) =>
           alert.id === alertId
             ? {
                 ...alert,
-                status: action === 'resolve' ? 'addressed' : 'monitoring',
+                status: action === 'resolve' ? 'addressed' as const : 'monitoring' as const,
                 assignedCounselorId:
-                  action === 'assign' ? data?.counselorId : alert.assignedCounselorId,
-                resolution: data?.response || alert.resolution,
+                  action === 'assign' ? (data?.counselorId as string) : alert.assignedCounselorId,
+                resolution: (data?.response as string) || alert.resolution,
               }
             : alert
         )
@@ -556,7 +556,7 @@ export const AdminDataProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAdminData = () => {
+export const useAdminData = (): AdminDataContextType => {
   const context = useContext(AdminDataContext);
   if (context === undefined) {
     throw new Error('useAdminData must be used within an AdminDataProvider');

@@ -64,11 +64,11 @@ export const useActivityContext = () => {
 
 // Higher-order component to automatically log navigation activities
 export const withActivityLogging = (
-  WrappedComponent: React.ComponentType<any>,
+  WrappedComponent: React.ComponentType<Record<string, unknown>>,
   activityType: 'chat' | 'resource' | 'forum' | 'booking',
   activityTitle: string
 ) => {
-  return (props: any) => {
+  return (props: Record<string, unknown>) => {
     const { logActivity } = useActivityContext();
 
     useEffect(() => {

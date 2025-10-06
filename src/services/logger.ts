@@ -17,7 +17,7 @@ export interface LogEntry {
   level: LogLevel;
   category: string;
   message: string;
-  data?: any;
+  data?: Record<string, unknown>;
   error?: Error;
 }
 
@@ -44,7 +44,7 @@ class Logger {
     return level >= this.logLevel;
   }
 
-  private createLogEntry(level: LogLevel, category: string, message: string, data?: any, error?: Error): LogEntry {
+  private createLogEntry(level: LogLevel, category: string, message: string, data?: Record<string, unknown>, error?: Error): LogEntry {
     return {
       timestamp: new Date().toISOString(),
       level,
@@ -100,7 +100,7 @@ class Logger {
     }
   }
 
-  private log(level: LogLevel, category: string, message: string, data?: any, error?: Error): void {
+  private log(level: LogLevel, category: string, message: string, data?: Record<string, unknown>, error?: Error): void {
     if (!this.shouldLog(level)) {
       return;
     }
@@ -112,19 +112,19 @@ class Logger {
   }
 
   // Public logging methods
-  public debug(category: string, message: string, data?: any): void {
+  public debug(category: string, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.DEBUG, category, message, data);
   }
 
-  public info(category: string, message: string, data?: any): void {
+  public info(category: string, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.INFO, category, message, data);
   }
 
-  public warn(category: string, message: string, data?: any): void {
+  public warn(category: string, message: string, data?: Record<string, unknown>): void {
     this.log(LogLevel.WARN, category, message, data);
   }
 
-  public error(category: string, message: string, error?: Error, data?: any): void {
+  public error(category: string, message: string, error?: Error, data?: Record<string, unknown>): void {
     this.log(LogLevel.ERROR, category, message, data, error);
   }
 
@@ -142,31 +142,31 @@ class Logger {
   }
 
   // Specialized logging methods for different categories
-  public logAudioError(message: string, error?: Error, data?: any): void {
+  public logAudioError(message: string, error?: Error, data?: Record<string, unknown>): void {
     this.error('AUDIO', message, error, data);
   }
 
-  public logVideoCallEvent(message: string, data?: any): void {
+  public logVideoCallEvent(message: string, data?: Record<string, unknown>): void {
     this.info('VIDEO_CALL', message, data);
   }
 
-  public logVideoCallError(message: string, error?: Error, data?: any): void {
+  public logVideoCallError(message: string, error?: Error, data?: Record<string, unknown>): void {
     this.error('VIDEO_CALL', message, error, data);
   }
 
-  public logMeditationSession(message: string, data?: any): void {
+  public logMeditationSession(message: string, data?: Record<string, unknown>): void {
     this.info('MEDITATION', message, data);
   }
 
-  public logStudyGroupEvent(message: string, data?: any): void {
+  public logStudyGroupEvent(message: string, data?: Record<string, unknown>): void {
     this.info('STUDY_GROUP', message, data);
   }
 
-  public logUserPreferences(message: string, data?: any): void {
+  public logUserPreferences(message: string, data?: Record<string, unknown>): void {
     this.info('USER_PREFERENCES', message, data);
   }
 
-  public logPerformance(message: string, data?: any): void {
+  public logPerformance(message: string, data?: Record<string, unknown>): void {
     this.debug('PERFORMANCE', message, data);
   }
 }
@@ -175,25 +175,25 @@ class Logger {
 export const logger = Logger.getInstance();
 
 // Export convenience functions for common usage patterns
-export const logAudioError = (message: string, error?: Error, data?: any) => 
+export const logAudioError = (message: string, error?: Error, data?: Record<string, unknown>): void => 
   logger.logAudioError(message, error, data);
 
-export const logVideoCall = (message: string, data?: any) => 
+export const logVideoCall = (message: string, data?: Record<string, unknown>): void => 
   logger.logVideoCallEvent(message, data);
 
-export const logVideoCallError = (message: string, error?: Error, data?: any) => 
+export const logVideoCallError = (message: string, error?: Error, data?: Record<string, unknown>): void => 
   logger.logVideoCallError(message, error, data);
 
-export const logMeditation = (message: string, data?: any) => 
+export const logMeditation = (message: string, data?: Record<string, unknown>): void => 
   logger.logMeditationSession(message, data);
 
-export const logStudyGroup = (message: string, data?: any) => 
+export const logStudyGroup = (message: string, data?: Record<string, unknown>): void => 
   logger.logStudyGroupEvent(message, data);
 
-export const logUserPrefs = (message: string, data?: any) => 
+export const logUserPrefs = (message: string, data?: Record<string, unknown>): void => 
   logger.logUserPreferences(message, data);
 
-export const logPerformance = (message: string, data?: any) => 
+export const logPerformance = (message: string, data?: Record<string, unknown>): void => 
   logger.logPerformance(message, data);
 
 // Default export
