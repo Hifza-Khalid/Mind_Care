@@ -64,7 +64,7 @@ const Header = () => {
     if (user?.role === 'counselor') {
       return [
         { name: 'Sessions', href: '/app/sessions', icon: Calendar },
-        { name: 'Chat Support', href: '/app/chat-support', icon: MessageCircle },
+        { name: 'Chat Support', href: '/app/chat', icon: MessageCircle },
         ...baseItems,
       ];
     }
