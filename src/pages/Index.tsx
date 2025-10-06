@@ -170,7 +170,7 @@ const AuthenticatedHomePage = ({
             <span className="text-sm text-muted-foreground">
               Welcome back, {user.name.split(' ')[0]}
             </span>
-            <Button asChild className="bg-gradient-primary hover:shadow-glow">
+            <Button asChild className="ml-2 bg-gradient-primary hover:shadow-glow">
               <Link to={getDashboardPath()}>Dashboard</Link>
             </Button>
           </div>
