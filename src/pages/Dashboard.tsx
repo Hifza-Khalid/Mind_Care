@@ -1,3 +1,49 @@
+/**
+ * @fileoverview Administrative Dashboard - Comprehensive Mental Health Platform Management
+ * 
+ * A real-time administrative dashboard for monitoring student mental health metrics,
+ * managing crisis interventions, tracking platform usage, and analyzing wellness trends.
+ * 
+ * Key Features:
+ * - Real-time student monitoring with risk assessment
+ * - Crisis alert management and intervention protocols
+ * - Live session tracking and counselor availability
+ * - Platform analytics and usage metrics
+ * - Data export capabilities for reporting
+ * - Auto-refresh functionality for live monitoring
+ * 
+ * Crisis Management:
+ * - Immediate alerts for high-risk students
+ * - Emergency protocol activation
+ * - Counselor dispatch and resource allocation
+ * - Risk level classification and trending
+ * 
+ * Analytics & Reporting:
+ * - Student engagement metrics
+ * - Mental health trend analysis
+ * - Session completion rates
+ * - Platform utilization statistics
+ * - Exportable data for institutional reporting
+ * 
+ * @example
+ * ```tsx
+ * // Wrapped with AdminDataProvider for real-time data
+ * <AdminDataProvider>
+ *   <AdminDashboard />
+ * </AdminDataProvider>
+ * 
+ * // The dashboard automatically:
+ * // - Monitors student risk levels
+ * // - Alerts on crisis situations  
+ * // - Tracks live sessions
+ * // - Provides real-time analytics
+ * ```
+ * 
+ * @see {@link ../contexts/AdminDataContext} For real-time data management
+ * @see {@link ../components/ui/card} For dashboard layout components
+ * @see {@link https://recharts.org/} For analytics visualizations
+ */
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -55,6 +101,34 @@ import {
   Target,
 } from 'lucide-react';
 
+/**
+ * AdminDashboard Component - Real-time mental health platform administration.
+ * 
+ * Provides comprehensive oversight of the Mind Care platform with real-time monitoring,
+ * crisis management, and analytics capabilities for administrators and clinical staff.
+ * 
+ * State Management:
+ * - searchTerm: Filter students by name, ID, or institution
+ * - selectedRiskLevel: Filter by mental health risk assessment level
+ * - selectedTimeframe: Analytics time window (24h, 7d, 30d, 90d)
+ * - autoRefresh: Toggle for automatic data updates
+ * 
+ * Data Sources:
+ * - students: Student roster with risk assessments and activity
+ * - liveSessions: Currently active counseling sessions
+ * - crisisAlerts: Emergency situations requiring immediate attention
+ * - platformMetrics: Usage statistics and performance indicators
+ * - activityLogs: Audit trail of platform interactions
+ * 
+ * Key Functions:
+ * - Real-time crisis alert monitoring and response
+ * - Student risk level tracking and intervention
+ * - Session management and counselor oversight
+ * - Data export for institutional reporting
+ * - Platform health monitoring
+ * 
+ * @returns Comprehensive administrative dashboard with real-time capabilities
+ */
 const AdminDashboard = () => {
   const {
     students,

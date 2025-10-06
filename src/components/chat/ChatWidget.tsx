@@ -1,3 +1,41 @@
+/**
+ * @fileoverview ChatWidget - AI-Powered Mental Health Support Chat Component
+ * 
+ * A comprehensive chat interface that provides immediate AI-powered mental health support
+ * with crisis detection, multilingual capabilities, and intelligent response routing.
+ * 
+ * Key Features:
+ * - Advanced crisis detection and intervention protocols
+ * - Multi-language support (12+ languages) with culturally appropriate responses
+ * - Real-time sentiment analysis and risk assessment
+ * - Offline message queuing and sync when reconnected
+ * - Contextual action buttons for emergency services, counseling, and resources
+ * - WCAG 2.1 AA compliant accessibility features
+ * 
+ * Crisis Detection:
+ * - Suicide ideation detection with immediate intervention
+ * - Self-harm risk assessment
+ * - Multiple severity levels (low, medium, high, crisis)
+ * - Multilingual crisis keywords and patterns
+ * - Risk factor identification (isolation, substance use, trauma, etc.)
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage - component manages its own state
+ * <ChatWidget />
+ * 
+ * // The widget automatically:
+ * // - Detects user's emotional state
+ * // - Provides appropriate resources
+ * // - Routes to emergency services if needed
+ * // - Maintains conversation history
+ * ```
+ * 
+ * @see {@link ./LanguageSelector} For language selection component
+ * @see {@link ../../hooks/useOnlineStatus} For network connectivity detection
+ * @see {@link ../../types/notifications} For notification integration
+ */
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,20 +58,65 @@ import { Badge } from '@/components/ui/badge';
 import LanguageSelector, { languages } from './LanguageSelector';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 
+/**
+ * Represents a chat message with comprehensive metadata for mental health assessment.
+ * 
+ * @interface Message
+ */
 interface Message {
+  /** Unique identifier for the message */
   id: string;
+  
+  /** Message sender type - user input or AI response */
   type: 'user' | 'ai';
+  
+  /** The actual message content */
   content: string;
+  
+  /** When the message was created */
   timestamp: Date;
+  
+  /** 
+   * AI-assessed severity level of mental health concerns expressed
+   * - low: General wellness, positive mood, minor stress
+   * - medium: Moderate anxiety, academic stress, relationship issues
+   * - high: Significant distress, depression indicators, isolation
+   * - crisis: Suicide ideation, self-harm, immediate danger
+   */
   severity?: 'low' | 'medium' | 'high' | 'crisis';
+  
+  /** Language code for the message content */
   language?: string;
+  
+  /** 
+   * Contextual action buttons presented to the user based on assessment
+   * Provides immediate pathways to appropriate help and resources
+   */
   actions?: Array<{
+    /** Type of action - determines routing and urgency */
     type: 'emergency' | 'counselor' | 'resources' | 'followup';
+    /** Display text for the action button */
     label: string;
+    /** Whether this action requires immediate attention (crisis scenarios) */
     urgent?: boolean;
   }>;
+  
+  /** 
+   * AI confidence score (0-1) in the severity assessment
+   * Higher confidence triggers more assertive interventions
+   */
   confidence?: number;
+  
+  /** 
+   * Specific keywords/phrases that triggered concern levels
+   * Used for transparent AI decision making and logging
+   */
   triggers?: string[];
+  
+  /** 
+   * Identified risk factors from psychological research
+   * Categories: isolation, substance, trauma, loss, financial, relationship, academic
+   */
   riskFactors?: string[];
 }
 

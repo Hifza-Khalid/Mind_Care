@@ -1,3 +1,42 @@
+/**
+ * @fileoverview MoodTracker - Interactive Daily Mood Tracking Component
+ * 
+ * A comprehensive mood tracking system that allows users to log their daily emotional state
+ * with contextual notes, view trends, maintain streaks, and receive personalized insights.
+ * 
+ * Features:
+ * - 5-point mood scale with emoji representations
+ * - Optional contextual notes for detailed tracking
+ * - Real-time trend analysis and streak tracking
+ * - Smooth animations and visual feedback
+ * - Accessibility-compliant mood selection interface
+ * - Integration with notification system for reminders
+ * 
+ * Mood Scale:
+ * 1. Very Sad (😢) - Severe emotional distress
+ * 2. Sad (😕) - Mild to moderate low mood
+ * 3. Neutral (😐) - Balanced emotional state
+ * 4. Happy (😊) - Positive mood and well-being
+ * 5. Very Happy (😄) - Excellent emotional state
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage in dashboard
+ * <MoodTracker />
+ * 
+ * // The component automatically:
+ * // - Tracks daily mood entries
+ * // - Calculates weekly averages
+ * // - Maintains mood streaks
+ * // - Provides trend analysis
+ * // - Sends encouragement notifications
+ * ```
+ * 
+ * @see {@link ../hooks/useDashboardFeatures} For mood tracking state management
+ * @see {@link ../hooks/useRealTimeFeatures} For animations and real-time updates
+ * @see {@link ./RealTimeFeedback} For user feedback components
+ */
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,6 +64,17 @@ import {
 import notificationService from '@/services/notificationService';
 import { Smile, Frown, Meh, Heart, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
+/**
+ * Mood scale configuration with emoji representations and accessibility labels.
+ * 
+ * Each mood level includes:
+ * - Visual emoji for quick recognition
+ * - Descriptive label for accessibility
+ * - Color coding for consistent theming
+ * 
+ * Scale is based on common psychological assessment tools and optimized
+ * for daily self-reporting by students and mental health consumers.
+ */
 const moodEmojis = {
   1: { emoji: '😢', label: 'Very Sad', color: 'text-red-500' },
   2: { emoji: '😕', label: 'Sad', color: 'text-orange-500' },
@@ -33,6 +83,27 @@ const moodEmojis = {
   5: { emoji: '😄', label: 'Very Happy', color: 'text-blue-500' },
 };
 
+/**
+ * MoodTracker Component - Interactive daily mood logging and trend analysis.
+ * 
+ * Provides a user-friendly interface for daily mood tracking with real-time feedback,
+ * trend visualization, and streak maintenance to encourage consistent self-monitoring.
+ * 
+ * State Management:
+ * - selectedMood: Currently selected mood value (1-5)
+ * - moodNote: Optional contextual note about the mood
+ * - isDialogOpen: Controls the mood entry dialog visibility
+ * 
+ * Features:
+ * - One-click mood selection with emoji interface
+ * - Optional detailed notes for context
+ * - Real-time trend calculation and display
+ * - Streak tracking with celebration feedback
+ * - Smooth animations for enhanced UX
+ * - Accessibility support for screen readers
+ * 
+ * @returns Interactive mood tracking component with analytics
+ */
 export const MoodTracker = () => {
   const { moods, addMoodEntry, getTodayMood, getWeeklyMoodAverage, getMoodTrend } =
     useMoodTracking();
