@@ -154,6 +154,14 @@ export const useGoals = () => {
     localStorage.setItem('user_goals', JSON.stringify(updatedGoals));
   };
 
+  // --- ADD THIS FUNCTION ---
+  const deleteGoal = (id: string) => {
+    const updatedGoals = goals.filter((goal) => goal.id !== id);
+    setGoals(updatedGoals);
+    localStorage.setItem('user_goals', JSON.stringify(updatedGoals));
+  };
+  // --- END OF ADDED FUNCTION ---
+
   const getActiveGoals = () => goals.filter((g) => !g.completed);
   const getCompletedGoals = () => goals.filter((g) => g.completed);
 
@@ -175,6 +183,7 @@ export const useGoals = () => {
     addGoal,
     updateGoalProgress,
     completeGoal,
+    deleteGoal, // --- ADD deleteGoal HERE ---
     getActiveGoals,
     getCompletedGoals,
     getWeeklyGoalProgress,
