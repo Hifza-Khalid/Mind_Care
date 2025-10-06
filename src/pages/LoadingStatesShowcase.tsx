@@ -6,12 +6,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Settings, Play, Pause, RotateCcw, Eye } from 'lucide-react';
 
-// Import all loading components
+// Import loading components from their respective modules
 import {
   Spinner,
   InlineSpinner,
   LoadingOverlay,
-  CardSpinner,
+  CardSpinner
+} from '@/components/ui/spinner';
+
+import {
   HeartbeatLoader,
   BreathingLoader,
   WaveLoader,
@@ -19,15 +22,21 @@ import {
   ActivityRingsLoader,
   ZenDotsLoader,
   TypingIndicator,
-  DashboardLoader,
+  DashboardLoader
+} from '@/components/ui/loading-animations';
+
+import {
   MoodTrackerSkeleton,
   MoodAnalyticsSkeleton,
   MoodWidgetSkeleton,
   InteractiveAnalyticsSkeleton,
-  QuickMoodSkeleton,
+  QuickMoodSkeleton
+} from '@/components/ui/loading-skeletons';
+
+import {
   LoadingDashboardDemo,
   LoadingAnimationsShowcase
-} from '@/components/loading';
+} from '@/components/dashboard/LoadingStatesDemo';
 
 /**
  * Loading States Showcase Page

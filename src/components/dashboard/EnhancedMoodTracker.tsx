@@ -21,6 +21,8 @@ import { showRealTimeNotification, AnimatedCounter } from '@/components/dashboar
 import notificationService from '@/services/notificationService';
 import { Heart, Smile, TrendingUp, TrendingDown, Minus, CheckCircle2, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ComponentErrorBoundary } from '@/components/error/ErrorBoundary';
+import { useErrorHandler } from '@/hooks/useErrorHandling';
 
 // Loading State Components
 import { 
@@ -132,6 +134,9 @@ export const EnhancedMoodTracker: React.FC<EnhancedMoodTrackerProps> = ({
   const [moodNote, setMoodNote] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  // Error handling
+  const { handleError } = useErrorHandler({ componentName: 'MoodTracker' });
+
   // Hooks
   const { 
     moods, 
@@ -160,8 +165,12 @@ export const EnhancedMoodTracker: React.FC<EnhancedMoodTrackerProps> = ({
         await new Promise(resolve => setTimeout(resolve, 1500));
         setIsLoading(false);
       } catch (err) {
+        const error = err instanceof Error ? err : new Error('Failed to load mood data');
         setError('Failed to load mood data');
         setIsLoading(false);
+        handleError(error, {
+          context: { action: 'loadMoodData' }
+        });
       }
     };
 
@@ -205,7 +214,15 @@ export const EnhancedMoodTracker: React.FC<EnhancedMoodTrackerProps> = ({
       setSelectedMood(null);
       setMoodNote('');
     } catch (err) {
+      const error = err instanceof Error ? err : new Error('Failed to save mood');
       setError('Failed to save mood. Please try again.');
+      handleError(error, {
+        context: {
+          action: 'saveMood',
+          mood: selectedMood,
+          hasNote: !!moodNote
+        }
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -496,6 +513,7 @@ export const QuickMoodCheckIn: React.FC<{
   loading?: boolean;
 }> = ({ className, onMoodSelected, loading = false }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { handleError } = useErrorHandler({ componentName: 'QuickMoodCheckIn' });
   
   if (loading) {
     return <QuickMoodSkeleton className={className} />;
@@ -513,8 +531,15 @@ export const QuickMoodCheckIn: React.FC<{
         'success',
         `Quick mood logged: ${moodEmojis[mood].emoji} ${moodEmojis[mood].label}`
       );
-    } catch (error) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Failed to save quick mood');
       showRealTimeNotification('error', 'Failed to save mood');
+      handleError(error, {
+        context: {
+          action: 'saveQuickMood',
+          mood: mood
+        }
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -551,4 +576,11 @@ export const QuickMoodCheckIn: React.FC<{
   );
 };
 
-export default EnhancedMoodTracker;
+// Enhanced MoodTracker wrapped with error boundary for safe rendering
+const EnhancedMoodTrackerWithErrorBoundary: React.FC<EnhancedMoodTrackerProps> = (props) => (
+  <ComponentErrorBoundary componentName="Enhanced Mood Tracker">
+    <EnhancedMoodTracker {...props} />
+  </ComponentErrorBoundary>
+);
+
+export default EnhancedMoodTrackerWithErrorBoundary;
