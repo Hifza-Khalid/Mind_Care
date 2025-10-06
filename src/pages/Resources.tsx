@@ -587,7 +587,7 @@ const Resources = () => {
   };
 
   return (
-    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses}`}>
+    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses} overflow-hidden`}>
       {/* Header */}
       <div className="text-center space-y-4 relative">
         <div className="absolute top-0 right-0">
