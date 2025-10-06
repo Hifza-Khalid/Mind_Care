@@ -166,7 +166,7 @@ const AuthenticatedHomePage = ({
               MindBuddy
             </span>
           </div>
-          <div className="flex items-center ">
+          <div className="flex items-center gap-3">
             <span className="text-sm text-muted-foreground">
               Welcome back, {user.name.split(' ')[0]}
             </span>
