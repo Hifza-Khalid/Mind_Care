@@ -50,7 +50,7 @@ const About = () => {
             <div className="rounded-2xl overflow-hidden shadow-xl transform hover:scale-102 transition-transform duration-500">
               <img
                 src={heroImage}
-                alt="Care illustration"
+                alt="Compassionate mental health care illustration depicting supportive healthcare professionals and individuals in a nurturing therapeutic environment"
                 className="w-full h-80 md:h-96 object-cover"
               />
             </div>

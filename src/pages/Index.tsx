@@ -792,7 +792,7 @@ const GuestHomePage = () => {
               <div className="flex justify-center md:justify-end">
                 <img
                   src={heroImage}
-                  alt="Wellness illustration"
+                  alt="Mental health and wellness illustration showing people supporting each other in a caring community environment"
                   className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] object-cover rounded-xl shadow-card gentle-transition gentle-hover"
                 />
               </div>

@@ -52,13 +52,25 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  'aria-label'?: string;
+  'aria-describedby'?: string;
+  'aria-expanded'?: boolean;
+  'aria-pressed'?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, 'aria-label': ariaLabel, 'aria-describedby': ariaDescribedBy, 'aria-expanded': ariaExpanded, 'aria-pressed': ariaPressed, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     return (
-      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+      <Comp 
+        className={cn(buttonVariants({ variant, size, className }))} 
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
+        aria-expanded={ariaExpanded}
+        aria-pressed={ariaPressed}
+        ref={ref} 
+        {...props} 
+      />
     );
   }
 );
