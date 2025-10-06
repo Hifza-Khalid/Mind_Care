@@ -45,6 +45,7 @@ import {
   MapPin,
   Globe,
 } from 'lucide-react';
+import { getCreationDate, getRecentActivityDate, getJoinDate, getScheduledDate, getRelativeDate } from '../../utils/dateUtils';
 
 import {
   Mentor,
@@ -182,7 +183,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
               'Sarah helped me develop incredible coping strategies for my anxiety. I went from panic attacks during exams to feeling confident and prepared.',
             helpfulnessScore: 95,
             category: 'anxiety-support',
-            submittedAt: '2024-01-15T00:00:00Z',
+            submittedAt: getRelativeDate(-20),
             isVerified: true,
           },
           {
@@ -193,7 +194,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
               'The study strategies and time management techniques I learned completely transformed my academic performance.',
             helpfulnessScore: 90,
             category: 'academic-guidance',
-            submittedAt: '2024-01-10T00:00:00Z',
+            submittedAt: getRelativeDate(-25),
             isVerified: true,
           },
         ],
@@ -205,7 +206,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
       reviewCount: 15,
       isActive: true,
       isVerified: true,
-      joinedAt: '2023-09-01T00:00:00Z',
+      joinedAt: getJoinDate(),
       lastActive: new Date().toISOString(),
     },
     {
@@ -279,7 +280,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
               'Alex provided incredible support during my transition to college. Their evidence-based approach really helped.',
             helpfulnessScore: 88,
             category: 'adjustment-support',
-            submittedAt: '2024-01-12T00:00:00Z',
+            submittedAt: getRelativeDate(-23),
             isVerified: true,
           },
         ],
@@ -291,7 +292,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
       reviewCount: 8,
       isActive: true,
       isVerified: true,
-      joinedAt: '2023-10-15T00:00:00Z',
+      joinedAt: getRelativeDate(-350),
       lastActive: new Date().toISOString(),
     },
     {
@@ -360,7 +361,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
               "Jordan helped me realize that perfection isn't the goal - progress is. My stress levels decreased significantly.",
             helpfulnessScore: 85,
             category: 'perfectionism-support',
-            submittedAt: '2024-01-08T00:00:00Z',
+            submittedAt: getRelativeDate(-27),
             isVerified: true,
           },
         ],
@@ -372,7 +373,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
       reviewCount: 6,
       isActive: true,
       isVerified: true,
-      joinedAt: '2023-11-01T00:00:00Z',
+      joinedAt: getRelativeDate(-333),
       lastActive: new Date().toISOString(),
     },
   ];
@@ -384,7 +385,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
       mentorId: 'mentor_001',
       menteeId: currentUser?.id || 'user_123',
       status: 'active',
-      matchedAt: '2024-01-15T00:00:00Z',
+      matchedAt: getRelativeDate(-20),
       compatibility: {
         overall: 88,
         concernsMatch: 85,
@@ -415,13 +416,13 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
               id: 'ms_001',
               title: 'Learn breathing techniques',
               isCompleted: true,
-              completedAt: '2024-01-20T00:00:00Z',
+              completedAt: getRelativeDate(-15),
             },
             {
               id: 'ms_002',
               title: 'Practice mindfulness before exams',
               isCompleted: true,
-              completedAt: '2024-01-25T00:00:00Z',
+              completedAt: getRelativeDate(-10),
             },
             { id: 'ms_003', title: 'Develop pre-exam routine', isCompleted: false },
             { id: 'ms_004', title: 'Apply strategies during midterms', isCompleted: false },
@@ -440,7 +441,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
               id: 'ms_005',
               title: 'Time audit and analysis',
               isCompleted: true,
-              completedAt: '2024-01-18T00:00:00Z',
+              completedAt: getRelativeDate(-17),
             },
             { id: 'ms_006', title: 'Create study schedule', isCompleted: false },
             { id: 'ms_007', title: 'Implement Pomodoro technique', isCompleted: false },
@@ -476,8 +477,8 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
         communicationMethod: 'video-calls',
         sessionFormat: 'goal-oriented',
       },
-      lastSession: '2024-01-20T18:00:00Z',
-      nextSession: '2024-01-27T18:00:00Z',
+      lastSession: getRelativeDate(-15, 18),
+      nextSession: getRelativeDate(7, 18),
       totalSessions: 4,
       isActive: true,
       satisfaction: {

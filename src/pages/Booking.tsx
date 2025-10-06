@@ -55,6 +55,15 @@ import {
   Database,
   AlertCircle,
 } from 'lucide-react';
+import { getScheduledDate, getRelativeDate } from '../utils/dateUtils';
+
+// Helper function to get a Date object for future appointments
+const getNextAvailableSlot = (daysFromNow: number, hour: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  date.setHours(hour, 0, 0, 0);
+  return date;
+};
 import { format, addDays, isSameDay, isToday, isTomorrow } from 'date-fns';
 
 interface Review {
@@ -118,7 +127,7 @@ const mockCounselors: Counselor[] = [
       'Solution-Focused Therapy',
       'Cultural Integration Therapy',
     ],
-    nextAvailable: new Date('2025-09-22T09:00:00'),
+    nextAvailable: getNextAvailableSlot(1, 9),
     responseTime: '< 2 hours',
     isOnline: true,
     timezone: 'IST',
@@ -175,7 +184,7 @@ const mockCounselors: Counselor[] = [
       'Mindfulness Training',
       'Social Skills Training',
     ],
-    nextAvailable: new Date('2025-09-22T10:00:00'),
+    nextAvailable: getNextAvailableSlot(2, 10),
     responseTime: '< 4 hours',
     isOnline: true,
     timezone: 'IST',
@@ -223,7 +232,7 @@ const mockCounselors: Counselor[] = [
       'Dialectical Behavior Therapy',
       'Somatic Therapy',
     ],
-    nextAvailable: new Date('2025-09-22T08:00:00'),
+    nextAvailable: getNextAvailableSlot(1, 8),
     responseTime: '< 1 hour',
     isOnline: true,
     timezone: 'IST',
@@ -277,7 +286,7 @@ const mockCounselors: Counselor[] = [
       'Solution-Focused Therapy',
       'Cultural Integration Therapy',
     ],
-    nextAvailable: new Date('2025-09-22T11:00:00'),
+    nextAvailable: getNextAvailableSlot(3, 11),
     responseTime: '< 6 hours',
     isOnline: true,
     timezone: 'IST',
@@ -331,7 +340,12 @@ const mockCounselors: Counselor[] = [
       'Narrative Therapy',
       'Strength-Based Counseling',
     ],
-    nextAvailable: new Date('2025-09-22T09:30:00'),
+    nextAvailable: (() => {
+      const date = new Date();
+      date.setDate(date.getDate() + 2);
+      date.setHours(9, 30, 0, 0);
+      return date;
+    })(),
     responseTime: '< 3 hours',
     isOnline: true,
     timezone: 'IST',

@@ -33,6 +33,7 @@ import {
   Settings,
   HelpCircle,
 } from 'lucide-react';
+import { getCreationDate } from '../../utils/dateUtils';
 
 import { PeerMatchingDashboard } from './PeerMatchingDashboard';
 import { PeerBuddyMatching } from './PeerBuddyMatching';
@@ -242,7 +243,7 @@ export const PeerMatchingDemo: React.FC<PeerMatchingDemoProps> = ({ className = 
       lastActive: new Date().toISOString(),
       profileComplete: true,
       verificationStatus: 'verified',
-      createdAt: '2024-01-15T00:00:00Z',
+      createdAt: getCreationDate(),
     };
 
     setDemoUser(mockUser);

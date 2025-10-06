@@ -32,6 +32,7 @@ import {
   Radio,
   Volume2,
 } from 'lucide-react';
+import { getCreationDate } from '../../utils/dateUtils';
 
 import { PeerBuddyMatching } from './PeerBuddyMatching';
 import { StudyGroupSystem } from './StudyGroupSystem';
@@ -142,7 +143,7 @@ export const PeerMatchingDashboard: React.FC<PeerMatchingDashboardProps> = ({
       lastActive: new Date().toISOString(),
       profileComplete: true,
       verificationStatus: 'verified' as const,
-      createdAt: '2024-01-15T00:00:00Z',
+      createdAt: getCreationDate(),
     } as PeerUser);
 
   // Initialize mock data
