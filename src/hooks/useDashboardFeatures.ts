@@ -40,7 +40,13 @@ export interface Achievement {
 }
 
 // Mood Tracking Hook
-export const useMoodTracking = () => {
+export const useMoodTracking = () : {
+  moods: MoodEntry[];
+  addMoodEntry: (mood: number, note?: string) => void;
+  getTodayMood: () => MoodEntry | undefined;
+  getWeeklyMoodAverage: () => number;
+  getMoodTrend: () => 'improving' | 'declining' | 'stable';
+} => {
   const [moods, setMoods] = useState<MoodEntry[]>([]);
 
   useEffect(() => {
@@ -106,7 +112,15 @@ export const useMoodTracking = () => {
 };
 
 // Goals Hook
-export const useGoals = () => {
+export const useGoals = (): {
+  goals: Goal[];
+  addGoal: (title: string, description: string, targetDate: string, category: Goal['category']) => void;
+  updateGoalProgress: (id: string, progress: number) => void;
+  completeGoal: (id: string) => void;
+  getActiveGoals: () => Goal[];
+  getCompletedGoals: () => Goal[];
+  getWeeklyGoalProgress: () => number;
+} => {
   const [goals, setGoals] = useState<Goal[]>([]);
 
   useEffect(() => {
@@ -191,7 +205,12 @@ export const useGoals = () => {
 };
 
 // Activity Logging Hook
-export const useActivityLog = () => {
+export const useActivityLog = (): {
+  activities: ActivityLog[];
+  logActivity: (type: ActivityLog['type'], title: string, details?: string) => void;
+  getWeeklyStats: () => { total: number; chat: number; resource: number; forum: number; booking: number; };
+  getRecentActivities: (limit?: number) => ActivityLog[];
+} => {
   const [activities, setActivities] = useState<ActivityLog[]>([]);
 
   useEffect(() => {
@@ -241,7 +260,13 @@ export const useActivityLog = () => {
 };
 
 // Achievement System Hook
-export const useAchievements = () => {
+export const useAchievements = (): {
+  achievements: Achievement[];
+  unlockAchievement: (id: string) => Achievement | undefined;
+  checkAchievements: (activities: ActivityLog[], moods: MoodEntry[], goals: Goal[]) => Achievement[];
+  getUnlockedCount: () => number;
+  getTotalCount: () => number;
+} => {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
   useEffect(() => {
@@ -369,7 +394,9 @@ export const useAchievements = () => {
 };
 
 // Daily Tips System
-export const useDailyTips = () => {
+export const useDailyTips = (): {
+  getDailyTips: (count?: number) => Array<{ icon: string; title: string; description: string; color: string; }>;
+} => {
   const tips = [
     {
       icon: 'Target',
@@ -438,7 +465,11 @@ export const useDailyTips = () => {
 };
 
 // Sleep Quality Tracking
-export const useSleepTracking = () => {
+export const useSleepTracking = (): {
+  sleepData: Array<{ date: string; hours: number }>;
+  addSleepEntry: (hours: number) => void;
+  getAverageHours: () => number;
+} => {
   const [sleepData, setSleepData] = useState<Array<{ date: string; hours: number }>>([]);
 
   useEffect(() => {

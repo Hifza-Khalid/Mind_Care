@@ -148,12 +148,21 @@ export const MoodTracker = () => {
                 <div className="grid grid-cols-5 gap-2">
                   {Object.entries(moodEmojis).map(([value, { emoji, label, color }]) => (
                     <button
+                      role="radio"
+                      aria-checked={selectedMood === parseInt(value)}
+                      aria-label={`Rate your mood as ${label}`}
                       key={value}
                       onClick={() => setSelectedMood(Number(value))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedMood(Number(value));
+                        }
+                      }}
                       className={`p-3 rounded-lg border-2 transition-all duration-200 ${
                         selectedMood === Number(value)
                           ? 'border-primary bg-primary/10 scale-110'
-                          : 'border-gray-200 hover:border-primary'
+                          : 'border-gray-200 hover:border-primary hover:scale-105'
                       }`}
                     >
                       <div className="text-2xl mb-1">{emoji}</div>

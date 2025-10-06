@@ -168,7 +168,7 @@ const Sessions = () => {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
                           <Avatar className="h-12 w-12 ring-2 ring-trust/20">
-                            <AvatarImage src={session.counsellorImage} />
+                            <AvatarImage src={session.counsellorImage} alt={`${session.counsellorName}'s profile picture`} />
                             <AvatarFallback className="bg-gradient-primary text-primary-foreground">
                               {session.counsellorName
                                 .split(' ')
@@ -242,7 +242,7 @@ const Sessions = () => {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10 ring-1 ring-border">
-                          <AvatarImage src={session.counsellorImage} />
+                          <AvatarImage src={session.counsellorImage} alt={`${session.counsellorName}'s profile picture`} />
                           <AvatarFallback className="bg-muted text-muted-foreground">
                             {session.counsellorName
                               .split(' ')

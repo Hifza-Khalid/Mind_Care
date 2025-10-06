@@ -355,7 +355,12 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
         {/* Control Buttons */}
         <div className="flex justify-center space-x-3">
           {!timer.isActive ? (
-            <Button onClick={handleStart} size="lg" className="flex items-center space-x-2">
+            <Button 
+              onClick={handleStart} 
+              size="lg" 
+              className="flex items-center space-x-2"
+              aria-label="Start meditation timer"
+            >
               <Play className="h-5 w-5" />
               <span>Start</span>
             </Button>
@@ -366,6 +371,7 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
                 size="lg"
                 variant="outline"
                 className="flex items-center space-x-2"
+                aria-label={isRunning ? 'Pause meditation timer' : 'Resume meditation timer'}
               >
                 {isRunning ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                 <span>{isRunning ? 'Pause' : 'Resume'}</span>
@@ -375,6 +381,7 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
                 size="lg"
                 variant="destructive"
                 className="flex items-center space-x-2"
+                aria-label="Stop meditation timer"
               >
                 <Square className="h-5 w-5" />
                 <span>Stop</span>
@@ -386,6 +393,7 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
             onClick={handleReset}
             size="lg"
             variant="ghost"
+            aria-label="Reset meditation timer"
             disabled={timer.isActive && !timer.isPaused}
           >
             <RotateCcw className="h-5 w-5" />

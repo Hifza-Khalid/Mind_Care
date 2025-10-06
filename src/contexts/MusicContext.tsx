@@ -71,7 +71,8 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       });
 
       audioRef.current.addEventListener('error', (e) => {
-        logAudioError('Audio playback error occurred', e as any, { currentTrack: playerState.currentTrack?.id });
+        const audioError = new Error(`Audio playback error: ${e.type}`);
+        logAudioError('Audio playback error occurred', audioError, { currentTrack: playerState.currentTrack?.id });
         setPlayerState((prev) => ({ ...prev, isPlaying: false }));
       });
     }
@@ -267,7 +268,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return <MusicContext.Provider value={value}>{children}</MusicContext.Provider>;
 };
 
-export const useMusic = () => {
+export const useMusic = (): MusicContextType => {
   const context = useContext(MusicContext);
   if (!context) {
     throw new Error('useMusic must be used within MusicProvider');

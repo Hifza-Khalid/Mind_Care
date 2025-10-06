@@ -1157,19 +1157,23 @@ const ChatWidget = () => {
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 className="flex-1"
+                aria-label="Type your message here"
+                aria-describedby="chat-disclaimer"
               />
               <Button
                 onClick={handleSendMessage}
                 variant="default"
                 size="icon"
                 disabled={!inputMessage.trim()}
+                aria-label="Send message"
               >
                 <Send className="h-4 w-4" />
+                <span className="sr-only">Send message</span>
               </Button>
             </div>
 
             {/* Disclaimer */}
-            <div className="mt-2 text-xs text-muted-foreground text-center">
+            <div id="chat-disclaimer" className="mt-2 text-xs text-muted-foreground text-center">
               {multilingualResponses[selectedLanguage]?.disclaimer ||
                 multilingualResponses.en.disclaimer}
             </div>
