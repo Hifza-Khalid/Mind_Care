@@ -639,6 +639,16 @@ const ChatWidget = () => {
   useEffect(() => {
     const node = messagesRef.current;
     if (!node) return;
+   
+    const last = node.lastElementChild as HTMLElement | null;
+    if (last && typeof last.scrollIntoView === 'function') {
+      try {
+        last.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        return;
+      } catch (err) {
+        
+      }
+    }
     const el = node as HTMLElement & { scrollTo?: (opts?: ScrollToOptions) => void };
     if (typeof el.scrollTo === 'function') {
       el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
