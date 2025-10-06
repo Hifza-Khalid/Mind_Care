@@ -5,6 +5,7 @@ interface AuthContextType {
   user: User | null;
   login: (credentials: LoginCredentials) => Promise<boolean>;
   logout: () => void;
+  updateUser: (userData: Partial<User>) => void;
   isLoading: boolean;
 }
 
@@ -71,10 +72,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     window.location.href = '/';
   };
 
+  const updateUser = (userData: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...userData };
+      setUser(updatedUser);
+      localStorage.setItem('mindbuddy_user', JSON.stringify(updatedUser));
+    }
+  };
+
   const value = {
     user,
     login,
     logout,
+    updateUser,
     isLoading,
   };
 
