@@ -755,8 +755,6 @@ const Resources = () => {
                     <Badge variant="secondary" className={getDifficultyColor(resource.difficulty)}>
                       {resource.difficulty}
                     </Badge>
-                  </div>
-                  <div className="flex items-center space-x-1">
                     <Badge variant="outline" className="flex items-center space-x-1">
                       <span>{languages[resource.language]?.icon}</span>
                       <span className="text-xs">{languages[resource.language]?.name}</span>
