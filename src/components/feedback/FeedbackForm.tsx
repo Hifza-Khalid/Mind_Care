@@ -1,3 +1,60 @@
+/**
+ * @fileoverview FeedbackForm - Comprehensive therapy session feedback collection
+ * 
+ * A sophisticated feedback collection system for mental health counseling sessions
+ * that captures detailed ratings, qualitative feedback, and session effectiveness metrics.
+ * 
+ * Features:
+ * - Multi-dimensional rating categories (communication, empathy, effectiveness, environment)
+ * - Quick satisfaction rating for immediate feedback
+ * - Detailed written feedback collection
+ * - Progress visualization during form completion
+ * - Anonymous feedback option for sensitive situations
+ * - Session metadata integration (duration, counselor, etc.)
+ * 
+ * Rating Categories:
+ * - Communication: Clarity and understanding of counselor interaction
+ * - Empathy: Feeling heard and understood during the session
+ * - Effectiveness: Perceived benefit and goal achievement
+ * - Environment: Safety and comfort of the session setting
+ * - Overall: Composite satisfaction rating
+ * 
+ * Privacy & Ethics:
+ * - Optional anonymous submission for honest feedback
+ * - Secure data handling for sensitive therapeutic information
+ * - Professional development insights for counselors
+ * - Quality assurance for mental health services
+ * 
+ * @example
+ * ```tsx
+ * // Post-session feedback collection
+ * <FeedbackForm
+ *   sessionId="session_123"
+ *   studentId="student_456" 
+ *   counselorId="counselor_789"
+ *   sessionDate="2024-10-06"
+ *   sessionDuration={50}
+ *   counselorName="Dr. Smith"
+ *   onSubmit={(feedback) => {
+ *     submitFeedback(feedback);
+ *     showThankYouMessage();
+ *   }}
+ * />
+ * 
+ * // Quick feedback for brief interactions
+ * <FeedbackForm
+ *   sessionId="chat_session_456"
+ *   onQuickSubmit={(quickFeedback) => {
+ *     logInteractionFeedback(quickFeedback);
+ *   }}
+ * />
+ * ```
+ * 
+ * @see {@link ./RatingComponent} For rating input components
+ * @see {@link ../../types/feedback} For feedback data structures
+ * @see {@link ../../pages/Sessions} For session management integration
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,14 +81,57 @@ import {
   ThumbsUp,
 } from 'lucide-react';
 
+/**
+ * Props interface for the FeedbackForm component.
+ * 
+ * @interface FeedbackFormProps
+ */
 interface FeedbackFormProps {
+  /** Unique identifier for the counseling session being evaluated */
   sessionId: string;
+  
+  /** Student ID for feedback attribution and analytics */
   studentId: string;
+  
+  /** Counselor ID for performance tracking and professional development */
   counselorId: string;
+  
+  /** 
+   * Date of the session in ISO format (optional).
+   * Used for temporal analysis of feedback trends.
+   */
   sessionDate?: string;
+  
+  /** 
+   * Duration of the session in minutes (optional).
+   * Helps correlate session length with satisfaction ratings.
+   */
   sessionDuration?: number;
+  
+  /** 
+   * Display name of the counselor (optional).
+   * Shown in the feedback form for context and personalization.
+   */
   counselorName?: string;
+  
+  /** 
+   * Callback for comprehensive feedback submission.
+   * 
+   * Fired when user completes the full feedback form with detailed ratings
+   * and written comments. Contains all session evaluation data.
+   * 
+   * @param feedback - Complete session feedback with ratings and comments
+   */
   onSubmit?: (feedback: SessionFeedback) => void;
+  
+  /** 
+   * Callback for quick satisfaction feedback.
+   * 
+   * Fired when user provides just a quick thumbs up/down rating
+   * without detailed evaluation. Used for brief interactions.
+   * 
+   * @param feedback - Simplified quick feedback data
+   */
   onQuickSubmit?: (feedback: QuickFeedback) => void;
   initialData?: Partial<SessionFeedback>;
   isSubmitting?: boolean;

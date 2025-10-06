@@ -1,3 +1,73 @@
+/**
+ * @fileoverview VideoCallWidget - Secure mental health counseling video interface
+ * 
+ * A comprehensive video calling solution specifically designed for mental health
+ * counseling sessions with privacy, security, and therapeutic effectiveness as priorities.
+ * 
+ * Features:
+ * - HIPAA-compliant video/audio communication
+ * - Real-time session notes and documentation
+ * - Multi-participant support for group therapy
+ * - Screen sharing for therapeutic materials
+ * - Connection quality monitoring and optimization
+ * - Emergency protocols and crisis intervention tools
+ * - Recording capabilities with consent management
+ * 
+ * Security & Privacy:
+ * - End-to-end encryption for all communications
+ * - No data retention beyond session requirements
+ * - Compliance with healthcare privacy regulations
+ * - Secure authentication and session management
+ * - Audit logging for clinical documentation
+ * 
+ * Therapeutic Features:
+ * - Calming interface design to reduce anxiety
+ * - Quick access to crisis resources
+ * - Session timer and progress tracking
+ * - Integrated feedback collection
+ * - Counselor tools and resources panel
+ * 
+ * Technical Capabilities:
+ * - WebRTC-based peer-to-peer communication
+ * - Adaptive bitrate for various connection qualities
+ * - Mobile and desktop compatibility
+ * - Fallback to audio-only mode
+ * - Integration with calendar and booking systems
+ * 
+ * @example
+ * ```tsx
+ * // Individual counseling session
+ * <VideoCallWidget
+ *   sessionId="therapy_session_123"
+ *   participantType="student"
+ *   counselorId="counselor_456"
+ *   onSessionEnd={(metrics) => {
+ *     updateSessionRecords(metrics);
+ *     showFeedbackForm();
+ *   }}
+ * />
+ * 
+ * // Group therapy session  
+ * <VideoCallWidget
+ *   sessionId="group_session_789"
+ *   isGroupSession={true}
+ *   maxParticipants={8}
+ *   moderatorId="counselor_456"
+ * />
+ * 
+ * // Crisis intervention session
+ * <VideoCallWidget
+ *   sessionId="crisis_session_101"
+ *   priorityLevel="emergency" 
+ *   crisisResources={emergencyContacts}
+ * />
+ * ```
+ * 
+ * @see {@link ../../services/logger} For session logging and analytics
+ * @see {@link ../ui/button} For interface controls
+ * @see {@link ../../pages/Sessions} For session management
+ */
+
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { logVideoCall, logVideoCallError } from '@/services/logger';

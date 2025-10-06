@@ -1,9 +1,65 @@
+/**
+ * @fileoverview Enhanced Button Component for Mind Care Application
+ * 
+ * A highly customizable button component built on top of Radix UI Slot with
+ * comprehensive accessibility support, multiple visual variants, and mental health-focused theming.
+ * 
+ * Features:
+ * - Multiple visual variants (default, destructive, outline, ghost, etc.)
+ * - Accessibility-first design with ARIA support
+ * - Mental health-specific styling (trust, safety, calm variants)
+ * - Responsive sizing and hover animations
+ * - Support for icon-only buttons
+ * - Polymorphic rendering via Radix Slot
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Button>Click me</Button>
+ * 
+ * // With variant and size
+ * <Button variant="hero" size="lg">Get Started</Button>
+ * 
+ * // Accessible button with ARIA labels
+ * <Button 
+ *   variant="outline" 
+ *   aria-label="Close dialog" 
+ *   aria-describedby="close-help"
+ * >
+ *   <X className="h-4 w-4" />
+ * </Button>
+ * 
+ * // As a different element (using asChild)
+ * <Button asChild>
+ *   <Link to="/dashboard">Dashboard</Link>
+ * </Button>
+ * ```
+ * 
+ * @see {@link https://www.radix-ui.com/docs/primitives/utilities/slot} For Slot API
+ * @see {@link https://cva.style/docs} For class-variance-authority documentation
+ */
+
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
+/**
+ * Button variant styles using class-variance-authority for type-safe style variants.
+ * 
+ * Base classes include:
+ * - Responsive design and accessibility features
+ * - Smooth animations and transitions optimized for mental health UX
+ * - Focus indicators that meet WCAG 2.1 AA standards
+ * - SVG icon handling with proper sizing
+ * 
+ * Variants include mental health-specific styling:
+ * - `trust`: Calming blue tones for trustworthy actions
+ * - `safety`: Green tones for safe, positive actions  
+ * - `gentle`: Subtle, non-invasive styling for sensitive contexts
+ * - `calm`: Muted tones for anxiety-reducing interfaces
+ */
 const buttonVariants = cva(
   'relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 overflow-hidden',
   {
@@ -48,16 +104,95 @@ const buttonVariants = cva(
   }
 );
 
+/**
+ * Props interface for the Button component.
+ * 
+ * Extends standard HTML button attributes while adding accessibility-specific props
+ * and variant customization options from class-variance-authority.
+ * 
+ * @interface ButtonProps
+ */
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
+  /** 
+   * When true, renders the button as a Slot component, allowing it to merge with child elements.
+   * Useful for creating composite components like <Button asChild><Link /></Button>
+   * 
+   * @default false
+   */
   asChild?: boolean;
+  
+  /** 
+   * Accessible name for screen readers. Required for icon-only buttons.
+   * Provides context when visual labels aren't sufficient.
+   * 
+   * @example "Close dialog", "Submit form", "Add item"
+   */
   'aria-label'?: string;
+  
+  /** 
+   * References elements that describe this button.
+   * Links to help text, error messages, or additional context.
+   * 
+   * @example "password-help error-msg"
+   */
   'aria-describedby'?: string;
+  
+  /** 
+   * Indicates if the button controls a collapsible element.
+   * Used for dropdown buttons, accordion triggers, etc.
+   */
   'aria-expanded'?: boolean;
+  
+  /** 
+   * Indicates the current pressed state for toggle buttons.
+   * Use for buttons that maintain state like "favorite" or "subscribe".
+   */
   'aria-pressed'?: boolean;
 }
 
+/**
+ * Button Component - A versatile, accessible button for the Mind Care application.
+ * 
+ * This component provides a foundation for all interactive button elements throughout
+ * the application, with special consideration for mental health contexts where clear,
+ * calming, and trustworthy design is essential.
+ * 
+ * Key Features:
+ * - Accessibility-first with comprehensive ARIA support
+ * - Mental health-focused visual variants (trust, safety, gentle, calm)
+ * - Smooth animations that don't trigger anxiety
+ * - Polymorphic rendering for maximum flexibility
+ * - Type-safe variant and size options
+ * 
+ * @param props - Button props including HTML button attributes and custom variants
+ * @param ref - Forwarded ref to the underlying button element
+ * 
+ * @example
+ * ```tsx
+ * // Crisis intervention button
+ * <Button variant="destructive" size="lg" aria-label="Get immediate help">
+ *   Emergency Support
+ * </Button>
+ * 
+ * // Gentle therapy booking
+ * <Button variant="gentle" aria-describedby="booking-help">
+ *   Schedule Session
+ * </Button>
+ * 
+ * // Toggle for mood tracking
+ * <Button 
+ *   variant="outline" 
+ *   aria-pressed={isActive}
+ *   onClick={() => setIsActive(!isActive)}
+ * >
+ *   Track Mood
+ * </Button>
+ * ```
+ * 
+ * @returns A fully accessible, styled button component
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, 'aria-label': ariaLabel, 'aria-describedby': ariaDescribedBy, 'aria-expanded': ariaExpanded, 'aria-pressed': ariaPressed, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
