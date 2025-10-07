@@ -1,0 +1,61 @@
+name: "Feature Request"
+about: "Suggest an improvement or new feature for Mind Care. Keep requests focused and actionable."
+title: "Feature: "
+labels: "enhancement"
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Mind Care! Please provide a short, clear description of the feature you'd like to see.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Short summary
+      description: One-line summary of the feature
+      placeholder: "e.g. add scheduled daily reminders for breathing exercises"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: User story / motivation
+      description: Who benefits and why (user perspective)
+      placeholder: "As a __, I want __ so that __"
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: Outline a minimal, implementable approach or UI sketch
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you considered (optional)
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this feature for you?
+      options:
+        - High
+        - Medium
+        - Low
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: Clear conditions that define when this feature is done (one per line)
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Any mockups, links, or notes that will help the maintainers (optional)
