@@ -50,6 +50,7 @@ import {
   Award,
   TrendingUp,
 } from 'lucide-react';
+import { getCreationDate, getRecentActivityDate, getScheduledDate, getRelativeDate } from '../../utils/dateUtils';
 
 import {
   StudyGroup,
@@ -127,8 +128,8 @@ export const StudyGroupSystem: React.FC<StudyGroupSystemProps> = ({
       isPrivate: false,
       requiresApproval: true,
       status: 'active',
-      createdAt: '2024-01-01T00:00:00Z',
-      lastActivity: '2024-01-20T15:30:00Z',
+      createdAt: getCreationDate(),
+      lastActivity: getRecentActivityDate(),
       schedule: {
         type: 'regular',
         regularSchedule: {
@@ -175,8 +176,8 @@ export const StudyGroupSystem: React.FC<StudyGroupSystemProps> = ({
       isPrivate: false,
       requiresApproval: false,
       status: 'forming',
-      createdAt: '2024-01-15T00:00:00Z',
-      lastActivity: '2024-01-19T12:00:00Z',
+      createdAt: getRelativeDate(-30),
+      lastActivity: getRecentActivityDate(),
       schedule: {
         type: 'flexible',
         flexibleTimes: [
@@ -220,8 +221,8 @@ export const StudyGroupSystem: React.FC<StudyGroupSystemProps> = ({
       isPrivate: false,
       requiresApproval: true,
       status: 'active',
-      createdAt: '2023-12-01T00:00:00Z',
-      lastActivity: '2024-01-20T10:15:00Z',
+      createdAt: getRelativeDate(-120),
+      lastActivity: getRecentActivityDate(),
       schedule: {
         type: 'regular',
         regularSchedule: {
@@ -262,7 +263,7 @@ export const StudyGroupSystem: React.FC<StudyGroupSystemProps> = ({
       title: 'Mindful Exam Preparation',
       description:
         'Combining mindfulness techniques with effective study strategies for upcoming midterms.',
-      scheduledAt: '2024-01-22T18:00:00Z',
+      scheduledAt: getScheduledDate(),
       duration: 90,
       attendeeIds: ['user_123', 'user_456', 'user_789'],
       facilitatorId: 'user_456',
@@ -284,7 +285,7 @@ export const StudyGroupSystem: React.FC<StudyGroupSystemProps> = ({
       title: 'Building Healthy Sleep Habits',
       description:
         'Workshop on creating sustainable sleep routines for better academic performance.',
-      scheduledAt: '2024-01-24T10:00:00Z',
+      scheduledAt: getRelativeDate(7, 10),
       duration: 120,
       attendeeIds: ['user_123', 'user_606', 'user_707', 'user_808'],
       facilitatorId: 'user_606',

@@ -36,6 +36,7 @@ import {
   Filter,
   SortAsc,
 } from 'lucide-react';
+import { getCreationDate, getRelativeDate, getRecentActivityDate } from '../../utils/dateUtils';
 
 import {
   PeerUser,
@@ -117,7 +118,7 @@ export const PeerBuddyMatching: React.FC<PeerBuddyMatchingProps> = ({
       },
       profileComplete: true,
       verificationStatus: 'verified',
-      createdAt: '2024-01-01T00:00:00Z',
+      createdAt: getCreationDate(),
     }
   );
 
@@ -214,12 +215,12 @@ export const PeerBuddyMatching: React.FC<PeerBuddyMatchingProps> = ({
       id: 'buddy_001',
       user1Id: user.id,
       user2Id: 'peer_456',
-      matchedAt: '2024-01-15T10:00:00Z',
+      matchedAt: getRelativeDate(-15, 10),
       status: 'active',
       compatibility: mockMatches[0].compatibility,
       sharedConcerns: ['anxiety', 'academic-pressure'],
       connectionType: 'peer-buddy',
-      lastInteraction: '2024-01-20T14:30:00Z',
+      lastInteraction: getRecentActivityDate(),
       totalInteractions: 15,
       averageResponseTime: 45,
       connectionStrength: 85,
@@ -229,12 +230,12 @@ export const PeerBuddyMatching: React.FC<PeerBuddyMatchingProps> = ({
       id: 'buddy_002',
       user1Id: user.id,
       user2Id: 'peer_789',
-      matchedAt: '2024-01-10T15:00:00Z',
+      matchedAt: getRelativeDate(-20, 15),
       status: 'paused',
       compatibility: mockMatches[1].compatibility,
       sharedConcerns: ['stress'],
       connectionType: 'support-buddy',
-      lastInteraction: '2024-01-18T16:20:00Z',
+      lastInteraction: getRelativeDate(-3, 16, 20),
       totalInteractions: 8,
       averageResponseTime: 120,
       connectionStrength: 65,

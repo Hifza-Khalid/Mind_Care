@@ -39,23 +39,42 @@ const ContactUs = lazy(() => import('./pages/ContactUs'));
 // ✅ New: MentalHealthBlog
 const MentalHealthBlog = lazy(() => import('./pages/MentalHealthBlog'));
 
+// ✅ New: Error Boundary Demo
+const ErrorBoundaryDemo = lazy(() => import('./pages/ErrorBoundaryDemo'));
+
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <AuthProvider>
-        <MusicProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Suspense
-                fallback={
-                  <div className="flex items-center justify-center min-h-screen">Loading...</div>
-                }
-              >
-                <Routes>
+  <ErrorBoundary
+    variant="critical"
+    componentName="App"
+    showCrisisResources={true}
+    onError={(error, errorInfo, errorId) => {
+      console.error('Application Error:', { error, errorInfo, errorId });
+    }}
+  >
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <MusicProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <PageErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div className="flex items-center justify-center min-h-screen">
+                        <div className="space-y-4 text-center">
+                          <div className="animate-pulse">
+                            <div className="w-8 h-8 bg-primary/20 rounded-full mx-auto mb-2" />
+                            <div className="text-muted-foreground">Loading Mind Care...</div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <Routes>
                   <Route path="/about" element={<About />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/select-institution" element={<InstitutionSelection />} />
@@ -81,22 +100,25 @@ const App = () => (
                     <Route path="users" element={<UserManagement />} />
                     <Route path="moderation" element={<ContentModeration />} />
                     <Route path="chat" element={<AIChat />} />
+                    <Route path="error-demo" element={<ErrorBoundaryDemo />} />
 
                     <Route path="*" element={<NotFound />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   </Route>
                 </Routes>
-              </Suspense>
-              <ChatWidget />
-              <NotificationContainer />
-              {/* Scroll-to-Top button */}
-              <ScrollToTop />
-            </BrowserRouter>
-          </TooltipProvider>
-        </MusicProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+                  </Suspense>
+                </PageErrorBoundary>
+                <ChatWidget />
+                <NotificationContainer />
+                {/* Scroll-to-Top button */}
+                <ScrollToTop />
+              </BrowserRouter>
+            </TooltipProvider>
+          </MusicProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 
