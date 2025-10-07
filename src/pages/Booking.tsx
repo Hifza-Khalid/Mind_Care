@@ -1555,8 +1555,12 @@ const Booking = () => {
                   !bookingForm.reason ? 'border-red-200 focus-visible:ring-red-500' : ''
                 }`}
                 required
+                aria-label="Describe what you'd like to discuss in your counseling session"
+                aria-describedby="reason-help"
+                aria-required="true"
+                aria-invalid={!bookingForm.reason ? 'true' : 'false'}
               />
-              <p className="text-xs text-muted-foreground">
+              <p id="reason-help" className="text-xs text-muted-foreground">
                 This information helps your counselor prepare for your session and is kept
                 confidential.
               </p>

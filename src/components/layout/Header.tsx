@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import QuickMoodHeader from '@/components/dashboard/QuickMoodHeader';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Heart,
   Menu,
@@ -15,10 +16,14 @@ import {
   Calendar,
   BookOpen,
   Users,
+  Globe,
+  Phone,
   BarChart,
   Palette,
   Bell,
   Music2,
+  FileText, // ✅ icon for blog
+  LucideIcon,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -29,14 +34,22 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+type NavItem = {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+};
+
 const Header = () => {
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const getNavItems = () => {
-    const baseItems = [
+  const getNavItems = (): NavItem[] => {
+      const baseItems: NavItem[] = [
       { name: 'Resources', href: '/app/resources', icon: BookOpen },
       { name: 'Forum', href: '/app/forum', icon: Users },
+      { name: 'Blog', href: '/app/blog', icon: FileText }, 
+      { name: 'About', href: '/about', icon: Globe },
     ];
 
     if (user?.role === 'student') {
@@ -69,6 +82,14 @@ const Header = () => {
   };
 
   const navItems = getNavItems();
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm shadow-subtle">
@@ -131,9 +152,14 @@ const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative h-12 w-12 rounded-2xl bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:scale-105 transition-all duration-200 group"
+                  className="relative h-12 w-12 rounded-2xl bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:scale-105 transition-all duration-200 group p-1"
                 >
-                  <User className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" />
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback className="text-sm font-semibold bg-primary text-primary-foreground">
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -177,6 +203,15 @@ const Header = () => {
                   >
                     <Palette className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
                     <span className="font-medium">Theme & Reading</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/contact"
+                    className="flex items-center p-3 rounded-xl hover:bg-white/10 transition-all duration-200 group"
+                  >
+                    <Phone className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span className="font-medium">Contact</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>

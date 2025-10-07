@@ -104,7 +104,7 @@ const categories = {
     hi: 'अवसाद सहायता',
     es: 'Apoyo para la Depresión',
     ta: 'மன அழுத்தத்திற்கான ஆதரவு',
-    color: 'bg-gray-100 text-gray-800',
+    color: 'bg-blue-200 text-black dark:text-white',
     icon: Heart,
   },
   study: {
@@ -587,7 +587,7 @@ const Resources = () => {
   };
 
   return (
-    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses}`}>
+    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses} overflow-hidden`}>
       {/* Header */}
       <div className="text-center space-y-4 relative">
         <div className="absolute top-0 right-0">

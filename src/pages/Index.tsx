@@ -152,25 +152,26 @@ const AuthenticatedHomePage = ({
     }
   };
 
+  
   return (
     <div className="min-h-screen bg-gradient-mesh">
       <FloatingParticles />
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-16  items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
               MindBuddy
             </span>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center ">
             <span className="text-sm text-muted-foreground">
               Welcome back, {user.name.split(' ')[0]}
             </span>
             <Button asChild className="bg-gradient-primary hover:shadow-glow">
-              <Link to={getDashboardPath()}>Go to Dashboard</Link>
+              <Link to={getDashboardPath()}>Dashboard</Link>
             </Button>
           </div>
         </div>
@@ -338,6 +339,7 @@ const AuthenticatedHomePage = ({
   );
 };
 
+
 const GuestHomePage = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
@@ -371,6 +373,42 @@ const GuestHomePage = () => {
     }, 4000);
     return () => clearInterval(timer);
   }, [testimonials.length]);
+
+
+  // adding questions here 
+  const faqs = [
+            {
+              question:"Is MindBuddy completely confidential?",
+              answer:"Absolutely. We adhere to strict HIPAA compliance standards. Your conversations with our AI chat, counseling sessions, and forum participation are completely confidential. We never share personal information without your explicit consent."
+            },
+            {
+              question:"How does the AI crisis detection work?",
+              answer:"Our AI uses validated screening tools like PHQ-9 and GAD-7 to assess your responses during chat sessions. If crisis indicators are detected, we immediately connect you with emergency resources and licensed counselors who can provide immediate support."
+            },
+            {
+              question:"Are the counselors real licensed professionals?",
+              answer:"Yes, all our counselors and therapists are licensed mental health professionals. They undergo rigorous background checks and are specifically trained to work with college students and young adults."
+            },
+            {
+              question:"Is MindBuddy free for students?",
+              answer:"We offer a comprehensive free tier that includes AI chat support, basic resources, and forum access. Premium features like one-on-one counseling sessions may have associated costs, but we work with universities to provide these at reduced rates."
+            },
+            {
+              question:"Can I remain anonymous on the platform?",
+              answer:"Yes, especially in our peer support forums. While we need some basic information for safety and crisis prevention, you can participate in community discussions anonymously while still receiving the support you need."
+            },
+            {
+              question:"What if I'm having a mental health emergency?",
+              answer:"If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations."
+            },
+          ]
+
+  // faq rendering 
+  const [openIndex, setOpenIndex]= useState <number | null > (null);
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
 
   return (
     <div className="min-h-screen">
@@ -569,8 +607,8 @@ const GuestHomePage = () => {
 
           {/* CTA Section */}
           <div className="text-center">
-            <div className="bg-gradient-primary p-8 rounded-2xl text-white mb-8">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
+            <div className="bg-gradient-primary p-8 rounded-2xl text-white mb-8 flex flex-col ">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white drop-shadow-sm">
                 Ready to Start Your Wellness Journey?
               </h3>
               <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
@@ -651,31 +689,16 @@ const GuestHomePage = () => {
           </div>
 
           <div className="space-y-4">
-            <FAQItem
-              question="Is MindBuddy completely confidential?"
-              answer="Absolutely. We adhere to strict HIPAA compliance standards. Your conversations with our AI chat, counseling sessions, and forum participation are completely confidential. We never share personal information without your explicit consent."
+          {faqs.map((faq, index) => (
+            <FAQItem key={index}
+            question={faq.question}
+            answer={faq.answer}
+            isOpen={openIndex === index}
+            onClick={() =>setOpenIndex(openIndex === index ? null : index)}
             />
-            <FAQItem
-              question="How does the AI crisis detection work?"
-              answer="Our AI uses validated screening tools like PHQ-9 and GAD-7 to assess your responses during chat sessions. If crisis indicators are detected, we immediately connect you with emergency resources and licensed counselors who can provide immediate support."
-            />
-            <FAQItem
-              question="Are the counselors real licensed professionals?"
-              answer="Yes, all our counselors and therapists are licensed mental health professionals. They undergo rigorous background checks and are specifically trained to work with college students and young adults."
-            />
-            <FAQItem
-              question="Is MindBuddy free for students?"
-              answer="We offer a comprehensive free tier that includes AI chat support, basic resources, and forum access. Premium features like one-on-one counseling sessions may have associated costs, but we work with universities to provide these at reduced rates."
-            />
-            <FAQItem
-              question="Can I remain anonymous on the platform?"
-              answer="Yes, especially in our peer support forums. While we need some basic information for safety and crisis prevention, you can participate in community discussions anonymously while still receiving the support you need."
-            />
-            <FAQItem
-              question="What if I'm having a mental health emergency?"
-              answer="If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations."
-            />
+          ))}
           </div>
+          {/* updates done till here  */}
 
           <div className="text-center mt-12">
             <p className="text-muted-foreground mb-6">Still have questions? We're here to help.</p>
@@ -699,7 +722,7 @@ const GuestHomePage = () => {
                   Start Your Wellness Journey Today
                 </h2>
 
-                <p className="text-base md:text-lg opacity-95 leading-relaxed mb-6 text-white/95">
+                <p className="text-base md:text-lg opacity-95 leading-relaxed mb-6 text-muted-foreground dark:text-white/95">
                   Join thousands of students for stigma-free, confidential mental health support —
                   instantly accessible and backed by licensed professionals.
                 </p>
@@ -709,7 +732,7 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <CheckCircle className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-white/90">
+                    <span className="text-sm text-foreground dark:text-white/90">
                       24/7 AI-assisted support and crisis detection
                     </span>
                   </li>
@@ -717,7 +740,7 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <Shield className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-white/90">
+                    <span className="text-sm text-foreground dark:text-white/90">
                       HIPAA-compliant privacy and secure sessions
                     </span>
                   </li>
@@ -725,7 +748,7 @@ const GuestHomePage = () => {
                     <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground mr-3 shadow-sm">
                       <UserCheck className="h-4 w-4" />
                     </span>
-                    <span className="text-sm text-white/90">
+                    <span className="text-sm text-foreground dark:text-white/90">
                       Licensed counselors and a supportive peer community
                     </span>
                   </li>
@@ -750,7 +773,9 @@ const GuestHomePage = () => {
                     asChild
                     variant="outline"
                     size="xl"
-                    className="text-lg border-white/40 text-white hover:bg-white/10 px-8 py-4 rounded-full"
+                    className="text-lg px-8 py-4 rounded-full
+                    border-primary text-primary hover:bg-primary/10 
+                    dark:border-white/40 dark:text-white dark:hover:bg-white/10" 
                   >
                     <Link to="/about" aria-label="Learn about our mission">
                       Our Mission
@@ -767,7 +792,7 @@ const GuestHomePage = () => {
               <div className="flex justify-center md:justify-end">
                 <img
                   src={heroImage}
-                  alt="Wellness illustration"
+                  alt="Mental health and wellness illustration showing people supporting each other in a caring community environment"
                   className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] object-cover rounded-xl shadow-card gentle-transition gentle-hover"
                 />
               </div>
@@ -903,32 +928,34 @@ const StatsCard = ({ title, stats }: StatsCardProps) => {
   );
 };
 
+// new updated one 
 interface FAQItemProps {
   question: string;
   answer: string;
+  isOpen: boolean;
+  onClick: () => void;
 }
 
-const FAQItem = ({ question, answer }: FAQItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
 
   return (
-    <div className="enhanced-card">
+    <div className={`enhanced-card ${(isOpen) ? 'border border-black rounded-lg': 'border border-white rounded-lg'}`}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onClick}
         className="w-full p-6 text-left flex justify-between items-center hover:bg-muted/10 transition-colors duration-200"
       >
-        <h3 className="font-semibold text-lg pr-4">{question}</h3>
+        <span className="font-medium text-lg pr-4">{question}</span>
         <ChevronDown
-          className={`h-5 w-5 text-muted-foreground transition-transform duration-200 flex-shrink-0 ${
+          className={`h-5 w-5 text-muted-foreground transition-transform duration-400 flex-shrink-0 ${
             isOpen ? 'transform rotate-180' : ''
           }`}
         />
       </button>
-      {isOpen && (
-        <div className="px-6 pb-6 pt-0">
+      
+        <div className={`overflow-hidden transition-all duration-400 ease-in-out ${ isOpen ? "max-h-40 p-5 opacity-100": "max-h-0 opacity-0 p-0"}`}>
           <div className="text-muted-foreground leading-relaxed border-t pt-4">{answer}</div>
         </div>
-      )}
+      
     </div>
   );
 };

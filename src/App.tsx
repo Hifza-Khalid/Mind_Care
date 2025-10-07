@@ -9,7 +9,8 @@ import { MusicProvider } from '@/contexts/MusicContext';
 import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
+import ScrollToTop from './components/layout/scrollToTop';
 
 // Lazy load pages for better performance
 const Index = lazy(() => import('./pages/Index'));
@@ -35,6 +36,9 @@ const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 
+// ✅ New: MentalHealthBlog
+const MentalHealthBlog = lazy(() => import('./pages/MentalHealthBlog'));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -56,7 +60,7 @@ const App = () => (
                   <Route path="/login" element={<Login />} />
                   <Route path="/select-institution" element={<InstitutionSelection />} />
                   <Route path="/" element={<Index />} />
-                  <Route path="contact" element={<ContactUs />} />
+                  <Route path="/contact" element={<ContactUs />} />
                   <Route path="*" element={<NotFound />} />
                   <Route path="/app" element={<Layout />}>
                     <Route index element={<Dashboard />} />
@@ -64,6 +68,7 @@ const App = () => (
                     <Route path="student-dashboard" element={<StudentDashboard />} />
                     <Route path="resources" element={<Resources />} />
                     <Route path="forum" element={<Forum />} />
+                    <Route path="blog" element={<MentalHealthBlog />} />
                     <Route path="booking" element={<Booking />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="sessions" element={<Sessions />} />
@@ -84,6 +89,8 @@ const App = () => (
               </Suspense>
               <ChatWidget />
               <NotificationContainer />
+              {/* Scroll-to-Top button */}
+              <ScrollToTop />
             </BrowserRouter>
           </TooltipProvider>
         </MusicProvider>
@@ -91,5 +98,6 @@ const App = () => (
     </ThemeProvider>
   </QueryClientProvider>
 );
+
 
 export default App;

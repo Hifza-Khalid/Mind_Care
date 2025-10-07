@@ -1,3 +1,51 @@
+/**
+ * @fileoverview MeditationTimer - Comprehensive guided meditation and mindfulness timer
+ * 
+ * A feature-rich meditation timer component that supports various meditation types,
+ * ambient soundscapes, session tracking, and progress monitoring for mental wellness.
+ * 
+ * Features:
+ * - Multiple meditation types (breathing, mindfulness, body scan, loving-kindness)
+ * - Customizable session duration (5 min to 2+ hours)
+ * - Ambient sound integration for enhanced focus
+ * - Session completion tracking and analytics
+ * - Interruption handling and resume capability
+ * - Visual progress indicators and calming animations
+ * - Accessibility support for meditation guidance
+ * 
+ * Meditation Types:
+ * - Breathing: Focused breath awareness exercises
+ * - Mindfulness: Present-moment awareness practice
+ * - Body Scan: Progressive relaxation technique
+ * - Loving-Kindness: Compassion and empathy cultivation
+ * - Walking: Moving meditation for active practice
+ * 
+ * @example
+ * ```tsx
+ * // Basic meditation timer
+ * <MeditationTimer />
+ * 
+ * // With session completion tracking
+ * <MeditationTimer
+ *   onSessionComplete={(data) => {
+ *     console.log('Session completed:', data.duration);
+ *     updateWellnessMetrics(data);
+ *   }}
+ *   onSessionStart={() => setMeditating(true)}
+ * />
+ * 
+ * // Custom styling for different contexts
+ * <MeditationTimer 
+ *   className="crisis-mode-timer"
+ *   onSessionPause={() => logInterruption()}
+ * />
+ * ```
+ * 
+ * @see {@link ../../types/meditation} For meditation-related type definitions
+ * @see {@link ../ui/progress} For progress visualization components
+ * @see {@link ./AmbientSoundPlayer} For integrated sound features
+ */
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,7 +73,24 @@ import {
   calculateSessionCompletion,
 } from '@/types/meditation';
 
+/**
+ * Props interface for the MeditationTimer component.
+ * 
+ * @interface MeditationTimerProps
+ */
 interface MeditationTimerProps {
+  /**
+   * Callback fired when a meditation session completes successfully.
+   * 
+   * Provides comprehensive session data for analytics and progress tracking:
+   * - duration: Intended session length in minutes
+   * - actualDuration: Actual time meditated (may differ if interrupted)
+   * - type: Type of meditation practiced
+   * - ambientSound: Background sound used (if any)
+   * - interrupted: Whether the session was paused/stopped early
+   * 
+   * @param sessionData - Complete session metrics and metadata
+   */
   onSessionComplete?: (sessionData: {
     duration: number;
     actualDuration: number;
@@ -33,8 +98,23 @@ interface MeditationTimerProps {
     ambientSound?: AmbientSoundType;
     interrupted: boolean;
   }) => void;
+  
+  /**
+   * Callback fired when a meditation session begins.
+   * Useful for updating parent component state or triggering analytics.
+   */
   onSessionStart?: () => void;
+  
+  /**
+   * Callback fired when a meditation session is paused.
+   * Can be used to log interruptions or provide supportive feedback.
+   */
   onSessionPause?: () => void;
+  
+  /**
+   * Additional CSS classes for custom styling.
+   * Allows integration with different dashboard layouts or themes.
+   */
   className?: string;
 }
 
@@ -355,7 +435,12 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
         {/* Control Buttons */}
         <div className="flex justify-center space-x-3">
           {!timer.isActive ? (
-            <Button onClick={handleStart} size="lg" className="flex items-center space-x-2">
+            <Button 
+              onClick={handleStart} 
+              size="lg" 
+              className="flex items-center space-x-2"
+              aria-label="Start meditation timer"
+            >
               <Play className="h-5 w-5" />
               <span>Start</span>
             </Button>
@@ -366,6 +451,7 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
                 size="lg"
                 variant="outline"
                 className="flex items-center space-x-2"
+                aria-label={isRunning ? 'Pause meditation timer' : 'Resume meditation timer'}
               >
                 {isRunning ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                 <span>{isRunning ? 'Pause' : 'Resume'}</span>
@@ -375,6 +461,7 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
                 size="lg"
                 variant="destructive"
                 className="flex items-center space-x-2"
+                aria-label="Stop meditation timer"
               >
                 <Square className="h-5 w-5" />
                 <span>Stop</span>
@@ -386,6 +473,7 @@ export const MeditationTimer: React.FC<MeditationTimerProps> = ({
             onClick={handleReset}
             size="lg"
             variant="ghost"
+            aria-label="Reset meditation timer"
             disabled={timer.isActive && !timer.isPaused}
           >
             <RotateCcw className="h-5 w-5" />

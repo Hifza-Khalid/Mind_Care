@@ -5,12 +5,13 @@ interface AuthContextType {
   user: User | null;
   login: (credentials: LoginCredentials) => Promise<boolean>;
   logout: () => void;
+  updateUser: (userData: Partial<User>) => void;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -71,10 +72,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     window.location.href = '/';
   };
 
+  const updateUser = (userData: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...userData };
+      setUser(updatedUser);
+      localStorage.setItem('mindbuddy_user', JSON.stringify(updatedUser));
+    }
+  };
+
   const value = {
     user,
     login,
     logout,
+    updateUser,
     isLoading,
   };
 

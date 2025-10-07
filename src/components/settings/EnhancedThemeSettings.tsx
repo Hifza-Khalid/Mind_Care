@@ -167,9 +167,11 @@ const EnhancedThemeSettings = () => {
                 ].map(({ id, label, icon: Icon, desc }) => (
                   <Card
                     key={id}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
-                      theme === id ? 'ring-2 ring-primary bg-primary/5' : ''
-                    }`}
+                    className={`cursor-pointer transition-all duration-200 ease-in-out border hover:border-primary/50 hover:shadow-lg hover:-translate-y-1 ${
+  theme === id
+    ? 'border-primary ring-2 ring-primary/50 shadow-lg shadow-primary/40 bg-primary/5'
+    : 'border-border shadow-md bg-background'
+}`}
                     onClick={() => setTheme(id as any)}
                   >
                     <CardContent className="p-4 text-center space-y-2">

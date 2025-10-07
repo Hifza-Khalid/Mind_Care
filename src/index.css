@@ -1,6 +1,7 @@
 /* Import modern UI enhancements */
 @import './styles/modern-ui.css';
 @import './styles/enhanced-theme.css';
+@import './styles/accessibility.css';
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
 @tailwind base;

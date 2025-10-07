@@ -5,6 +5,7 @@ import {
   MusicPreferences,
   CALMING_MUSIC_TRACKS,
 } from '@/types/music';
+import { logAudioError, logUserPrefs } from '@/services/logger';
 
 interface MusicContextType {
   playerState: MusicPlayerState;
@@ -35,7 +36,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return JSON.parse(stored);
       }
     } catch (error) {
-      console.error('Error loading music preferences:', error);
+      logAudioError('Failed to load music preferences from localStorage', error as Error);
     }
     return {
       autoPlay: false,
@@ -70,7 +71,8 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       });
 
       audioRef.current.addEventListener('error', (e) => {
-        console.error('Audio playback error:', e);
+        const audioError = new Error(`Audio playback error: ${e.type}`);
+        logAudioError('Audio playback error occurred', audioError, { currentTrack: playerState.currentTrack?.id });
         setPlayerState((prev) => ({ ...prev, isPlaying: false }));
       });
     }
@@ -88,7 +90,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
     } catch (error) {
-      console.error('Error saving music preferences:', error);
+      logUserPrefs('Failed to save music preferences to localStorage', { preferences, error: error as Error });
     }
   }, [preferences]);
 
@@ -131,12 +133,12 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               }));
             })
             .catch((error) => {
-              console.error('Error playing audio:', error);
+              logAudioError('Failed to play audio track', error as Error, { trackId: track.id, trackName: track.title });
               setPlayerState((prev) => ({ ...prev, isPlaying: false }));
             });
         }
       } catch (error) {
-        console.error('Error loading track:', error);
+        logAudioError('Failed to load audio track', error as Error, { trackId: track.id, trackUrl: track.url });
       }
     },
     [playerState.volume]
@@ -165,7 +167,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             setPlayerState((prev) => ({ ...prev, isPlaying: true }));
           })
           .catch((error) => {
-            console.error('Error playing audio:', error);
+            logAudioError('Failed to resume audio playback', error as Error, { currentTrack: playerState.currentTrack?.id });
           });
       }
     } else {
@@ -266,7 +268,7 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return <MusicContext.Provider value={value}>{children}</MusicContext.Provider>;
 };
 
-export const useMusic = () => {
+export const useMusic = (): MusicContextType => {
   const context = useContext(MusicContext);
   if (!context) {
     throw new Error('useMusic must be used within MusicProvider');

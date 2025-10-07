@@ -40,8 +40,37 @@ const AIChat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (smooth = true) => {
+    const endEl = messagesEndRef.current;
+    if (!endEl) return;
+
+    // Find the nearest scrollable ancestor (the chat ScrollArea viewport)
+    let node: HTMLElement | null = endEl.parentElement as HTMLElement | null;
+    while (node) {
+      try {
+        const style = window.getComputedStyle(node);
+        const overflowY = style.overflowY;
+        // Explicitly type the node so TypeScript knows about scrollTop/scrollHeight
+        const el = node as HTMLElement & { scrollTo?: (options?: ScrollToOptions) => void };
+        const isScrollable = el.scrollHeight > el.clientHeight;
+
+        if (isScrollable && (overflowY === 'auto' || overflowY === 'scroll')) {
+          // Scroll the chat container only (prevents window/page scroll)
+          if (typeof el.scrollTo === 'function') {
+            el.scrollTo({ top: el.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+          } else {
+            el.scrollTop = el.scrollHeight;
+          }
+          return;
+        }
+      } catch (e) {
+        // continue climbing if accessing computed style fails for any reason
+      }
+      node = node.parentElement as HTMLElement | null;
+    }
+
+    // Fallback: scroll the element into view (last resort)
+    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
   };
 
   useEffect(() => {
@@ -478,17 +507,20 @@ How has your day been treating you? Sometimes it helps to check in with ourselve
                   placeholder="Share what's on your mind... I'm here to listen and support you ❤️"
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   className="flex-1 rounded-xl sm:rounded-full border-primary/20 focus:border-primary focus:ring-primary/20 focus-enhanced transition-all duration-300 text-sm"
+                  aria-label="Type your message to the AI counselor"
+                  aria-describedby="ai-chat-disclaimer"
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputText.trim() || isTyping}
                   className="rounded-xl sm:rounded-full bg-gradient-primary hover:shadow-glow hover:scale-105 active:scale-95 transition-all duration-300 px-4 sm:px-6 btn-enhanced flex-shrink-0"
+                  aria-label="Send message to AI counselor"
                 >
                   <Send className="h-4 w-4" />
                   <span className="sr-only">Send message</span>
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2 sm:mt-3 text-center px-2">
+              <p id="ai-chat-disclaimer" className="text-xs text-muted-foreground mt-2 sm:mt-3 text-center px-2">
                 💬 Press Enter to send • 🔒 Your conversation is private and secure
               </p>
             </div>

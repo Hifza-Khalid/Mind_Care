@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { logger } from '@/services/logger';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   DropdownMenu,
@@ -72,7 +73,7 @@ export const QuickMoodHeader: React.FC<QuickMoodHeaderProps> = ({
         }
       });
     } catch (error) {
-      console.error('Error logging mood:', error);
+      logger.error('MOOD_TRACKING', 'Failed to log mood in quick header', error as Error, { mood });
     }
   };
 

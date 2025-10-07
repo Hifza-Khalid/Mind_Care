@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { logAudioError } from '@/services/logger';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -115,7 +116,7 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
         switch (soundType) {
           case 'white-noise':
           case 'pink-noise':
-          case 'brown-noise':
+          case 'brown-noise': {
             const noiseType = soundType.replace('-noise', '') as 'white' | 'pink' | 'brown';
             const noiseBuffer = createNoiseBuffer(noiseType);
             if (noiseBuffer) {
@@ -126,8 +127,9 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
               noiseNodeRef.current.start();
             }
             break;
+          }
 
-          case 'rain':
+          case 'rain': {
             // Simulate rain with filtered white noise
             const rainBuffer = createNoiseBuffer('white');
             if (rainBuffer) {
@@ -145,8 +147,9 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
               noiseNodeRef.current.start();
             }
             break;
+          }
 
-          case 'ocean-waves':
+          case 'ocean-waves': {
             // Simulate ocean waves with oscillating low frequency
             oscillatorRef.current = audioContextRef.current.createOscillator();
             const waveFilter = audioContextRef.current.createBiquadFilter();
@@ -171,8 +174,9 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
             oscillatorRef.current.start();
             waveLfo.start();
             break;
+          }
 
-          case 'forest':
+          case 'forest': {
             // Simulate forest with multiple oscillators
             const frequencies = [220, 440, 880, 1760];
             frequencies.forEach((freq, index) => {
@@ -192,8 +196,9 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
               setTimeout(() => osc.stop(), 2000 + Math.random() * 3000);
             });
             break;
+          }
 
-          case 'fireplace':
+          case 'fireplace': {
             // Simulate fireplace crackling
             const crackling = createNoiseBuffer('brown');
             if (crackling) {
@@ -210,8 +215,9 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
               noiseNodeRef.current.start();
             }
             break;
+          }
 
-          case 'tibetan-bowls':
+          case 'tibetan-bowls': {
             // Simulate singing bowls with harmonics
             const bowlFreqs = [256, 384, 512, 768];
             bowlFreqs.forEach((freq, index) => {
@@ -233,8 +239,9 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
               }, index * 4000);
             });
             break;
+          }
 
-          default:
+          default: {
             // Default to soft sine wave
             oscillatorRef.current = audioContextRef.current.createOscillator();
             oscillatorRef.current.type = 'sine';
@@ -244,13 +251,14 @@ export const AmbientSoundPlayer: React.FC<AmbientSoundPlayerProps> = ({
             );
             oscillatorRef.current.connect(gainNodeRef.current);
             oscillatorRef.current.start();
+          }
         }
 
         setIsPlaying(true);
         setError(null);
       } catch (err) {
         setError('Failed to play audio');
-        console.error('Audio error:', err);
+        logAudioError('Ambient sound playback error', err as Error, { soundType: selectedSound });
       }
     },
     [initAudioContext, createNoiseBuffer]

@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 export const useRealTimeUpdates = () => {
   const [updateTrigger, setUpdateTrigger] = useState(0);
 
-  const triggerUpdate = useCallback((eventType: string, data?: any) => {
+  const triggerUpdate = useCallback((eventType: string, data?: Record<string, unknown>) => {
     setUpdateTrigger((prev) => prev + 1);
 
     // Dispatch custom event for cross-component communication
@@ -107,7 +107,7 @@ export const useRealTimeProgress = () => {
 export const useLiveSync = () => {
   const [syncStatus, setSyncStatus] = useState<'synced' | 'syncing' | 'error'>('synced');
 
-  const syncData = useCallback(async (key: string, data: any) => {
+  const syncData = useCallback(async (key: string, data: Record<string, unknown>) => {
     setSyncStatus('syncing');
 
     try {

@@ -562,7 +562,7 @@ export const MentorMatchingSystem: React.FC<MentorMatchingSystemProps> = ({
       <CardHeader>
         <div className="flex items-start space-x-4">
           <Avatar className="w-12 h-12">
-            <AvatarImage src={`/avatars/mentor-${mentor.id}.jpg`} />
+            <AvatarImage src={`/avatars/mentor-${mentor.id}.jpg`} alt={`${mentor.mentorProfile.year} ${mentor.mentorProfile.major} student mentor profile picture`} />
             <AvatarFallback>
               {mentor.mentorProfile.bio
                 .split(' ')
