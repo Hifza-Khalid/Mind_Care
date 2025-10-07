@@ -68,9 +68,6 @@ const AIChat = () => {
       }
       node = node.parentElement as HTMLElement | null;
     }
-
-    // Fallback: scroll the element into view (last resort)
-    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
   };
 
   useEffect(() => {
@@ -520,7 +517,10 @@ How has your day been treating you? Sometimes it helps to check in with ourselve
                   <span className="sr-only">Send message</span>
                 </Button>
               </div>
-              <p id="ai-chat-disclaimer" className="text-xs text-muted-foreground mt-2 sm:mt-3 text-center px-2">
+              <p
+                id="ai-chat-disclaimer"
+                className="text-xs text-muted-foreground mt-2 sm:mt-3 text-center px-2"
+              >
                 💬 Press Enter to send • 🔒 Your conversation is private and secure
               </p>
             </div>
