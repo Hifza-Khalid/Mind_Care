@@ -37,7 +37,6 @@ import { useState, useEffect, useRef } from 'react';
  * @see {@link ../../types/notifications} For notification integration
  */
 
-import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   MessageCircle,
