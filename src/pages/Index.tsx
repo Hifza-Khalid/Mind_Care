@@ -159,19 +159,19 @@ const AuthenticatedHomePage = ({
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-16  items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
               MindBuddy
             </span>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center ">
             <span className="text-sm text-muted-foreground">
               Welcome back, {user.name.split(' ')[0]}
             </span>
             <Button asChild className="bg-gradient-primary hover:shadow-glow">
-              <Link to={getDashboardPath()}>Go to Dashboard</Link>
+              <Link to={getDashboardPath()}>Dashboard</Link>
             </Button>
           </div>
         </div>
@@ -607,7 +607,7 @@ const GuestHomePage = () => {
 
           {/* CTA Section */}
           <div className="text-center">
-            <div className="bg-gradient-primary p-8 rounded-2xl text-white mb-8">
+            <div className="bg-gradient-primary p-8 rounded-2xl text-white mb-8 flex flex-col ">
               <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white drop-shadow-sm">
                 Ready to Start Your Wellness Journey?
               </h3>

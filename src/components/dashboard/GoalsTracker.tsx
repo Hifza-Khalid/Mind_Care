@@ -49,6 +49,7 @@ export const GoalsTracker = () => {
     addGoal,
     updateGoalProgress,
     completeGoal,
+    deleteGoal, // --- 1. GET THE NEW FUNCTION ---
     getActiveGoals,
     getWeeklyGoalProgress,
   } = useGoals();
@@ -106,6 +107,20 @@ export const GoalsTracker = () => {
       }
     });
   };
+  
+  // --- 2. ADD THIS NEW HANDLER FUNCTION ---
+  const handleDeleteGoal = (goalId: string) => {
+    smoothTransition(() => {
+      const goal = goals.find((g) => g.id === goalId);
+      deleteGoal(goalId);
+      triggerUpdate('goal_deleted', { goalId });
+
+      if (goal) {
+        showRealTimeNotification('info', `Goal removed: ${goal.title}`);
+      }
+    });
+  };
+  // --- END OF ADDED HANDLER ---
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -332,6 +347,18 @@ export const GoalsTracker = () => {
                       >
                         <Check className="h-3 w-3" />
                       </Button>
+
+                      {/* --- 3. ADD THE DELETE BUTTON HERE --- */}
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-6 w-6 text-red-500/70 hover:bg-red-50 hover:text-red-600 transition-all duration-200 hover:scale-105"
+                        onClick={() => handleDeleteGoal(goal.id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                      {/* --- END OF ADDED BUTTON --- */}
+
                     </div>
                   </div>
                 </div>

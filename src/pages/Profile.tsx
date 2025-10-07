@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { User as UserType } from '@/types/auth';
 import { Button } from '@/components/ui/button';
@@ -21,14 +21,31 @@ import {
   Edit,
   Save,
   Camera,
+  Upload,
+  Trash2,
+  MoreVertical,
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<Partial<UserType>>(user || {});
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setEditData(user);
+    }
+  }, [user]);
 
   if (!user) {
     return (
@@ -43,11 +60,67 @@ const Profile = () => {
   }
 
   const handleSave = () => {
-    // Mock save functionality
+    updateUser(editData);
     setIsEditing(false);
     toast({
       title: 'Profile Updated',
       description: 'Your profile information has been saved successfully.',
+    });
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: 'Invalid File Type',
+        description: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP).',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast({
+        title: 'File Too Large',
+        description: 'Please upload an image smaller than 5MB.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsUploadingImage(true);
+
+    const imageUrl = URL.createObjectURL(file);
+    
+    setTimeout(() => {
+      const newEditData = { ...editData, avatar: imageUrl };
+      setEditData(newEditData);
+      updateUser({ avatar: imageUrl });
+      
+      setIsUploadingImage(false);
+      toast({
+        title: 'Profile Picture Updated',
+        description: 'Your profile picture has been updated successfully.',
+      });
+    }, 1500);
+  };
+
+  const triggerFileInput = () => {
+    const fileInput = document.getElementById('profile-image-upload') as HTMLInputElement;
+    fileInput?.click();
+  };
+
+  const removeProfilePicture = () => {
+    const newEditData = { ...editData, avatar: undefined };
+    setEditData(newEditData);
+    updateUser({ avatar: undefined });
+    toast({
+      title: 'Profile Picture Removed',
+      description: 'Your profile picture has been removed.',
     });
   };
 
@@ -85,16 +158,48 @@ const Profile = () => {
           <CardHeader className="text-center">
             <div className="relative mx-auto mb-4">
               <Avatar className="h-24 w-24">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={editData.avatar || user.avatar} alt={user.name} />
                 <AvatarFallback className="text-xl">{getInitials(user.name)}</AvatarFallback>
               </Avatar>
-              <Button
-                variant="outline"
-                size="icon"
-                className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full"
-              >
-                <Camera className="h-4 w-4" />
-              </Button>
+              <input
+                id="profile-image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full"
+                    disabled={isUploadingImage}
+                    title="Change profile picture"
+                  >
+                    {isUploadingImage ? (
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    ) : (
+                      <Camera className="h-4 w-4" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={triggerFileInput} disabled={isUploadingImage}>
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload new photo
+                  </DropdownMenuItem>
+                  {(editData.avatar || user.avatar) && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={removeProfilePicture} disabled={isUploadingImage}>
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Remove photo
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <CardTitle className="text-xl">{user.name}</CardTitle>
             <CardDescription className="flex items-center justify-center space-x-2">

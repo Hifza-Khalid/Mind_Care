@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react'; // --- 1. IMPORT useMemo ---
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -47,6 +47,24 @@ export const InteractiveAnalytics = () => {
   const moodTrend = getMoodTrend();
   const goalProgress = getWeeklyGoalProgress();
   const averageSleep = getAverageHours();
+
+  // --- 2. ADD THIS DYNAMIC FILTERING LOGIC ---
+  const filteredMoods = useMemo(() => {
+    const now = Date.now();
+    const daysToFilter = {
+      week: 7,
+      month: 30,
+      '3months': 90,
+    }[selectedTimeframe];
+
+    const cutoffDate = now - daysToFilter * 24 * 60 * 60 * 1000;
+    
+    // Filter moods and then take the most recent ones matching the timeframe
+    return moods
+      .filter((mood) => mood.timestamp >= cutoffDate)
+      .slice(-daysToFilter); // Ensure we don't show more bars than the timeframe allows
+  }, [moods, selectedTimeframe]);
+  // --- END OF ADDED LOGIC ---
 
   const getMetricTrend = (current: number, previous: number) => {
     if (current > previous + 0.1) return { trend: 'up', icon: ArrowUp, color: 'text-green-500' };
@@ -195,13 +213,15 @@ export const InteractiveAnalytics = () => {
                     <div className="p-4 border rounded-lg">
                       <h4 className="font-semibold mb-3 flex items-center">
                         <Heart className="h-4 w-4 mr-2 text-red-500" />
-                        Mood Trend ({selectedTimeframe})
+                        Mood Trend ({selectedTimeframe === '3months' ? '3 Months' : `This ${selectedTimeframe}`})
                       </h4>
                       <div className="flex items-end space-x-2 h-24">
-                        {moods.slice(-7).map((mood, index) => (
+                        {/* --- 3. USE THE DYNAMICALLY FILTERED DATA --- */}
+                        {filteredMoods.map((mood, index) => (
                           <div key={index} className="flex flex-col items-center flex-1">
                             <div
-                              className="bg-gradient-to-t from-primary to-secondary rounded-t opacity-70"
+                              title={`Mood: ${mood.mood}/5 on ${new Date(mood.date).toLocaleDateString()}`}
+                              className="w-full bg-gradient-to-t from-primary to-secondary rounded-t opacity-70 hover:opacity-100 transition-opacity"
                               style={{ height: `${(mood.mood / 5) * 100}%`, minHeight: '4px' }}
                             />
                             <span className="text-xs text-muted-foreground mt-1">
