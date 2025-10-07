@@ -50,17 +50,29 @@ export const EnhancedDailyTips = () => {
   const { smoothTransition } = useSmoothAnimations();
 
   const [completedTips, setCompletedTips] = useState<CompletedTip[]>(() => {
-    const stored = localStorage.getItem('completed_daily_tips');
-    const today = new Date().toDateString();
+    // --- 1. START of the BUG FIX ---
+    try {
+      const stored = localStorage.getItem('completed_daily_tips');
+      const today = new Date().toDateString();
 
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      // Filter out tips completed on previous days
-      return parsed.filter(
-        (tip: CompletedTip) => new Date(tip.completedAt).toDateString() === today
-      );
+      if (stored) {
+        const parsed = JSON.parse(stored);
+
+        // Add an extra check to ensure the parsed data is an array before filtering
+        if (Array.isArray(parsed)) {
+          return parsed.filter(
+            (tip: CompletedTip) => new Date(tip.completedAt).toDateString() === today
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Failed to parse completed daily tips from localStorage:', error);
+      // If parsing fails, it's safer to clear the corrupted data to prevent future errors.
+      localStorage.removeItem('completed_daily_tips');
     }
+    // Return a default empty array if there's no data or if an error occurred.
     return [];
+    // --- END of the BUG FIX ---
   });
 
   const [refreshCount, setRefreshCount] = useState(0);
