@@ -1,4 +1,5 @@
-import { Toaster } from '@/components/ui/toaster';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // for styling!
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -9,7 +10,7 @@ import { MusicProvider } from '@/contexts/MusicContext';
 import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { ErrorBoundary, PageErrorBoundary } from '@/components/error';
 import ScrollToTop from './components/layout/scrollToTop';
 
@@ -59,7 +60,18 @@ const App = () => (
         <AuthProvider>
           <MusicProvider>
             <TooltipProvider>
-              <Toaster />
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
               <Sonner />
               <BrowserRouter>
                 <PageErrorBoundary>
@@ -76,37 +88,37 @@ const App = () => (
                     }
                   >
                     <Routes>
-                  <Route path="/about" element={<About />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/select-institution" element={<InstitutionSelection />} />
-                  <Route path="/" element={<Index />} />
-                  <Route path="/contact" element={<ContactUs />} />
-                  <Route path="*" element={<NotFound />} />
-                  <Route path="/app" element={<Layout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="student-dashboard" element={<StudentDashboard />} />
-                    <Route path="resources" element={<Resources />} />
-                    <Route path="forum" element={<Forum />} />
-                    <Route path="blog" element={<MentalHealthBlog />} />
-                    <Route path="booking" element={<Booking />} />
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="sessions" element={<Sessions />} />
-                    <Route path="breathing" element={<BreathingExercises />} />
-                    <Route path="notifications" element={<NotificationSettings />} />
-                    <Route path="theme-settings" element={<EnhancedThemeSettings />} />
-                    <Route path="mood-showcase" element={<QuickMoodShowcase />} />
-                    <Route path="feedback-demo" element={<FeedbackDemo />} />
-                    <Route path="system" element={<SystemHealth />} />
-                    <Route path="users" element={<UserManagement />} />
-                    <Route path="moderation" element={<ContentModeration />} />
-                    <Route path="chat" element={<AIChat />} />
-                    <Route path="error-demo" element={<ErrorBoundaryDemo />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/select-institution" element={<InstitutionSelection />} />
+                      <Route path="/" element={<Index />} />
+                      <Route path="/contact" element={<ContactUs />} />
+                      <Route path="*" element={<NotFound />} />
+                      <Route path="/app" element={<Layout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="student-dashboard" element={<StudentDashboard />} />
+                        <Route path="resources" element={<Resources />} />
+                        <Route path="forum" element={<Forum />} />
+                        <Route path="blog" element={<MentalHealthBlog />} />
+                        <Route path="booking" element={<Booking />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="sessions" element={<Sessions />} />
+                        <Route path="breathing" element={<BreathingExercises />} />
+                        <Route path="notifications" element={<NotificationSettings />} />
+                        <Route path="theme-settings" element={<EnhancedThemeSettings />} />
+                        <Route path="mood-showcase" element={<QuickMoodShowcase />} />
+                        <Route path="feedback-demo" element={<FeedbackDemo />} />
+                        <Route path="system" element={<SystemHealth />} />
+                        <Route path="users" element={<UserManagement />} />
+                        <Route path="moderation" element={<ContentModeration />} />
+                        <Route path="chat" element={<AIChat />} />
+                        <Route path="error-demo" element={<ErrorBoundaryDemo />} />
 
-                    <Route path="*" element={<NotFound />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  </Route>
-                </Routes>
+                        <Route path="*" element={<NotFound />} />
+                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      </Route>
+                    </Routes>
                   </Suspense>
                 </PageErrorBoundary>
                 <ChatWidget />
