@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,15 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import Footer from '@/components/layout/Footer';
 import { Heart, Mail, Lock, User, Shield, GraduationCap } from 'lucide-react';
 import { LoginCredentials } from '@/types/auth';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login, isLoading } = useAuth();
-  const { toast } = useToast();
 
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: '',
@@ -25,20 +23,32 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const success = await login(credentials);
+    // toast.promise requires a promise that rejects on failure.
+    // We'll wrap the original login function to achieve this.
+    const loginAndCheckPromise = new Promise(async (resolve, reject) => {
+        const success = await login(credentials);
+        if (success) {
+            resolve('Login successful');
+        } else {
+            reject('Login failed');
+        }
+    });
 
-    if (success) {
-      toast({
-        title: 'Welcome to MindBuddy!',
-        description: `Logged in successfully as ${credentials.role}.`,
-      });
-      navigate('/');
-    } else {
-      toast({
-        title: 'Login Failed',
-        description: 'Please check your credentials and try again.',
-        variant: 'destructive',
-      });
+    toast.promise(loginAndCheckPromise, {
+        pending: 'Signing in...',
+        success: 'Logged in successfully!',
+        error: 'Login failed. Please check your credentials.'
+    });
+
+    try {
+        await loginAndCheckPromise;
+        // On success, navigate after a delay to let the user see the toast.
+        setTimeout(() => {
+            navigate('/');
+        }, 1500); // 1.5-second delay
+    } catch (error) {
+        // The error is already handled by toast.promise, so we just catch it here.
+        console.error("Authentication attempt failed.");
     }
   };
 
@@ -83,12 +93,9 @@ const Login = () => {
   };
 
   return (
-    // Make the main area fill the viewport so the footer sits below the
-    // fold and is visible only after scrolling.
     <div className="flex flex-col bg-gradient-calm">
       <main className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-md space-y-6">
-          {/* Logo & Title */}
           <div className="text-center space-y-2">
             <Link to="/" className="flex items-center justify-center space-x-2 group">
               <Heart className="h-10 w-10 text-primary group-hover:text-secondary transition-colors" />
@@ -193,7 +200,6 @@ const Login = () => {
                 </Button>
               </form>
 
-              {/* Demo Credentials Helper */}
               <div className="mt-6 p-3 bg-primary-light/20 rounded-lg text-sm">
                 <p className="font-medium text-center mb-2">Demo Credentials:</p>
                 <div className="space-y-1 text-xs">
@@ -218,7 +224,6 @@ const Login = () => {
             </CardContent>
           </Card>
 
-          {/* Trust Indicators */}
           <div className="text-center space-y-2 text-sm md:text-base text-muted-foreground">
             <p>🔒 Your privacy is protected with end-to-end encryption</p>
             <p>💬 Confidential support available 24/7</p>
@@ -226,9 +231,9 @@ const Login = () => {
           </div>
         </div>
       </main>
-
     </div>
   );
 };
 
 export default Login;
+
