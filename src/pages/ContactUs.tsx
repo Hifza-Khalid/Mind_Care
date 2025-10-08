@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, Heart, MessageCircle, Clock, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Heart, MessageCircle, Clock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import Footer from '@/components/layout/Footer';
 
 export default function ContactUs() {
@@ -11,11 +12,67 @@ export default function ContactUs() {
     category: 'general',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      // Check if EmailJS environment variables are configured
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS configuration is missing. Please set up environment variables.');
+      }
+
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        category: formData.category,
+        message: formData.message,
+        to_email: 'support@mindbuddy.com', // You can change this to your actual email
+      };
+
+      // Send email using EmailJS
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
+
+      if (result.status === 200) {
+        setSubmitted(true);
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+          category: 'general',
+        });
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      if (error instanceof Error) {
+        setSubmitError(error.message);
+      } else {
+        setSubmitError('Failed to send message. Please try again or contact us directly.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -115,7 +172,22 @@ export default function ContactUs() {
                 <p className="text-slate-400">We'll get back to you within 24 hours.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <>
+                {submitError && (
+                  <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    <div>
+                      <p className="text-red-400 text-sm">{submitError}</p>
+                      <p className="text-slate-400 text-xs mt-1">
+                        You can also email us directly at{' '}
+                        <a href="mailto:support@mindbuddy.com" className="text-cyan-400 hover:text-cyan-300">
+                          support@mindbuddy.com
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">Full Name</label>
                   <input
@@ -186,12 +258,23 @@ export default function ContactUs() {
 
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-medium hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-cyan-500/50"
+                  disabled={isSubmitting}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-medium hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className="w-5 h-5" />
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Send Message
+                    </>
+                  )}
                 </button>
-              </form>
+                </form>
+              </>
             )}
           </div>
 
