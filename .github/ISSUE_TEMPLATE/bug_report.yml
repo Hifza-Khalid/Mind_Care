@@ -1,60 +1,87 @@
-name: "Bug Report"
-about: "Report a reproducible bug in Mind Care. Provide steps, expected vs actual behavior, and environment details."
-title: "Bug: "
-labels: "bug"
+name: "🐛 Bug Report"
+description: |
+  Report a reproducible bug in Mind Care. Please include steps, expected vs actual
+  behavior, and environment details.
+title: "🐞 Bug: "
+labels: ["bug", "help wanted"]
 assignees: []
 
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting a bug — the clearer the report, the faster we can fix it. Please fill in the sections below.
+        ## 🐛 Bug Report
+
+        Thanks for taking the time to report a bug!  
+        The clearer your report, the faster we can fix it. 🛠️  
+        Please fill out all required sections below.
 
   - type: input
     id: summary
     attributes:
-      label: Short summary
-      description: One-line summary of the bug
-      placeholder: "e.g. music playback stops when switching tabs"
+      label: 🧾 Short Summary
+      description: Give a one-line summary of the issue.
+      placeholder: "e.g. Music playback stops when switching tabs"
     validations:
       required: true
 
   - type: textarea
     id: steps
     attributes:
-      label: Steps to reproduce
-      description: Minimal, numbered steps to reproduce the issue
-      placeholder: "1. Go to ...\n2. Click ...\n3. Observe ..."
+      label: 🔄 Steps to Reproduce
+      description: Step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Go to ...
+        2. Click on ...
+        3. Observe the error ...
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: Expected behavior
-      description: What you expected to happen
+      label: ✅ Expected Behavior
+      description: What should happen instead?
+      placeholder: "Describe what you expected to happen"
+    validations:
+      required: true
 
   - type: textarea
     id: actual
     attributes:
-      label: Actual behavior
-      description: What actually happened
+      label: ❌ Actual Behavior
+      description: What actually happened?
+      placeholder: "Describe what really happened"
+    validations:
+      required: true
 
   - type: input
     id: environment
     attributes:
-      label: Environment
-      description: Browser/OS/version or app version (if known)
-      placeholder: "e.g. Chrome 120 on Windows 11"
+      label: 🖥️ Environment
+      description: Provide details about your setup (browser, OS, app version, etc.)
+      placeholder: |
+        e.g. Chrome 120 on Windows 11 / Node.js 20.10 / MongoDB 6.0
 
   - type: textarea
     id: logs
     attributes:
-      label: Error messages or logs
+      label: 🧩 Error Messages or Logs
       description: Paste console errors, stack traces, or relevant logs (optional)
+      placeholder: |
+        Error: [paste error logs here]
+        Stack trace: [if available]
 
   - type: textarea
     id: additional_context
     attributes:
-      label: Additional context
-      description: Anything else that might help reproduce or diagnose the issue (optional)
+      label: 💬 Additional Context
+      description: Anything else that might help diagnose the problem (optional)
+      placeholder: "Add any other context or screenshots here 📸"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        💖 **Thank you for helping improve Mind Care!**  
+        Your effort and attention to detail make a big difference. 🙏✨

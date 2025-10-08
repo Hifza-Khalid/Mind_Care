@@ -1,61 +1,98 @@
-name: "Feature Request"
-about: "Suggest an improvement or new feature for Mind Care. Keep requests focused and actionable."
-title: "Feature: "
-labels: "enhancement"
+name: "🚀 Feature Request"
+description: |
+  Suggest an improvement or new feature for Mind Care. Keep requests focused
+  and actionable.
+title: "✨ Feature: "
+labels: ["enhancement"]
 assignees: []
 
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve Mind Care! Please provide a short, clear description of the feature you'd like to see.
+        ## 💡 Feature Request
+
+        Thanks for helping improve **Mind Care**! 🧠  
+        Please provide a short, clear, and actionable description of the feature you'd like to see.
 
   - type: input
     id: summary
     attributes:
-      label: Short summary
-      description: One-line summary of the feature
-      placeholder: "e.g. add scheduled daily reminders for breathing exercises"
+      label: 🧾 Short Summary
+      description: One-line summary of the requested feature.
+      placeholder: "e.g. Add scheduled daily reminders for breathing exercises"
     validations:
       required: true
 
   - type: textarea
     id: user_story
     attributes:
-      label: User story / motivation
-      description: Who benefits and why (user perspective)
-      placeholder: "As a __, I want __ so that __"
+      label: 👥 User Story / Motivation
+      description: Describe who benefits from this and why (from a user’s perspective).
+      placeholder: |
+        As a [type of user], I want [feature or capability] so that [benefit or reason].
+    validations:
+      required: false
 
   - type: textarea
     id: proposed_solution
     attributes:
-      label: Proposed solution
-      description: Outline a minimal, implementable approach or UI sketch
+      label: 🧠 Proposed Solution
+      description: Outline a clear and minimal approach or attach a simple UI idea.
+      placeholder: |
+        - Describe how this feature should work.
+        - Include any relevant code snippets or design notes.
+    validations:
+      required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives considered
-      description: Other approaches you considered (optional)
+      label: 🔄 Alternatives Considered
+      description: Have you thought about other ways to solve this problem? (optional)
+      placeholder: |
+        - Alternative 1: ...
+        - Alternative 2: ...
+    validations:
+      required: false
 
   - type: dropdown
     id: priority
     attributes:
-      label: Priority
-      description: How urgent is this feature for you?
+      label: ⚡ Priority
+      description: How urgent or important is this feature for you?
       options:
-        - High
-        - Medium
-        - Low
+        - 🔴 High
+        - 🟡 Medium
+        - 🟢 Low
+    validations:
+      required: false
 
   - type: textarea
     id: acceptance_criteria
     attributes:
-      label: Acceptance criteria
-      description: Clear conditions that define when this feature is done (one per line)
+      label: ✅ Acceptance Criteria
+      description: Conditions that define when this feature is complete.
+      placeholder: |
+        - [ ] Condition 1
+        - [ ] Condition 2
+        - [ ] Condition 3
+    validations:
+      required: false
 
   - type: textarea
     id: additional_context
     attributes:
-      label: Additional context
-      description: Any mockups, links, or notes that will help the maintainers (optional)
+      label: 🧩 Additional Context
+      description: Add mockups, links, notes, or references that will help the maintainers.
+      placeholder: "Attach screenshots, design mockups, or related GitHub issues."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        💖 **Thank you for helping shape the future of Mind Care!**  
+        Your feedback and creativity make the project better every day. 🌿✨
+        Please be patient as maintainers review and prioritize feature requests.
