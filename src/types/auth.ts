@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 export interface User {
   id: string;
   name: string;
@@ -32,10 +34,20 @@ export interface LoginCredentials {
   role: 'student' | 'counselor' | 'admin';
 }
 
-// Mock users for demo
-export const mockUsers: Record<string, { user: User; password: string }> = {
+export interface UserWithPassword {
+  password: string;
+  user: User;
+}
+
+// Helper function to hash passwords
+const hashPassword = (password: string): string => {
+  return CryptoJS.SHA256(password).toString();
+};
+
+// Mock users with hashed password
+export const mockUsers: Record<string, UserWithPassword> = {
   'student@mindbuddy.com': {
-    password: 'student123',
+    password: hashPassword('student123'), 
     user: {
       id: '1',
       name: 'Alex Student',
@@ -57,7 +69,7 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
     },
   },
   'counselor@mindbuddy.com': {
-    password: 'counselor123',
+    password: hashPassword('counselor123'), 
     user: {
       id: '2',
       name: 'Dr. Sarah Wilson',
@@ -83,7 +95,7 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
     },
   },
   'admin@mindbuddy.com': {
-    password: 'admin123',
+    password: hashPassword('admin123'), 
     user: {
       id: '3',
       name: 'Admin User',
