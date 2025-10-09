@@ -43,6 +43,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import PageTransition from '@/components/ui/PageTransition';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 interface Institution {
   id: string;
@@ -790,261 +792,258 @@ const InstitutionSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-3 sm:p-4 lg:p-6">
-      <div className="w-full max-w-7xl mx-auto">
-        {/* Header - Improved Mobile Responsive */}
-        <div className="text-center mb-6 sm:mb-8 px-2">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-3 sm:mb-4 leading-tight">
-            Select Your Institution
-          </h1>
-          <p className="text-base sm:text-lg text-muted-foreground mb-2 px-4 sm:px-0">
-            Welcome {user?.name}! Choose your college or university to continue.
-          </p>
-          <Badge variant="secondary" className="mb-4 sm:mb-6">
-            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
-          </Badge>
-        </div>
-
-        {/* Search and Filters - Enhanced Mobile Responsive */}
-        <div className="bg-card rounded-xl p-3 sm:p-4 md:p-6 shadow-soft mb-6 sm:mb-8 space-y-3 sm:space-y-4">
-          {/* Search Bar - Better Mobile */}
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search institutions..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 h-11 sm:h-12 text-sm sm:text-base"
-            />
-          </div>
-
-          {/* Filters and Sorting - Enhanced Mobile Layout */}
-          <div className="space-y-3 sm:space-y-4">
-            {/* Filters Row - Improved Mobile Stacking */}
-            <div className="space-y-3 sm:space-y-0">
-              <div className="flex items-center gap-2 mb-2 sm:mb-0">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Filters</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                <Select value={filterType} onValueChange={setFilterType}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Institution Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {institutionTypes.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        <span className="truncate">{type}</span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={filterState} onValueChange={setFilterState}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Select State" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All States</SelectItem>
-                    {institutionStates.map((state) => (
-                      <SelectItem key={state} value={state}>
-                        <span className="truncate">{state}</span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Clear Filters Button - Better Mobile Placement */}
-                {(searchTerm || filterType !== 'all' || filterState !== 'all') && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="gap-2 text-muted-foreground hover:text-foreground h-10 col-span-1 sm:col-span-2 lg:col-span-1"
-                  >
-                    <X className="h-3 w-3" />
-                    <span className="hidden sm:inline">Clear Filters</span>
-                    <span className="sm:hidden">Clear</span>
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            {/* Sort Row - Enhanced Mobile Layout */}
-            <div className="space-y-2 sm:space-y-0 sm:flex sm:gap-3 sm:items-center pt-3 border-t">
-              <span className="text-sm font-medium">Sort by:</span>
-              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
-                <Button
-                  variant={sortBy === 'name' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => toggleSort('name')}
-                  className="gap-1 h-8 text-xs sm:text-sm"
-                >
-                  Name
-                  {sortBy === 'name' &&
-                    (sortDirection === 'asc' ? (
-                      <SortAsc className="h-3 w-3" />
-                    ) : (
-                      <SortDesc className="h-3 w-3" />
-                    ))}
-                </Button>
-                <Button
-                  variant={sortBy === 'students' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => toggleSort('students')}
-                  className="gap-1 h-8 text-xs sm:text-sm"
-                >
-                  Students
-                  {sortBy === 'students' &&
-                    (sortDirection === 'asc' ? (
-                      <SortAsc className="h-3 w-3" />
-                    ) : (
-                      <SortDesc className="h-3 w-3" />
-                    ))}
-                </Button>
-                <Button
-                  variant={sortBy === 'rating' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => toggleSort('rating')}
-                  className="gap-1 h-8 text-xs sm:text-sm"
-                >
-                  Rating
-                  {sortBy === 'rating' &&
-                    (sortDirection === 'asc' ? (
-                      <SortAsc className="h-3 w-3" />
-                    ) : (
-                      <SortDesc className="h-3 w-3" />
-                    ))}
-                </Button>
-                <Button
-                  variant={sortBy === 'established' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => toggleSort('established')}
-                  className="gap-1 h-8 text-xs sm:text-sm"
-                >
-                  Year
-                  {sortBy === 'established' &&
-                    (sortDirection === 'asc' ? (
-                      <SortAsc className="h-3 w-3" />
-                    ) : (
-                      <SortDesc className="h-3 w-3" />
-                    ))}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Results Info - Better Mobile Layout */}
-        <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 px-1">
-          <p className="text-sm sm:text-base text-muted-foreground">
-            {isLoading ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Loading institutions...
-              </span>
-            ) : (
-              <span>
-                Showing{' '}
-                <span className="font-semibold">{filteredAndSortedInstitutions.length}</span> of{' '}
-                <span className="font-semibold">{institutions.length}</span> institutions
-              </span>
-            )}
-          </p>
-          {selectedInstitution && (
-            <Badge
-              variant="outline"
-              className="bg-primary/10 text-primary text-xs sm:text-sm px-2 py-1"
-            >
-              <CheckCircle className="h-3 w-3 mr-1" />
-              <span className="truncate max-w-[200px] sm:max-w-none">
-                {institutions.find((inst) => inst.id === selectedInstitution)?.name} selected
-              </span>
+    <PageTransition>
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-3 sm:p-4 lg:p-6">
+        <div className="w-full max-w-7xl mx-auto">
+          <ScrollFadeIn yOffset={32}><div className="text-center mb-6 sm:mb-8 px-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-3 sm:mb-4 leading-tight">
+              Select Your Institution
+            </h1>
+            <p className="text-base sm:text-lg text-muted-foreground mb-2 px-4 sm:px-0">
+              Welcome {user?.name}! Choose your college or university to continue.
+            </p>
+            <Badge variant="secondary" className="mb-4 sm:mb-6">
+              {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
             </Badge>
-          )}
-        </div>
-
-        {/* Recent and Favorites - Enhanced Mobile Responsive */}
-        {recentSelections.length > 0 && !searchTerm && (
-          <div className="mb-4 sm:mb-6 px-1">
-            <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 flex items-center gap-2">
-              <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-              Recently Viewed
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {recentSelections.slice(0, 3).map((instId) => {
-                const inst = institutions.find((i) => i.id === instId);
-                return inst ? (
-                  <Button
-                    key={instId}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleInstitutionSelect(instId)}
-                    className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
-                  >
-                    <Eye className="h-3 w-3" />
-                    <span className="truncate max-w-[100px] sm:max-w-[150px] lg:max-w-none">
-                      {inst.name}
-                    </span>
-                  </Button>
-                ) : null;
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Enhanced Responsive Institution Grid - Fixed Column Breakpoints */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 px-1">
-          {isLoading ? (
-            // Loading skeletons - responsive count based on screen size
-            Array.from({ length: 8 }).map((_, index) => <InstitutionCardSkeleton key={index} />)
-          ) : filteredAndSortedInstitutions.length > 0 ? (
-            filteredAndSortedInstitutions.map((institution) => (
-              <InstitutionCard
-                key={institution.id}
-                institution={institution}
-                isSelected={selectedInstitution === institution.id}
-                onSelect={() => handleInstitutionSelect(institution.id)}
-                onToggleFavorite={(e) => toggleFavorite(institution.id, e)}
+          </div></ScrollFadeIn>
+          <ScrollFadeIn yOffset={28} delay={0.05}><div className="bg-card rounded-xl p-3 sm:p-4 md:p-6 shadow-soft mb-6 sm:mb-8 space-y-3 sm:space-y-4">
+            {/* Search Bar - Better Mobile */}
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search institutions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 h-11 sm:h-12 text-sm sm:text-base"
               />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-8 sm:py-12 px-4">
-              <Building2 className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold mb-2">No institutions found</h3>
-              <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                Try adjusting your search terms or filters
-              </p>
-              <Button variant="outline" onClick={clearFilters} size="sm">
-                Clear All Filters
-              </Button>
             </div>
-          )}
-        </div>
 
-        {/* Enhanced Mobile-First Continue Button */}
-        <div className="sticky bottom-0 sm:static bg-background/95 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none p-3 sm:p-0 rounded-t-xl sm:rounded-none border sm:border-none shadow-lg sm:shadow-none mb-4 sm:mb-0 -mx-4 sm:mx-0">
-          <div className="text-center max-w-md mx-auto sm:max-w-none">
-            <Button
-              onClick={handleContinue}
-              disabled={!selectedInstitution}
-              size="lg"
-              className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold shadow-elegant"
-            >
-              Continue to Dashboard
-              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-            {!selectedInstitution && (
-              <p className="text-xs sm:text-sm text-muted-foreground mt-2">
-                Please select an institution to continue
-              </p>
+            {/* Filters and Sorting - Enhanced Mobile Layout */}
+            <div className="space-y-3 sm:space-y-4">
+              {/* Filters Row - Improved Mobile Stacking */}
+              <div className="space-y-3 sm:space-y-0">
+                <div className="flex items-center gap-2 mb-2 sm:mb-0">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Filters</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger className="w-full h-10">
+                      <SelectValue placeholder="Institution Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {institutionTypes.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          <span className="truncate">{type}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={filterState} onValueChange={setFilterState}>
+                    <SelectTrigger className="w-full h-10">
+                      <SelectValue placeholder="Select State" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All States</SelectItem>
+                      {institutionStates.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          <span className="truncate">{state}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Clear Filters Button - Better Mobile Placement */}
+                  {(searchTerm || filterType !== 'all' || filterState !== 'all') && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="gap-2 text-muted-foreground hover:text-foreground h-10 col-span-1 sm:col-span-2 lg:col-span-1"
+                    >
+                      <X className="h-3 w-3" />
+                      <span className="hidden sm:inline">Clear Filters</span>
+                      <span className="sm:hidden">Clear</span>
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              {/* Sort Row - Enhanced Mobile Layout */}
+              <div className="space-y-2 sm:space-y-0 sm:flex sm:gap-3 sm:items-center pt-3 border-t">
+                <span className="text-sm font-medium">Sort by:</span>
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+                  <Button
+                    variant={sortBy === 'name' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => toggleSort('name')}
+                    className="gap-1 h-8 text-xs sm:text-sm"
+                  >
+                    Name
+                    {sortBy === 'name' &&
+                      (sortDirection === 'asc' ? (
+                        <SortAsc className="h-3 w-3" />
+                      ) : (
+                        <SortDesc className="h-3 w-3" />
+                      ))}
+                  </Button>
+                  <Button
+                    variant={sortBy === 'students' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => toggleSort('students')}
+                    className="gap-1 h-8 text-xs sm:text-sm"
+                  >
+                    Students
+                    {sortBy === 'students' &&
+                      (sortDirection === 'asc' ? (
+                        <SortAsc className="h-3 w-3" />
+                      ) : (
+                        <SortDesc className="h-3 w-3" />
+                      ))}
+                  </Button>
+                  <Button
+                    variant={sortBy === 'rating' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => toggleSort('rating')}
+                    className="gap-1 h-8 text-xs sm:text-sm"
+                  >
+                    Rating
+                    {sortBy === 'rating' &&
+                      (sortDirection === 'asc' ? (
+                        <SortAsc className="h-3 w-3" />
+                      ) : (
+                        <SortDesc className="h-3 w-3" />
+                      ))}
+                  </Button>
+                  <Button
+                    variant={sortBy === 'established' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => toggleSort('established')}
+                    className="gap-1 h-8 text-xs sm:text-sm"
+                  >
+                    Year
+                    {sortBy === 'established' &&
+                      (sortDirection === 'asc' ? (
+                        <SortAsc className="h-3 w-3" />
+                      ) : (
+                        <SortDesc className="h-3 w-3" />
+                      ))}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div></ScrollFadeIn>
+          <ScrollFadeIn yOffset={20} delay={0.08}><div className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 px-1">
+            <p className="text-sm sm:text-base text-muted-foreground">
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading institutions...
+                </span>
+              ) : (
+                <span>
+                  Showing{' '}
+                  <span className="font-semibold">{filteredAndSortedInstitutions.length}</span> of{' '}
+                  <span className="font-semibold">{institutions.length}</span> institutions
+                </span>
+              )}
+            </p>
+            {selectedInstitution && (
+              <Badge
+                variant="outline"
+                className="bg-primary/10 text-primary text-xs sm:text-sm px-2 py-1"
+              >
+                <CheckCircle className="h-3 w-3 mr-1" />
+                <span className="truncate max-w-[200px] sm:max-w-none">
+                  {institutions.find((inst) => inst.id === selectedInstitution)?.name} selected
+                </span>
+              </Badge>
             )}
-          </div>
+          </div></ScrollFadeIn>
+
+          {/* Recent and Favorites - Enhanced Mobile Responsive */}
+          {recentSelections.length > 0 && !searchTerm && (
+            <ScrollFadeIn yOffset={18} delay={0.11}><div className="mb-4 sm:mb-6 px-1">
+              <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 flex items-center gap-2">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                Recently Viewed
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {recentSelections.slice(0, 3).map((instId) => {
+                  const inst = institutions.find((i) => i.id === instId);
+                  return inst ? (
+                    <Button
+                      key={instId}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleInstitutionSelect(instId)}
+                      className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
+                    >
+                      <Eye className="h-3 w-3" />
+                      <span className="truncate max-w-[100px] sm:max-w-[150px] lg:max-w-none">
+                        {inst.name}
+                      </span>
+                    </Button>
+                  ) : null;
+                })}
+              </div>
+            </div></ScrollFadeIn>
+          )}
+
+          {/* Enhanced Responsive Institution Grid - Fixed Column Breakpoints */}
+          <ScrollFadeIn yOffset={28} delay={0.12}><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 px-1">
+            {isLoading ? (
+              // Loading skeletons - responsive count based on screen size
+              Array.from({ length: 8 }).map((_, index) => <InstitutionCardSkeleton key={index} />)
+            ) : filteredAndSortedInstitutions.length > 0 ? (
+              filteredAndSortedInstitutions.map((institution) => (
+                <InstitutionCard
+                  key={institution.id}
+                  institution={institution}
+                  isSelected={selectedInstitution === institution.id}
+                  onSelect={() => handleInstitutionSelect(institution.id)}
+                  onToggleFavorite={(e) => toggleFavorite(institution.id, e)}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8 sm:py-12 px-4">
+                <Building2 className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mx-auto mb-3 sm:mb-4" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">No institutions found</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                  Try adjusting your search terms or filters
+                </p>
+                <Button variant="outline" onClick={clearFilters} size="sm">
+                  Clear All Filters
+                </Button>
+              </div>
+            )}
+          </div></ScrollFadeIn>
+
+          {/* Enhanced Mobile-First Continue Button */}
+          <ScrollFadeIn delay={0.15}><div className="sticky bottom-0 sm:static bg-background/95 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none p-3 sm:p-0 rounded-t-xl sm:rounded-none border sm:border-none shadow-lg sm:shadow-none mb-4 sm:mb-0 -mx-4 sm:mx-0">
+            <div className="text-center max-w-md mx-auto sm:max-w-none">
+              <Button
+                onClick={handleContinue}
+                disabled={!selectedInstitution}
+                size="lg"
+                className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold shadow-elegant"
+              >
+                Continue to Dashboard
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+              </Button>
+              {!selectedInstitution && (
+                <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+                  Please select an institution to continue
+                </p>
+              )}
+            </div>
+          </div></ScrollFadeIn>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

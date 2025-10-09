@@ -20,6 +20,8 @@ import {
   Heart,
   CheckCircle,
 } from 'lucide-react';
+import PageTransition from '@/components/ui/PageTransition';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 interface BreathingExercise {
   id: string;
@@ -205,208 +207,214 @@ const BreathingExercises = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center space-x-3">
-          <div className="p-3 rounded-full bg-gradient-to-br from-blue-500/20 to-green-500/20">
-            <Wind className="h-8 w-8 text-blue-600" />
+    <PageTransition>
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <ScrollFadeIn yOffset={32}>
+          <div className="text-center space-y-4">
+            <div className="flex items-center justify-center space-x-3">
+              <div className="p-3 rounded-full bg-gradient-to-br from-blue-500/20 to-green-500/20">
+                <Wind className="h-8 w-8 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-heading">Breathing Exercises</h1>
+                <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mx-auto mt-2"></div>
+              </div>
+            </div>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Take a moment to reconnect with your breath. These guided exercises help reduce stress,
+              improve focus, and promote overall well-being.
+            </p>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-heading">Breathing Exercises</h1>
-            <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-full mx-auto mt-2"></div>
-          </div>
-        </div>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Take a moment to reconnect with your breath. These guided exercises help reduce stress,
-          improve focus, and promote overall well-being.
-        </p>
-      </div>
+        </ScrollFadeIn>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Exercise Selection */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-lg">Choose Exercise</CardTitle>
-            <CardDescription>
-              Select a breathing pattern that suits your current needs
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Select
-              value={selectedExercise.id}
-              onValueChange={(value) => {
-                const exercise = BREATHING_EXERCISES.find((ex) => ex.id === value);
-                if (exercise) {
-                  setSelectedExercise(exercise);
-                  resetExercise();
-                }
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {BREATHING_EXERCISES.map((exercise) => (
-                  <SelectItem key={exercise.id} value={exercise.id}>
-                    {exercise.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <div className="space-y-3">
-              <h4 className="font-medium">Pattern</h4>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Inhale:</span>
-                  <span className="font-medium">{selectedExercise.pattern.inhale}s</span>
-                </div>
-                {selectedExercise.pattern.hold > 0 && (
-                  <div className="flex justify-between">
-                    <span>Hold:</span>
-                    <span className="font-medium">{selectedExercise.pattern.hold}s</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span>Exhale:</span>
-                  <span className="font-medium">{selectedExercise.pattern.exhale}s</span>
-                </div>
-                {selectedExercise.pattern.holdEmpty && (
-                  <div className="flex justify-between">
-                    <span>Hold Empty:</span>
-                    <span className="font-medium">{selectedExercise.pattern.holdEmpty}s</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="font-medium">Benefits</h4>
-              <ul className="text-sm space-y-1">
-                {selectedExercise.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex items-center justify-between pt-4">
-              <div className="flex items-center space-x-2">
-                <Timer className="h-4 w-4" />
-                <span className="text-sm">{selectedExercise.totalDuration} minutes</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={() => setSoundEnabled(!soundEnabled)}>
-                {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Breathing Animation */}
-        <Card className="lg:col-span-2">
-          <CardContent className="p-8">
-            <div className="flex flex-col items-center space-y-8">
-              {/* Breathing Circle */}
-              <div className="relative flex items-center justify-center w-64 h-64">
-                <div
-                  className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/30 to-green-500/30 transition-transform duration-1000 ease-in-out flex items-center justify-center"
-                  style={{ transform: getCircleScale() }}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <ScrollFadeIn yOffset={24} delay={0.05}>
+            <Card className="lg:col-span-1">
+              <CardHeader>
+                <CardTitle className="text-lg">Choose Exercise</CardTitle>
+                <CardDescription>
+                  Select a breathing pattern that suits your current needs
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Select
+                  value={selectedExercise.id}
+                  onValueChange={(value) => {
+                    const exercise = BREATHING_EXERCISES.find((ex) => ex.id === value);
+                    if (exercise) {
+                      setSelectedExercise(exercise);
+                      resetExercise();
+                    }
+                  }}
                 >
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-green-500 opacity-80" />
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BREATHING_EXERCISES.map((exercise) => (
+                      <SelectItem key={exercise.id} value={exercise.id}>
+                        {exercise.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <div className="space-y-3">
+                  <h4 className="font-medium">Pattern</h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Inhale:</span>
+                      <span className="font-medium">{selectedExercise.pattern.inhale}s</span>
+                    </div>
+                    {selectedExercise.pattern.hold > 0 && (
+                      <div className="flex justify-between">
+                        <span>Hold:</span>
+                        <span className="font-medium">{selectedExercise.pattern.hold}s</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span>Exhale:</span>
+                      <span className="font-medium">{selectedExercise.pattern.exhale}s</span>
+                    </div>
+                    {selectedExercise.pattern.holdEmpty && (
+                      <div className="flex justify-between">
+                        <span>Hold Empty:</span>
+                        <span className="font-medium">{selectedExercise.pattern.holdEmpty}s</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* Progress Ring */}
-                <svg className="absolute w-64 h-64 -rotate-90">
-                  <circle
-                    cx="128"
-                    cy="128"
-                    r="120"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="text-gray-200"
-                  />
-                  <circle
-                    cx="128"
-                    cy="128"
-                    r="120"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeDasharray={`${2 * Math.PI * 120}`}
-                    strokeDashoffset={`${2 * Math.PI * 120 * (1 - phaseProgress / 100)}`}
-                    className={`transition-all duration-100 ${getPhaseColor()}`}
-                  />
-                </svg>
-              </div>
-
-              {/* Phase Instruction */}
-              <div className="text-center space-y-2">
-                <h2
-                  className={`text-3xl font-bold transition-colors duration-300 ${getPhaseColor()}`}
-                >
-                  {getPhaseInstruction()}
-                </h2>
-                <p className="text-muted-foreground">
-                  {selectedExercise.pattern[currentPhase]} seconds
-                </p>
-              </div>
-
-              {/* Controls */}
-              <div className="flex items-center space-x-4">
-                {!isActive && !sessionComplete ? (
-                  <Button onClick={startExercise} size="lg" className="px-8">
-                    <Play className="h-5 w-5 mr-2" />
-                    Start
-                  </Button>
-                ) : isActive ? (
-                  <Button onClick={pauseExercise} variant="outline" size="lg" className="px-8">
-                    <Pause className="h-5 w-5 mr-2" />
-                    Pause
-                  </Button>
-                ) : null}
-
-                <Button onClick={resetExercise} variant="outline" size="lg">
-                  <RotateCcw className="h-5 w-5 mr-2" />
-                  Reset
-                </Button>
-              </div>
-
-              {/* Progress */}
-              <div className="w-full max-w-md space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Progress</span>
-                  <span>
-                    {cycleCount} of {Math.ceil(totalCycles)} cycles
-                  </span>
+                <div className="space-y-2">
+                  <h4 className="font-medium">Benefits</h4>
+                  <ul className="text-sm space-y-1">
+                    {selectedExercise.benefits.map((benefit, index) => (
+                      <li key={index} className="flex items-center space-x-2">
+                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <Progress value={totalProgress} className="h-2" />
-              </div>
 
-              {/* Session Complete */}
-              {sessionComplete && (
-                <Card className="w-full max-w-md bg-green-50 border-green-200">
-                  <CardContent className="p-4 text-center">
-                    <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                    <h3 className="font-semibold text-green-800">Session Complete!</h3>
-                    <p className="text-sm text-green-600 mt-1">
-                      Great job! You've completed your {selectedExercise.totalDuration}-minute
-                      breathing session.
+                <div className="flex items-center justify-between pt-4">
+                  <div className="flex items-center space-x-2">
+                    <Timer className="h-4 w-4" />
+                    <span className="text-sm">{selectedExercise.totalDuration} minutes</span>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => setSoundEnabled(!soundEnabled)}>
+                    {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollFadeIn>
+
+          <ScrollFadeIn yOffset={28} delay={0.05}>
+            <Card className="lg:col-span-2">
+              <CardContent className="p-8">
+                <div className="flex flex-col items-center space-y-8">
+                  {/* Breathing Circle */}
+                  <div className="relative flex items-center justify-center w-64 h-64">
+                    <div
+                      className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/30 to-green-500/30 transition-transform duration-1000 ease-in-out flex items-center justify-center"
+                      style={{ transform: getCircleScale() }}
+                    >
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-green-500 opacity-80" />
+                    </div>
+
+                    {/* Progress Ring */}
+                    <svg className="absolute w-64 h-64 -rotate-90">
+                      <circle
+                        cx="128"
+                        cy="128"
+                        r="120"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-gray-200"
+                      />
+                      <circle
+                        cx="128"
+                        cy="128"
+                        r="120"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeDasharray={`${2 * Math.PI * 120}`}
+                        strokeDashoffset={`${2 * Math.PI * 120 * (1 - phaseProgress / 100)}`}
+                        className={`transition-all duration-100 ${getPhaseColor()}`}
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Phase Instruction */}
+                  <div className="text-center space-y-2">
+                    <h2
+                      className={`text-3xl font-bold transition-colors duration-300 ${getPhaseColor()}`}
+                    >
+                      {getPhaseInstruction()}
+                    </h2>
+                    <p className="text-muted-foreground">
+                      {selectedExercise.pattern[currentPhase]} seconds
                     </p>
-                    <Button onClick={resetExercise} className="mt-3" size="sm">
-                      Start New Session
+                  </div>
+
+                  {/* Controls */}
+                  <div className="flex items-center space-x-4">
+                    {!isActive && !sessionComplete ? (
+                      <Button onClick={startExercise} size="lg" className="px-8">
+                        <Play className="h-5 w-5 mr-2" />
+                        Start
+                      </Button>
+                    ) : isActive ? (
+                      <Button onClick={pauseExercise} variant="outline" size="lg" className="px-8">
+                        <Pause className="h-5 w-5 mr-2" />
+                        Pause
+                      </Button>
+                    ) : null}
+
+                    <Button onClick={resetExercise} variant="outline" size="lg">
+                      <RotateCcw className="h-5 w-5 mr-2" />
+                      Reset
                     </Button>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  </div>
+
+                  {/* Progress */}
+                  <div className="w-full max-w-md space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Progress</span>
+                      <span>
+                        {cycleCount} of {Math.ceil(totalCycles)} cycles
+                      </span>
+                    </div>
+                    <Progress value={totalProgress} className="h-2" />
+                  </div>
+
+                  {/* Session Complete */}
+                  {sessionComplete && (
+                    <Card className="w-full max-w-md bg-green-50 border-green-200">
+                      <CardContent className="p-4 text-center">
+                        <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                        <h3 className="font-semibold text-green-800">Session Complete!</h3>
+                        <p className="text-sm text-green-600 mt-1">
+                          Great job! You've completed your {selectedExercise.totalDuration}-minute
+                          breathing session.
+                        </p>
+                        <Button onClick={resetExercise} className="mt-3" size="sm">
+                          Start New Session
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollFadeIn>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 
