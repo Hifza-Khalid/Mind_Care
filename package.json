@@ -16,6 +16,10 @@
   ],
   "author": "Abhishek Kumar Giri",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0",
+    "npm": ">=8.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AbhishekChamp879/MInd_Care.git"

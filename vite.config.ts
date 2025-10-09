@@ -15,7 +15,12 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  define: {
+    global: 'globalThis',
+  },
   build: {
+    target: 'esnext',
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
