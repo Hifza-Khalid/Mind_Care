@@ -65,8 +65,6 @@ const getNextAvailableSlot = (daysFromNow: number, hour: number) => {
   return date;
 };
 import { format, addDays, isSameDay, isToday, isTomorrow } from 'date-fns';
-import PageTransition from '@/components/ui/PageTransition';
-import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 interface Review {
   id: string;
@@ -2070,14 +2068,159 @@ const Booking = () => {
   );
 
   return (
-    <PageTransition>
-      <div className="container mx-auto px-4 py-6 min-h-screen space-y-8">
-        <ScrollFadeIn yOffset={32}><div className="text-center space-y-4 mb-6">{/* ...header contents... */}</div></ScrollFadeIn>
-        <ScrollFadeIn yOffset={20} delay={0.05}><div className="mb-6 space-y-3">{/* ...live status & progress bar... */}</div></ScrollFadeIn>
-        <ScrollFadeIn yOffset={20} delay={0.08}><Card className="mb-6 bg-severity-high/10 border-severity-high/20">{/* ...crisis support banner... */}</Card></ScrollFadeIn>
-        <ScrollFadeIn yOffset={12} delay={0.1}><div className="max-w-6xl mx-auto">{/* ...main booking steps switch... */}</div></ScrollFadeIn>
+    <div className="container mx-auto px-4 py-6 min-h-screen">
+      {/* Header */}
+      <div className="text-center space-y-4 mb-6">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Confidential Counseling
+        </h1>
+        <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+          Book a private session with a licensed mental health professional. Your privacy and
+          confidentiality are our top priority.
+        </p>
+
+        {/* Trust Indicators */}
+        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 text-xs md:text-sm text-muted-foreground">
+          <div className="flex items-center space-x-1">
+            <CheckCircle className="h-4 w-4" />
+            <span>Privacy Protected</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Heart className="h-4 w-4" />
+            <span>Licensed Professionals</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Phone className="h-4 w-4" />
+            <span>Crisis Support Available</span>
+          </div>
+        </div>
       </div>
-    </PageTransition>
+
+      {/* Real-time Status & Progress Bar */}
+      <div className="mb-6 space-y-3">
+        {/* Progress Bar */}
+        <div className="max-w-md mx-auto">
+          <div className="flex justify-between text-sm text-muted-foreground mb-2">
+            <span>Booking Progress</span>
+            <span>{Math.round(bookingProgress)}%</span>
+          </div>
+          <Progress value={bookingProgress} className="h-2" />
+        </div>
+
+        {/* Live Status & Controls */}
+        <Card className="max-w-5xl mx-auto">
+          <CardContent className="p-3 md:p-4">
+            <div className="flex flex-col lg:flex-row justify-between items-center space-y-3 lg:space-y-0 lg:space-x-4">
+              {/* Live Status */}
+              <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="flex items-center space-x-2">
+                  <div
+                    className={`w-3 h-3 rounded-full ${isLiveUpdate ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`}
+                  />
+                  <span className="text-sm font-medium">
+                    {isLiveUpdate ? 'Updating...' : 'Live Availability'}
+                  </span>
+                </div>
+
+                <div className="text-xs text-muted-foreground">
+                  Last updated: {format(lastUpdate, 'HH:mm:ss')}
+                </div>
+              </div>
+
+              {/* Controls */}
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Auto-refresh toggle */}
+                <div className="flex items-center space-x-2">
+                  <label className="text-sm">Auto-refresh</label>
+                  <button
+                    onClick={() => setAutoRefresh(!autoRefresh)}
+                    className={`p-1 rounded ${autoRefresh ? 'text-green-600' : 'text-gray-400'}`}
+                  >
+                    <Zap className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* Manual refresh */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={refreshAvailability}
+                  disabled={isLiveUpdate}
+                >
+                  <RefreshCw className={`h-4 w-4 mr-1 ${isLiveUpdate ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Crisis Support Banner */}
+      <Card className="mb-6 bg-severity-high/10 border-severity-high/20">
+        <CardContent className="p-4 md:p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+            <AlertTriangle className="h-5 w-5 text-severity-high flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-severity-high">In Crisis? Get Immediate Help</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                If you're having thoughts of self-harm, call 988 (Suicide & Crisis Lifeline) or
+                visit your nearest emergency room.
+              </p>
+            </div>
+            <Button variant="destructive" size="sm" className="flex-shrink-0">
+              <PhoneCall className="h-4 w-4 mr-1" />
+              Call 988
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Booking Steps */}
+      <div className="max-w-6xl mx-auto">
+        {/* Progress Indicator */}
+        <div className="mb-6 px-2">
+          <div className="flex justify-between items-center">
+            {['counselor', 'datetime', 'details', 'confirmation'].map((s, index) => (
+              <div key={s} className="flex items-center flex-1">
+                <div
+                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-xs md:text-sm font-medium ${
+                    step === s
+                      ? 'bg-primary text-primary-foreground'
+                      : ['counselor', 'datetime', 'details', 'confirmation'].indexOf(step) > index
+                        ? 'bg-severity-low text-white'
+                        : 'bg-muted text-muted-foreground'
+                  }`}
+                >
+                  {index + 1}
+                </div>
+                {index < 3 && (
+                  <div
+                    className={`flex-1 h-1 mx-1 md:mx-2 ${
+                      ['counselor', 'datetime', 'details', 'confirmation'].indexOf(step) > index
+                        ? 'bg-severity-low'
+                        : 'bg-muted'
+                    }`}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-4 gap-1 mt-2 text-xs md:text-sm text-center">
+            <span className="truncate">Choose Counsellor</span>
+            <span className="truncate">Date & Time</span>
+            <span className="truncate">Details</span>
+            <span className="truncate">Confirmation</span>
+          </div>
+        </div>
+
+        {/* Step Content */}
+        {step === 'counselor' && renderCounselorSelection()}
+        {step === 'datetime' && renderDateTimeSelection()}
+        {step === 'details' && renderDetailsForm()}
+        {step === 'confirmation' && renderConfirmation()}
+      </div>
+    </div>
   );
 };
 

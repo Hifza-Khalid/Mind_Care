@@ -137,7 +137,7 @@ const FeedbackDemo: React.FC = () => {
             onSubmit={handleFeedbackSubmit}
             onQuickSubmit={handleQuickFeedbackSubmit}
           />
-        </div></ScrollFadeIn>}
+        </div></ScrollFadeIn>
         {(submittedFeedback || submittedQuickFeedback) && <ScrollFadeIn yOffset={24} delay={0.12}><div className="max-w-4xl mx-auto">
           {/* Submitted Feedback Display */}
           <h2 className="text-2xl font-semibold text-center mb-6">Submitted Feedback</h2>
