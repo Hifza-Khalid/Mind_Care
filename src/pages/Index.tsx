@@ -4,13 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import heroImage from '@/assets/freepik__retouch__90823.png';
-import { 
-  MessageCircle, 
-  Calendar, 
-  BookOpen, 
-  Users, 
-  Shield, 
-  Lock, 
+import {
+  MessageCircle,
+  Calendar,
+  BookOpen,
+  Users,
+  Shield,
+  Lock,
   Heart,
   CheckCircle,
   Phone,
@@ -28,7 +28,7 @@ import {
   Quote,
   Play
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -66,7 +66,7 @@ const Index = () => {
 // Floating particles component
 const FloatingParticles = () => {
   const particles = Array.from({ length: 12 }, (_, i) => i);
-  
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {particles.map((i) => (
@@ -113,7 +113,7 @@ const AnimatedCounter = ({ end, duration = 2, suffix = "" }: { end: number; dura
 // Authenticated Landing Page for returning users
 const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelcomeBack: boolean }) => {
   const navigate = useNavigate();
-  
+
   const getDashboardPath = () => {
     switch (user.role) {
       case 'student': return '/app/student-dashboard';
@@ -126,7 +126,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
   return (
     <div className="min-h-screen bg-gradient-mesh">
       <FloatingParticles />
-      
+
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
@@ -153,7 +153,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
                 Welcome back to your wellness journey!
               </Badge>
             )}
-            
+
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="text-heading">Ready to continue your</span>
@@ -162,9 +162,9 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
                   mental wellness journey?
                 </span>
               </h1>
-              
+
               <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Your personalized mental health support system is ready. Access AI chat, book sessions, 
+                Your personalized mental health support system is ready. Access AI chat, book sessions,
                 and connect with your supportive community.
               </p>
 
@@ -196,7 +196,7 @@ const AuthenticatedHomePage = ({ user, showWelcomeBack }: { user: any; showWelco
               Quick access to all your mental health resources
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <Card className="enhanced-card group hover:shadow-aurora transition-all duration-500">
               <CardHeader className="text-center">
@@ -320,14 +320,17 @@ const GuestHomePage = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+
   return (
     <div className="min-h-screen">
       {/* Enhanced Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-mesh">
         <FloatingParticles />
-        
+
         {/* Background Image with Overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-30"
           style={{
             backgroundImage: `url(${heroImage})`,
@@ -337,14 +340,14 @@ const GuestHomePage = () => {
           }}
         />
         <div className="absolute inset-0 bg-gradient-hero opacity-20" />
-        
+
         <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
           <div className="space-y-6 fade-in">
             <Badge variant="secondary" className="animate-pulse bg-primary/10 text-primary border-primary/20">
               <Sparkles className="h-4 w-4 mr-2" />
               Trusted by 10,000+ Students
             </Badge>
-            
+
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
               Your Mental Health
               <br />
@@ -352,9 +355,9 @@ const GuestHomePage = () => {
                 Matters Most
               </span>
             </h1>
-            
+
             <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed">
-              Experience stigma-free, confidential mental health support designed specifically for students. 
+              Experience stigma-free, confidential mental health support designed specifically for students.
               Get immediate AI assistance, book professional counseling, and connect with a supportive community.
             </p>
           </div>
@@ -400,7 +403,7 @@ const GuestHomePage = () => {
               See how MindBuddy is transforming student mental health support across campuses.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { icon: Users, number: 10000, suffix: "+", label: "Students Helped", description: "Across 200+ Universities" },
@@ -431,7 +434,7 @@ const GuestHomePage = () => {
             </Badge>
             <h2 className="text-3xl md:text-5xl font-bold">Everything You Need for Mental Wellness</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive, evidence-based support designed specifically for students, 
+              Comprehensive, evidence-based support designed specifically for students,
               backed by mental health professionals and cutting-edge AI technology.
             </p>
           </div>
@@ -496,37 +499,36 @@ const GuestHomePage = () => {
               Real experiences from students who found support through MindBuddy.
             </p>
           </div>
-          
+
           <div className="max-w-4xl mx-auto">
             <div className="enhanced-card p-8 md:p-12 text-center relative overflow-hidden">
               <Quote className="h-16 w-16 text-primary/20 absolute top-4 left-4" />
-              
+
               <div className="space-y-6">
                 <div className="flex justify-center mb-4">
                   {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
                     <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                
+
                 <blockquote className="text-xl md:text-2xl font-medium leading-relaxed">
                   "{testimonials[activeTestimonial].content}"
                 </blockquote>
-                
+
                 <div className="pt-4 border-t">
                   <div className="font-semibold text-lg">{testimonials[activeTestimonial].name}</div>
                   <div className="text-muted-foreground">{testimonials[activeTestimonial].role}</div>
                 </div>
               </div>
-              
+
               {/* Testimonial Indicators */}
               <div className="flex justify-center space-x-2 mt-8">
                 {testimonials.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveTestimonial(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      index === activeTestimonial ? 'bg-primary' : 'bg-primary/30'
-                    }`}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeTestimonial ? 'bg-primary' : 'bg-primary/30'
+                      }`}
                   />
                 ))}
               </div>
@@ -534,6 +536,7 @@ const GuestHomePage = () => {
           </div>
         </div>
       </section>
+
 
       {/* FAQ Section */}
       <section className="py-20 px-4 bg-background">
@@ -544,34 +547,52 @@ const GuestHomePage = () => {
               Everything you need to know about MindBuddy's mental health support services.
             </p>
           </div>
-          
+
           <div className="space-y-4">
-            <FAQItem
-              question="Is MindBuddy completely confidential?"
-              answer="Absolutely. We adhere to strict HIPAA compliance standards. Your conversations with our AI chat, counseling sessions, and forum participation are completely confidential. We never share personal information without your explicit consent."
-            />
-            <FAQItem
-              question="How does the AI crisis detection work?"
-              answer="Our AI uses validated screening tools like PHQ-9 and GAD-7 to assess your responses during chat sessions. If crisis indicators are detected, we immediately connect you with emergency resources and licensed counselors who can provide immediate support."
-            />
-            <FAQItem
-              question="Are the counselors real licensed professionals?"
-              answer="Yes, all our counselors and therapists are licensed mental health professionals. They undergo rigorous background checks and are specifically trained to work with college students and young adults."
-            />
-            <FAQItem
-              question="Is MindBuddy free for students?"
-              answer="We offer a comprehensive free tier that includes AI chat support, basic resources, and forum access. Premium features like one-on-one counseling sessions may have associated costs, but we work with universities to provide these at reduced rates."
-            />
-            <FAQItem
-              question="Can I remain anonymous on the platform?"
-              answer="Yes, especially in our peer support forums. While we need some basic information for safety and crisis prevention, you can participate in community discussions anonymously while still receiving the support you need."
-            />
-            <FAQItem
-              question="What if I'm having a mental health emergency?"
-              answer="If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations."
-            />
+            {[
+              {
+                question: "Is MindBuddy completely confidential?",
+                answer:
+                  "Absolutely. We adhere to strict HIPAA compliance standards. Your conversations with our AI chat, counseling sessions, and forum participation are completely confidential. We never share personal information without your explicit consent.",
+              },
+              {
+                question: "How does the AI crisis detection work?",
+                answer:
+                  "Our AI uses validated screening tools like PHQ-9 and GAD-7 to assess your responses during chat sessions. If crisis indicators are detected, we immediately connect you with emergency resources and licensed counselors who can provide immediate support.",
+              },
+              {
+                question: "Are the counselors real licensed professionals?",
+                answer:
+                  "Yes, all our counselors and therapists are licensed mental health professionals. They undergo rigorous background checks and are specifically trained to work with college students and young adults.",
+              },
+              {
+                question: "Is MindBuddy free for students?",
+                answer:
+                  "We offer a comprehensive free tier that includes AI chat support, basic resources, and forum access. Premium features like one-on-one counseling sessions may have associated costs, but we work with universities to provide these at reduced rates.",
+              },
+              {
+                question: "Can I remain anonymous on the platform?",
+                answer:
+                  "Yes, especially in our peer support forums. While we need some basic information for safety and crisis prevention, you can participate in community discussions anonymously while still receiving the support you need.",
+              },
+              {
+                question: "What if I'm having a mental health emergency?",
+                answer:
+                  "If you're in immediate danger, please call 911 or go to your nearest emergency room. Our platform includes immediate crisis resources and can connect you with emergency services. We also provide 24/7 crisis chat support for urgent situations.",
+              },
+            ].map((faq, index) => (
+              <FAQItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openIndex === index}
+                onClick={() =>
+                  setOpenIndex(openIndex === index ? null : index)
+                }
+              />
+            ))}
           </div>
-          
+
           <div className="text-center mt-12">
             <p className="text-muted-foreground mb-6">
               Still have questions? We're here to help.
@@ -586,6 +607,7 @@ const GuestHomePage = () => {
         </div>
       </section>
 
+
       {/* Final CTA Section */}
       <section className="py-20 px-4 bg-gradient-aurora text-white">
         <div className="container mx-auto text-center">
@@ -595,11 +617,11 @@ const GuestHomePage = () => {
                 Your Mental Health Journey Starts Today
               </h2>
               <p className="text-xl opacity-90 leading-relaxed">
-                Join thousands of students who have already taken the first step towards better mental health. 
+                Join thousands of students who have already taken the first step towards better mental health.
                 No stigma, no judgment, just professional support when you need it most.
               </p>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild size="xl" variant="secondary" className="text-lg bg-white text-primary hover:bg-white/90">
                 <Link to="/login">
@@ -614,7 +636,7 @@ const GuestHomePage = () => {
                 </Link>
               </Button>
             </div>
-            
+
             <div className="pt-8 text-sm opacity-75">
               <p>Available 24/7 • HIPAA Compliant • Licensed Professionals</p>
             </div>
@@ -680,7 +702,7 @@ const FeatureCard = ({ icon: Icon, title, description, badge, features }: Featur
         </Badge>
         <CardTitle className="text-xl mb-3">{title}</CardTitle>
         <CardDescription className="text-center leading-relaxed">{description}</CardDescription>
-        
+
         {features && (
           <div className="mt-4 space-y-2">
             {features.map((feature, index) => (
@@ -727,34 +749,42 @@ const StatsCard = ({ title, stats }: StatsCardProps) => {
   );
 };
 
+// new updated one 
+
+import { motion, AnimatePresence } from "framer-motion";
+
 interface FAQItemProps {
   question: string;
   answer: string;
+  isOpen: boolean;
+  onClick: () => void;
 }
 
-const FAQItem = ({ question, answer }: FAQItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
   return (
-    <div className="enhanced-card">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-6 text-left flex justify-between items-center hover:bg-muted/10 transition-colors duration-200"
-      >
-        <h3 className="font-semibold text-lg pr-4">{question}</h3>
-        <ChevronDown
-          className={`h-5 w-5 text-muted-foreground transition-transform duration-200 flex-shrink-0 ${
-            isOpen ? 'transform rotate-180' : ''
-          }`}
-        />
-      </button>
-      {isOpen && (
-        <div className="px-6 pb-6 pt-0">
-          <div className="text-muted-foreground leading-relaxed border-t pt-4">
-            {answer}
-          </div>
-        </div>
-      )}
+    <div
+      className="border rounded-2xl p-4 mb-4 shadow-sm cursor-pointer bg-background transition hover:shadow-md"
+      onClick={onClick}
+    >
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-semibold">{question}</h3>
+        <span className="text-xl">{isOpen ? "−" : "+"}</span>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <p className="text-muted-foreground mt-2">{answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
