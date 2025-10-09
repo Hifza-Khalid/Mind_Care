@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import bcrypt from 'bcryptjs';
 
 export interface User {
   id: string;
@@ -39,12 +39,13 @@ export interface UserWithPassword {
   user: User;
 }
 
-// Helper function to hash passwords
+// Helper function to hash passwords with bcrypt
 const hashPassword = (password: string): string => {
-  return CryptoJS.SHA256(password).toString();
+  const saltRounds = 10; // Cost factor - higher = more secure but slower
+  return bcrypt.hashSync(password, saltRounds);
 };
 
-// Mock users with hashed password
+// Mock users with SECURELY HASHED passwords using bcrypt
 export const mockUsers: Record<string, UserWithPassword> = {
   'student@mindbuddy.com': {
     password: hashPassword('student123'), 

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, LoginCredentials, mockUsers } from '@/types/auth';
 import CryptoJS from 'crypto-js';
+import bcrypt from 'bcryptjs';
 
 interface AuthContextType {
   user: User | null;
@@ -24,7 +25,7 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-// Encryption utilities 
+// Encryption utilities for data storage
 const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key-change-in-production';
 
 const encryptData = (data: string): string => {
@@ -70,11 +71,6 @@ const secureStorage = {
   }
 };
 
-// Hash password 
-const hashPassword = (password: string): string => {
-  return CryptoJS.SHA256(password).toString();
-};
-
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -90,22 +86,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     setIsLoading(true);
     
-    // Simulate API delay
+    
     await new Promise((resolve) => setTimeout(resolve, 800));
     
     const usersDb = secureStorage.getItem('mindbuddy_users_db') || {};
     const allUsers = { ...mockUsers, ...usersDb };
     const foundUser = allUsers[credentials.email];
     
-    // Hash password and compare
-    const hashedPassword = hashPassword(credentials.password);
-    
+    //using bcrypt here
     if (
       foundUser &&
-      foundUser.password === hashedPassword &&
+      bcrypt.compareSync(credentials.password, foundUser.password) &&
       foundUser.user.role === credentials.role
     ) {
-      // Store only user data and don't store the password
+      // Store only user data
       const userDataWithoutPassword = { ...foundUser.user };
       setUser(userDataWithoutPassword);
       secureStorage.setItem('mindbuddy_user', userDataWithoutPassword);
@@ -134,7 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const usersDb = secureStorage.getItem('mindbuddy_users_db') || {};
       
       if (usersDb[user.email]) {
-        // Update user data without storing password
+        // Update user data 
         usersDb[user.email].user = updatedUser;
         secureStorage.setItem('mindbuddy_users_db', usersDb);
       }

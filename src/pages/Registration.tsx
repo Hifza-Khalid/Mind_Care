@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import PageTransition from '@/components/ui/PageTransition';
 import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 import CryptoJS from 'crypto-js';
+import bcrypt from 'bcryptjs';
 
 interface RegisterFormData {
   name: string;
@@ -28,8 +29,8 @@ interface RegisterFormData {
   department?: string;
 }
 
-
-const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key-change-upon-going-for-production';
+// Encryption utilities for data storage
+const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key-change-in-production';
 
 const encryptData = (data: string): string => {
   return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
@@ -46,7 +47,7 @@ const decryptData = (encryptedData: string): string | null => {
   }
 };
 
-// Secure storage
+// Secure storage utilities
 const secureStorage = {
   setItem: (key: string, value: any): void => {
     const stringValue = JSON.stringify(value);
@@ -70,16 +71,16 @@ const secureStorage = {
   },
 };
 
-// Hash password 
+// SECURITY FIX: Using bcrypt for password hashing 
 const hashPassword = (password: string): string => {
-  return CryptoJS.SHA256(password).toString();
+  const saltRounds = 10; // Cost factor
+  return bcrypt.hashSync(password, saltRounds);
 };
 
 // Generate cryptographically secure random ID
 const generateSecureId = (): string => {
   const timestamp = Date.now();
-  // CryptoJS to generate secure random bytes
-  const randomBytes = CryptoJS.lib.WordArray.random(16); 
+  const randomBytes = CryptoJS.lib.WordArray.random(16);
   const randomString = randomBytes.toString(CryptoJS.enc.Hex);
   return `user_${timestamp}_${randomString}`;
 };
@@ -151,7 +152,6 @@ const Register = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Use secure storage instead of localStorage
       const existingUsers = secureStorage.getItem('mindbuddy_users_db') || {};
 
       if (existingUsers[formData.email]) {
@@ -160,7 +160,6 @@ const Register = () => {
         return;
       }
 
-      // here use cryptographically secure random ID generation
       const userId = generateSecureId();
 
       const newUser = {
@@ -199,13 +198,12 @@ const Register = () => {
         });
       }
 
-      // SECURITY FIX: Hash the password before storing
+      
       existingUsers[formData.email] = {
-        password: hashPassword(formData.password), // Store hashed password
-        user: newUser, // Store user data WITHOUT password
+        password: hashPassword(formData.password),
+        user: newUser,
       };
 
-      // Use secure storage
       secureStorage.setItem('mindbuddy_users_db', existingUsers);
 
       toast.success('Registration successful! Please login.');
