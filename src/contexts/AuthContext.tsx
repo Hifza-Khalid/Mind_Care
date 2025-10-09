@@ -28,7 +28,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored user session
     const storedUser = localStorage.getItem('mindbuddy_user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -38,22 +37,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     setIsLoading(true);
-
-    // Simulate API call delay
+    
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    const mockUser = mockUsers[credentials.email];
+    const usersDbJson = localStorage.getItem('mindbuddy_users_db');
+    const usersDb = usersDbJson ? JSON.parse(usersDbJson) : {};
+
+    const allUsers = { ...mockUsers, ...usersDb };
+
+    const foundUser = allUsers[credentials.email];
 
     if (
-      mockUser &&
-      mockUser.password === credentials.password &&
-      mockUser.user.role === credentials.role
+      foundUser &&
+      foundUser.password === credentials.password &&
+      foundUser.user.role === credentials.role
     ) {
-      setUser(mockUser.user);
-      localStorage.setItem('mindbuddy_user', JSON.stringify(mockUser.user));
+      setUser(foundUser.user);
+      localStorage.setItem('mindbuddy_user', JSON.stringify(foundUser.user));
       setIsLoading(false);
-      // Redirect to institution selection instead of directly to dashboard
-      window.location.href = '/select-institution';
       return true;
     }
 
@@ -64,12 +65,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('mindbuddy_user');
-    // Clear institution-related data for privacy
     localStorage.removeItem('selected_institution');
     localStorage.removeItem('recent_institutions');
     localStorage.removeItem('institution_favorites');
-    // Redirect to the main landing page
-    window.location.href = '/';
   };
 
   const updateUser = (userData: Partial<User>) => {
@@ -77,6 +75,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const updatedUser = { ...user, ...userData };
       setUser(updatedUser);
       localStorage.setItem('mindbuddy_user', JSON.stringify(updatedUser));
+
+      const usersDbJson = localStorage.getItem('mindbuddy_users_db');
+      const usersDb = usersDbJson ? JSON.parse(usersDbJson) : {};
+      
+      if (usersDb[user.email]) {
+        usersDb[user.email].user = updatedUser;
+        localStorage.setItem('mindbuddy_users_db', JSON.stringify(usersDb));
+      }
     }
   };
 
