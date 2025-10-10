@@ -17,8 +17,8 @@
   "author": "Abhishek Kumar Giri",
   "license": "MIT",
   "engines": {
-    "node": ">=20.19.0",
-    "npm": ">=8.0.0"
+    "node": ">=22.9.0",
+    "npm": ">=10.8.0"
   },
   "repository": {
     "type": "git",

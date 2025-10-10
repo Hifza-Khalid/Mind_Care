@@ -3,6 +3,9 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "vite",
+  "env": {
+    "NODE_VERSION": "22.9.0"
+  },
   "rewrites": [
     {
       "source": "/(.*)",
