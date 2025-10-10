@@ -33,6 +33,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
+import { validateProfileData } from '@/utils/validation';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
@@ -40,6 +41,9 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<Partial<UserType>>(user || {});
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({}); 
+
+
 
   useEffect(() => {
     if (user) {
@@ -60,13 +64,30 @@ const Profile = () => {
   }
 
   const handleSave = () => {
-    updateUser(editData);
-    setIsEditing(false);
-    toast({
-      title: 'Profile Updated',
-      description: 'Your profile information has been saved successfully.',
-    });
-  };
+    // 1. Reset errors at start of save attempt
+    setValidationErrors({});
+    
+    // Check validation. We need to capture errors if it fails.
+    const errors = validateProfileData(editData, toast);
+
+    if (errors && typeof errors === 'object' && Object.keys(errors).length > 0) {
+      // 2. If errors exist, set the visual error state and STOP saving.
+      setValidationErrors(errors as Record<string, boolean>);
+      console.log('Validation failed. Stopping save.');
+      return;
+    }
+
+    // If validation passes, this line runs and updates the state/context.
+    updateUser(editData); 
+    setIsEditing(false);
+    // Clear any persistent errors on successful save
+    setValidationErrors({});
+    
+    toast({
+      title: 'Profile Updated',
+      description: 'Your profile information has been saved successfully.',
+    });
+  };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -158,8 +179,8 @@ const Profile = () => {
           <CardHeader className="text-center">
             <div className="relative mx-auto mb-4">
               <Avatar className="h-24 w-24">
-                <AvatarImage src={editData.avatar || user.avatar} alt={user.name} />
-                <AvatarFallback className="text-xl">{getInitials(user.name)}</AvatarFallback>
+                <AvatarImage src={editData.avatar || user.avatar} alt={editData.name || user.name} />
+                <AvatarFallback className="text-xl">{getInitials(editData.name || user.name)}</AvatarFallback>
               </Avatar>
               <input
                 id="profile-image-upload"
@@ -271,7 +292,7 @@ const Profile = () => {
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
-                      id="name"
+                      id="name" type='text'
                       value={isEditing ? editData.name || '' : user.name || ''}
                       onChange={(e) => setEditData({ ...editData, name: e.target.value })}
                       disabled={!isEditing}
@@ -280,10 +301,12 @@ const Profile = () => {
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
-                      id="email"
+                      id="email" type='email'
                       value={isEditing ? editData.email || '' : user.email || ''}
                       onChange={(e) => setEditData({ ...editData, email: e.target.value })}
                       disabled={!isEditing}
+                      className={validationErrors.email ? 'border-red-500 ring-red-500 focus:border-red-500' : ''}
+                      placeholder={validationErrors.email ? 'e.g. user@example.com' : ''}
                     />
                   </div>
                   <div className="space-y-2">
@@ -317,16 +340,23 @@ const Profile = () => {
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
-                      id="phone"
+                      id="phone" type='tel' maxLength={10}
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault(); 
+                        }
+                      }}
                       value={isEditing ? editData.phone || '' : user.phone || ''}
                       onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
                       disabled={!isEditing}
+                      className={validationErrors.phone ? 'border-red-500 ring-red-500 focus:border-red-500' : ''}
+                      placeholder={validationErrors.phone ? 'e.g. 1234567890 (10 digits)' : ''}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="timezone">Timezone</Label>
                     <Input
-                      id="timezone"
+                      id="timezone" type='timezone'
                       value={isEditing ? editData.timezone || '' : user.timezone || ''}
                       onChange={(e) => setEditData({ ...editData, timezone: e.target.value })}
                       disabled={!isEditing}
@@ -335,7 +365,12 @@ const Profile = () => {
                   <div className="space-y-2">
                     <Label htmlFor="emergencyContact">Emergency Contact</Label>
                     <Input
-                      id="emergencyContact"
+                      id="emergencyContact" type='text'
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
                       value={
                         isEditing ? editData.emergencyContact || '' : user.emergencyContact || ''
                       }
@@ -348,7 +383,7 @@ const Profile = () => {
                   <div className="space-y-2">
                     <Label htmlFor="emergencyPhone">Emergency Phone</Label>
                     <Input
-                      id="emergencyPhone"
+                      id="emergencyPhone" type='tel' maxLength={10}
                       value={isEditing ? editData.emergencyPhone || '' : user.emergencyPhone || ''}
                       onChange={(e) => setEditData({ ...editData, emergencyPhone: e.target.value })}
                       disabled={!isEditing}
@@ -381,7 +416,7 @@ const Profile = () => {
                     <div className="space-y-2">
                       <Label htmlFor="year">Academic Year</Label>
                       <Input
-                        id="year"
+                        id="year" type='year'
                         value={isEditing ? editData.year || '' : user.year || ''}
                         onChange={(e) => setEditData({ ...editData, year: e.target.value })}
                         disabled={!isEditing}
@@ -390,7 +425,7 @@ const Profile = () => {
                     <div className="space-y-2">
                       <Label htmlFor="studentId">Student ID</Label>
                       <Input
-                        id="studentId"
+                        id="studentId" type='id'
                         value={isEditing ? editData.studentId || '' : user.studentId || ''}
                         onChange={(e) => setEditData({ ...editData, studentId: e.target.value })}
                         disabled={!isEditing}
