@@ -34,8 +34,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { validateProfileData } from '@/utils/validation';
-import PageTransition from '@/components/ui/PageTransition';
-import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
