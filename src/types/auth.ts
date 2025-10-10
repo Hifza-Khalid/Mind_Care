@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs';
+
 export interface User {
   id: string;
   name: string;
@@ -32,10 +34,21 @@ export interface LoginCredentials {
   role: 'student' | 'counselor' | 'admin';
 }
 
-// Mock users for demo
-export const mockUsers: Record<string, { user: User; password: string }> = {
+export interface UserWithPassword {
+  password: string;
+  user: User;
+}
+
+// Helper function to hash passwords with bcrypt
+const hashPassword = (password: string): string => {
+  const saltRounds = 10; // Cost factor - higher = more secure but slower
+  return bcrypt.hashSync(password, saltRounds);
+};
+
+// Mock users with SECURELY HASHED passwords using bcrypt
+export const mockUsers: Record<string, UserWithPassword> = {
   'student@mindbuddy.com': {
-    password: 'student123',
+    password: hashPassword('student123'), 
     user: {
       id: '1',
       name: 'Alex Student',
@@ -57,7 +70,7 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
     },
   },
   'counselor@mindbuddy.com': {
-    password: 'counselor123',
+    password: hashPassword('counselor123'), 
     user: {
       id: '2',
       name: 'Dr. Sarah Wilson',
@@ -83,7 +96,7 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
     },
   },
   'admin@mindbuddy.com': {
-    password: 'admin123',
+    password: hashPassword('admin123'), 
     user: {
       id: '3',
       name: 'Admin User',
