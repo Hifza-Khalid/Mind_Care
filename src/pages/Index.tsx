@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+// import heroImage from '@/assets/freepik__retouch__90823.png';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Footer from '@/components/layout/Footer';
 import {
@@ -29,7 +30,7 @@ import {
   Quote,
   Play,
 } from 'lucide-react';
-import { useState, useEffect, ComponentType, SVGProps } from 'react';
+import { useState, useRef, useEffect, ComponentType, SVGProps } from 'react';
 import type { User } from '@/types/auth';
 
 const Index = () => {
@@ -529,10 +530,107 @@ const GuestHomePage = () => {
                 </span>
               </h1>
 
-              <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed">
-                Experience stigma-free, confidential mental health support designed specifically for
-                students. Get immediate AI assistance, book professional counseling, and connect
-                with a supportive community.
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: Users,
+                number: 10000,
+                suffix: '+',
+                label: 'Students Helped',
+                description: 'Across 200+ Universities',
+              },
+              {
+                icon: MessageCircle,
+                number: 95,
+                suffix: '%',
+                label: 'Crisis Detection Rate',
+                description: 'AI-Powered Screening',
+              },
+              {
+                icon: Heart,
+                number: 4.9,
+                suffix: '/5',
+                label: 'Satisfaction Rating',
+                description: 'From Our Students',
+              },
+              {
+                icon: TrendingUp,
+                number: 78,
+                suffix: '%',
+                label: 'Improved Wellbeing',
+                description: 'Within First Month',
+              },
+            ].map((stat, index) => (
+              <div key={index} className="enhanced-card p-6 text-center">
+                <stat.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <div className="text-4xl font-bold text-primary mb-2">
+                  <AnimatedCounter end={stat.number} suffix={stat.suffix} />
+                </div>
+                <div className="font-semibold text-lg mb-1">{stat.label}</div>
+                <div className="text-sm text-muted-foreground">{stat.description}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Features Section */}
+      <section id="learn-more" className="py-20 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="text-center space-y-4 mb-16">
+            <Badge variant="outline" className="mb-4">
+              <Award className="h-4 w-4 mr-2" />
+              Award-Winning Platform
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-bold">
+              Everything You Need for Mental Wellness
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Comprehensive, evidence-based support designed specifically for students,
+              backed by mental health professionals and cutting-edge AI technology.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <FeatureCard
+              icon={MessageCircle}
+              title="AI Crisis Detection"
+              description="Advanced PHQ-9 and GAD-7 screening with immediate crisis intervention and professional referrals"
+              badge="Instant Help"
+              features={['24/7 Availability', 'Crisis Detection', 'Immediate Response']}
+            />
+            <FeatureCard
+              icon={Calendar}
+              title="Professional Counseling"
+              description="Licensed therapists and counselors available for confidential sessions with flexible scheduling"
+              badge="Licensed Care"
+              features={['Licensed Therapists', 'Flexible Scheduling', 'Complete Privacy']}
+            />
+            <FeatureCard
+              icon={BookOpen}
+              title="Wellness Resources"
+              description="Evidence-based materials, guided meditations, stress management tools, and academic support"
+              badge="Self-Help Tools"
+              features={['Guided Meditation', 'Study Tips', 'Stress Management']}
+            />
+            <FeatureCard
+              icon={Users}
+              title="Peer Community"
+              description="Anonymous support groups, peer mentorship, and moderated discussions in a safe environment"
+              badge="Safe Community"
+              features={['Anonymous Groups', 'Peer Mentors', 'Moderated Chats']}
+            />
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <div className="bg-gradient-primary p-8 rounded-2xl text-white mb-8 flex flex-col ">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white drop-shadow-sm">
+                Ready to Start Your Wellness Journey?
+              </h3>
+              <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
+                Join thousands of students who have found support, community, and professional care
+                through MindBuddy.
               </p>
             </div>
 
@@ -746,11 +844,37 @@ const GuestHomePage = () => {
                     />
                   ))}
                 </div>
+
+                <blockquote className="text-xl md:text-2xl font-medium leading-relaxed">
+                  "{testimonials[activeTestimonial].content}"
+                </blockquote>
+
+                <div className="pt-4 border-t">
+                  <div className="font-semibold text-lg">
+                    {testimonials[activeTestimonial].name}
+                  </div>
+                  <div className="text-muted-foreground">
+                    {testimonials[activeTestimonial].role}
+                  </div>
+                </div>
+              </div>
+
+              {/* Testimonial Indicators */}
+              <div className="flex justify-center space-x-2 mt-8">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveTestimonial(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeTestimonial ? 'bg-primary' : 'bg-primary/30'
+                      }`}
+                  />
+                ))}
               </div>
             </div>
           </div>
         </section>
       </ScrollFadeIn>
+
 
       {/* FAQ Section */}
       <ScrollFadeIn yOffset={24} delay={0.16}>
@@ -1009,7 +1133,10 @@ const StatsCard = ({ title, stats }: StatsCardProps) => {
   );
 };
 
-// new updated one
+// new updated one 
+
+import { motion, AnimatePresence } from "framer-motion";
+
 interface FAQItemProps {
   question: string;
   answer: string;
@@ -1020,25 +1147,28 @@ interface FAQItemProps {
 const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
   return (
     <div
-      className={`enhanced-card ${isOpen ? 'border border-black rounded-lg' : 'border border-white rounded-lg'}`}
+      className="border rounded-2xl p-4 mb-4 shadow-sm cursor-pointer bg-background transition hover:shadow-md"
+      onClick={onClick}
     >
-      <button
-        onClick={onClick}
-        className="w-full p-6 text-left flex justify-between items-center hover:bg-muted/10 transition-colors duration-200"
-      >
-        <span className="font-medium text-lg pr-4">{question}</span>
-        <ChevronDown
-          className={`h-5 w-5 text-muted-foreground transition-transform duration-400 flex-shrink-0 ${
-            isOpen ? 'transform rotate-180' : ''
-          }`}
-        />
-      </button>
-
-      <div
-        className={`overflow-hidden transition-all duration-400 ease-in-out ${isOpen ? 'max-h-40 p-5 opacity-100' : 'max-h-0 opacity-0 p-0'}`}
-      >
-        <div className="text-muted-foreground leading-relaxed border-t pt-4">{answer}</div>
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-semibold">{question}</h3>
+        <span className="text-xl">{isOpen ? "−" : "+"}</span>
       </div>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <p className="text-muted-foreground mt-2">{answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
