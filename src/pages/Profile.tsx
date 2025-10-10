@@ -329,15 +329,13 @@ const Profile = () => {
                     />
                   </div>
                 </div>
-              )}
-              {user.timezone && (
-                <div className="flex items-center space-x-2 text-sm">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span>{user.timezone}</span>
-                </div>
-              )}
-            </CardContent>
-          </Card></ScrollFadeIn>
+                {user.timezone && (
+                  <div className="flex items-center space-x-2 text-sm">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span>{user.timezone}</span>
+                  </div>
+                )}
+              </TabsContent>
 
               <TabsContent value="contact" className="space-y-4 mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
