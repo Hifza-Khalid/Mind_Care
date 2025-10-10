@@ -6,8 +6,6 @@ import FeedbackForm from '@/components/feedback/FeedbackForm';
 import { RatingComponent, QuickSatisfaction } from '@/components/feedback/RatingComponent';
 import { SessionFeedback, QuickFeedback } from '@/types/feedback';
 import { MessageSquare, Star, TrendingUp, Clock, BarChart3 } from 'lucide-react';
-import PageTransition from '@/components/ui/PageTransition';
-import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const FeedbackDemo: React.FC = () => {
   const [submittedFeedback, setSubmittedFeedback] = React.useState<SessionFeedback | null>(null);
@@ -80,28 +78,27 @@ const FeedbackDemo: React.FC = () => {
   );
 
   return (
-    <PageTransition>
-      <div className="min-h-screen bg-background p-6 space-y-8">
-        <ScrollFadeIn yOffset={32}><div className="max-w-6xl mx-auto space-y-8">
-          {/* Header */}
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center space-x-2">
-              <MessageSquare className="h-8 w-8 text-primary" />
-              <h1 className="text-3xl font-bold text-foreground">Session Feedback System</h1>
-            </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Real-time feedback collection system for counseling sessions with star ratings, emoji
-              feedback, and comprehensive form handling.
-            </p>
-            <div className="flex items-center justify-center space-x-2">
-              <Badge variant="outline">Feature 5</Badge>
-              <Badge variant="secondary">Session Rating</Badge>
-              <Badge variant="secondary">Quick Feedback</Badge>
-            </div>
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center space-x-2">
+            <MessageSquare className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold text-foreground">Session Feedback System</h1>
           </div>
-        </div></ScrollFadeIn>
-        <ScrollFadeIn yOffset={28} delay={0.05}><div className="flex justify-center space-x-4">
-          {/* Demo Controls */}
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Real-time feedback collection system for counseling sessions with star ratings, emoji
+            feedback, and comprehensive form handling.
+          </p>
+          <div className="flex items-center justify-center space-x-2">
+            <Badge variant="outline">Feature 5</Badge>
+            <Badge variant="secondary">Session Rating</Badge>
+            <Badge variant="secondary">Quick Feedback</Badge>
+          </div>
+        </div>
+
+        {/* Demo Controls */}
+        <div className="flex justify-center space-x-4">
           <Button
             onClick={() => setShowDemo(!showDemo)}
             variant={showDemo ? 'default' : 'outline'}
@@ -119,14 +116,18 @@ const FeedbackDemo: React.FC = () => {
           >
             Reset Demo
           </Button>
-        </div></ScrollFadeIn>
-        {showDemo && <ScrollFadeIn delay={0.09}><div className="space-y-6">
-          {/* Component Demo */}
-          <h2 className="text-2xl font-semibold text-center">Component Showcase</h2>
-          {demoRatingComponents()}
-        </div></ScrollFadeIn>}
-        <ScrollFadeIn yOffset={24} delay={0.1}><div className="max-w-3xl mx-auto">
-          {/* Main Feedback Form */}
+        </div>
+
+        {/* Component Demo */}
+        {showDemo && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-center">Component Showcase</h2>
+            {demoRatingComponents()}
+          </div>
+        )}
+
+        {/* Main Feedback Form */}
+        <div className="max-w-3xl mx-auto">
           <FeedbackForm
             sessionId="demo_session_123"
             studentId="student_456"
@@ -137,160 +138,164 @@ const FeedbackDemo: React.FC = () => {
             onSubmit={handleFeedbackSubmit}
             onQuickSubmit={handleQuickFeedbackSubmit}
           />
-        </div></ScrollFadeIn>
-        {(submittedFeedback || submittedQuickFeedback) && <ScrollFadeIn yOffset={24} delay={0.12}><div className="max-w-4xl mx-auto">
-          {/* Submitted Feedback Display */}
-          <h2 className="text-2xl font-semibold text-center mb-6">Submitted Feedback</h2>
+        </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {submittedFeedback && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Star className="h-5 w-5 text-primary" />
-                    <span>Complete Feedback</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Submitted at {new Date(submittedFeedback.submittedAt).toLocaleString()}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium">Overall Rating:</span>
-                      <div className="flex items-center space-x-1">
-                        {Array.from({ length: submittedFeedback.overallRating }).map((_, i) => (
-                          <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
-                        ))}
-                        <span className="ml-1">{submittedFeedback.overallRating}/5</span>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="font-medium">Helpfulness:</span>
-                      <div className="flex items-center space-x-1">
-                        {Array.from({
-                          length: submittedFeedback.categoryRatings.helpfulness,
-                        }).map((_, i) => (
-                          <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
-                        ))}
-                        <span className="ml-1">
-                          {submittedFeedback.categoryRatings.helpfulness}/5
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="font-medium">Communication:</span>
-                      <div className="flex items-center space-x-1">
-                        {Array.from({
-                          length: submittedFeedback.categoryRatings.communication,
-                        }).map((_, i) => (
-                          <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
-                        ))}
-                        <span className="ml-1">
-                          {submittedFeedback.categoryRatings.communication}/5
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="font-medium">Satisfaction:</span>
-                      <div className="flex items-center space-x-1">
-                        {Array.from({
-                          length: submittedFeedback.categoryRatings.satisfaction,
-                        }).map((_, i) => (
-                          <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
-                        ))}
-                        <span className="ml-1">
-                          {submittedFeedback.categoryRatings.satisfaction}/5
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+        {/* Submitted Feedback Display */}
+        {(submittedFeedback || submittedQuickFeedback) && (
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-semibold text-center mb-6">Submitted Feedback</h2>
 
-                  <div>
-                    <span className="font-medium">Quick Assessment:</span>
-                    <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {submittedFeedback && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Star className="h-5 w-5 text-primary" />
+                      <span>Complete Feedback</span>
+                    </CardTitle>
+                    <CardDescription>
+                      Submitted at {new Date(submittedFeedback.submittedAt).toLocaleString()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium">Overall Rating:</span>
+                        <div className="flex items-center space-x-1">
+                          {Array.from({ length: submittedFeedback.overallRating }).map((_, i) => (
+                            <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
+                          ))}
+                          <span className="ml-1">{submittedFeedback.overallRating}/5</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="font-medium">Helpfulness:</span>
+                        <div className="flex items-center space-x-1">
+                          {Array.from({
+                            length: submittedFeedback.categoryRatings.helpfulness,
+                          }).map((_, i) => (
+                            <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
+                          ))}
+                          <span className="ml-1">
+                            {submittedFeedback.categoryRatings.helpfulness}/5
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="font-medium">Communication:</span>
+                        <div className="flex items-center space-x-1">
+                          {Array.from({
+                            length: submittedFeedback.categoryRatings.communication,
+                          }).map((_, i) => (
+                            <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
+                          ))}
+                          <span className="ml-1">
+                            {submittedFeedback.categoryRatings.communication}/5
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="font-medium">Satisfaction:</span>
+                        <div className="flex items-center space-x-1">
+                          {Array.from({
+                            length: submittedFeedback.categoryRatings.satisfaction,
+                          }).map((_, i) => (
+                            <Star key={i} className="h-4 w-4 text-yellow-500 fill-current" />
+                          ))}
+                          <span className="ml-1">
+                            {submittedFeedback.categoryRatings.satisfaction}/5
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <span className="font-medium">Quick Assessment:</span>
+                      <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                        <div
+                          className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.wouldRecommend ? 'text-green-600' : 'text-red-600'}`}
+                        >
+                          <span>{submittedFeedback.quickFeedback.wouldRecommend ? '✓' : '✗'}</span>
+                          <span>Would Recommend</span>
+                        </div>
+                        <div
+                          className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.feelHeard ? 'text-green-600' : 'text-red-600'}`}
+                        >
+                          <span>{submittedFeedback.quickFeedback.feelHeard ? '✓' : '✗'}</span>
+                          <span>Felt Heard</span>
+                        </div>
+                        <div
+                          className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.goalsMet ? 'text-green-600' : 'text-red-600'}`}
+                        >
+                          <span>{submittedFeedback.quickFeedback.goalsMet ? '✓' : '✗'}</span>
+                          <span>Goals Met</span>
+                        </div>
+                        <div
+                          className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.safeEnvironment ? 'text-green-600' : 'text-red-600'}`}
+                        >
+                          <span>{submittedFeedback.quickFeedback.safeEnvironment ? '✓' : '✗'}</span>
+                          <span>Safe Environment</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {submittedFeedback.detailedFeedback?.additionalComments && (
+                      <div>
+                        <span className="font-medium">Additional Comments:</span>
+                        <p className="text-sm text-muted-foreground mt-1 p-2 bg-muted rounded">
+                          {submittedFeedback.detailedFeedback.additionalComments}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {submittedQuickFeedback && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Clock className="h-5 w-5 text-primary" />
+                      <span>Quick Feedback</span>
+                    </CardTitle>
+                    <CardDescription>Fast feedback submission</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
                       <div
-                        className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.wouldRecommend ? 'text-green-600' : 'text-red-600'}`}
+                        className={`flex items-center space-x-2 ${submittedQuickFeedback.wouldRecommend ? 'text-green-600' : 'text-red-600'}`}
                       >
-                        <span>{submittedFeedback.quickFeedback.wouldRecommend ? '✓' : '✗'}</span>
+                        <span>{submittedQuickFeedback.wouldRecommend ? '✓' : '✗'}</span>
                         <span>Would Recommend</span>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.feelHeard ? 'text-green-600' : 'text-red-600'}`}
+                        className={`flex items-center space-x-2 ${submittedQuickFeedback.feelHeard ? 'text-green-600' : 'text-red-600'}`}
                       >
-                        <span>{submittedFeedback.quickFeedback.feelHeard ? '✓' : '✗'}</span>
+                        <span>{submittedQuickFeedback.feelHeard ? '✓' : '✗'}</span>
                         <span>Felt Heard</span>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.goalsMet ? 'text-green-600' : 'text-red-600'}`}
+                        className={`flex items-center space-x-2 ${submittedQuickFeedback.goalsMet ? 'text-green-600' : 'text-red-600'}`}
                       >
-                        <span>{submittedFeedback.quickFeedback.goalsMet ? '✓' : '✗'}</span>
+                        <span>{submittedQuickFeedback.goalsMet ? '✓' : '✗'}</span>
                         <span>Goals Met</span>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 ${submittedFeedback.quickFeedback.safeEnvironment ? 'text-green-600' : 'text-red-600'}`}
+                        className={`flex items-center space-x-2 ${submittedQuickFeedback.safeEnvironment ? 'text-green-600' : 'text-red-600'}`}
                       >
-                        <span>{submittedFeedback.quickFeedback.safeEnvironment ? '✓' : '✗'}</span>
+                        <span>{submittedQuickFeedback.safeEnvironment ? '✓' : '✗'}</span>
                         <span>Safe Environment</span>
                       </div>
                     </div>
-                  </div>
-
-                  {submittedFeedback.detailedFeedback?.additionalComments && (
-                    <div>
-                      <span className="font-medium">Additional Comments:</span>
-                      <p className="text-sm text-muted-foreground mt-1 p-2 bg-muted rounded">
-                        {submittedFeedback.detailedFeedback.additionalComments}
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-
-            {submittedQuickFeedback && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Clock className="h-5 w-5 text-primary" />
-                    <span>Quick Feedback</span>
-                  </CardTitle>
-                  <CardDescription>Fast feedback submission</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div
-                      className={`flex items-center space-x-2 ${submittedQuickFeedback.wouldRecommend ? 'text-green-600' : 'text-red-600'}`}
-                    >
-                      <span>{submittedQuickFeedback.wouldRecommend ? '✓' : '✗'}</span>
-                      <span>Would Recommend</span>
-                    </div>
-                    <div
-                      className={`flex items-center space-x-2 ${submittedQuickFeedback.feelHeard ? 'text-green-600' : 'text-red-600'}`}
-                    >
-                      <span>{submittedQuickFeedback.feelHeard ? '✓' : '✗'}</span>
-                      <span>Felt Heard</span>
-                    </div>
-                    <div
-                      className={`flex items-center space-x-2 ${submittedQuickFeedback.goalsMet ? 'text-green-600' : 'text-red-600'}`}
-                    >
-                      <span>{submittedQuickFeedback.goalsMet ? '✓' : '✗'}</span>
-                      <span>Goals Met</span>
-                    </div>
-                    <div
-                      className={`flex items-center space-x-2 ${submittedQuickFeedback.safeEnvironment ? 'text-green-600' : 'text-red-600'}`}
-                    >
-                      <span>{submittedQuickFeedback.safeEnvironment ? '✓' : '✗'}</span>
-                      <span>Safe Environment</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </div>
-        </div></ScrollFadeIn>}
-        <ScrollFadeIn delay={0.14}><div className="text-center space-y-4">
-          {/* Feature Status */}
+        )}
+
+        {/* Feature Status */}
+        <div className="text-center space-y-4">
           <div className="bg-green-50 border border-green-200 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-green-800 mb-2">
               ✅ Feature 5: Session Feedback System - Complete!
@@ -306,9 +311,9 @@ const FeedbackDemo: React.FC = () => {
               <div>✓ Submission handling</div>
             </div>
           </div>
-        </div></ScrollFadeIn>
+        </div>
       </div>
-    </PageTransition>
+    </div>
   );
 };
 

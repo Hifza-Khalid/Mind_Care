@@ -32,8 +32,6 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, ComponentType, SVGProps } from 'react';
 import type { User } from '@/types/auth';
-import PageTransition from '@/components/ui/PageTransition';
-import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -65,13 +63,9 @@ const Index = () => {
 
   // Always show the landing page, but customize content based on auth status
   return user ? (
-    <PageTransition>
-      <AuthenticatedHomePage user={user} showWelcomeBack={showWelcomeBack} />
-    </PageTransition>
+    <AuthenticatedHomePage user={user} showWelcomeBack={showWelcomeBack} />
   ) : (
-    <PageTransition>
-      <GuestHomePage />
-    </PageTransition>
+    <GuestHomePage />
   );
 };
 
@@ -160,8 +154,11 @@ const AuthenticatedHomePage = ({
 
   
   return (
-    <PageTransition>
-      <ScrollFadeIn yOffset={32}><header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="min-h-screen bg-gradient-mesh">
+      <FloatingParticles />
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16  items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary" />
@@ -178,10 +175,10 @@ const AuthenticatedHomePage = ({
             </Button>
           </div>
         </div>
-      </header></ScrollFadeIn>
+      </header>
 
       {/* Welcome Back Hero */}
-      <ScrollFadeIn yOffset={32} delay={0.04}><section className="relative py-20 sm:py-32 overflow-hidden">
+      <section className="relative py-20 sm:py-32 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-8">
             {showWelcomeBack && (
@@ -231,10 +228,10 @@ const AuthenticatedHomePage = ({
             </div>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* Quick Access Cards for Authenticated Users */}
-      <ScrollFadeIn yOffset={28} delay={0.08}><section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-4">
@@ -307,10 +304,10 @@ const AuthenticatedHomePage = ({
             </Card>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* Emergency Support - Always Visible */}
-      <ScrollFadeIn yOffset={24} delay={0.12}><section className="py-16 bg-gradient-to-br from-red-50 to-orange-50">
+      <section className="py-16 bg-gradient-to-br from-red-50 to-orange-50">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="flex items-center justify-center space-x-3 mb-6">
@@ -336,9 +333,9 @@ const AuthenticatedHomePage = ({
             </div>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
       <Footer />
-    </PageTransition>
+    </div>
   );
 };
 
@@ -414,8 +411,9 @@ const GuestHomePage = () => {
 
 
   return (
-    <PageTransition>
-      <ScrollFadeIn yOffset={32}><header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="min-h-screen">
+      {/* Guest Header with Theme Toggle */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center space-x-2">
             <Heart className="h-8 w-8 text-primary" />
@@ -430,10 +428,10 @@ const GuestHomePage = () => {
             </Button>
           </div>
         </div>
-      </header></ScrollFadeIn>
+      </header>
 
       {/* Enhanced Hero Section */}
-      <ScrollFadeIn yOffset={34} delay={0.03}><section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-24 pb-20 px-4 sm:px-6 lg:px-8 sm:pt-28 lg:pt-32 sm:pb-24 lg:pb-28">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-24 pb-20 px-4 sm:px-6 lg:px-8 sm:pt-28 lg:pt-32 sm:pb-24 lg:pb-28">
         <FloatingParticles />
 
         {/* Background Image with Overlay */}
@@ -503,10 +501,10 @@ const GuestHomePage = () => {
             ))}
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* Statistics Section */}
-      <ScrollFadeIn yOffset={28} delay={0.06}><section className="py-20 bg-gradient-calm">
+      <section className="py-20 bg-gradient-calm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Making a Real Impact</h2>
@@ -557,10 +555,10 @@ const GuestHomePage = () => {
             ))}
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* Enhanced Features Section */}
-      <ScrollFadeIn yOffset={24} delay={0.10}><section id="learn-more" className="py-20 px-4 bg-background">
+      <section id="learn-more" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center space-y-4 mb-16">
             <Badge variant="outline" className="mb-4">
@@ -626,10 +624,10 @@ const GuestHomePage = () => {
             </div>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* Testimonials Section */}
-      <ScrollFadeIn yOffset={24} delay={0.12}><section className="py-20 bg-gradient-mesh">
+      <section className="py-20 bg-gradient-mesh">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What Students Are Saying</h2>
@@ -678,10 +676,10 @@ const GuestHomePage = () => {
             </div>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* FAQ Section */}
-      <ScrollFadeIn yOffset={24} delay={0.16}><section className="py-20 px-4 bg-background">
+      <section className="py-20 px-4 bg-background">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
@@ -712,10 +710,10 @@ const GuestHomePage = () => {
             </Button>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
 
       {/* Final CTA Section (enhanced layout + illustration) */}
-      <ScrollFadeIn yOffset={24} delay={0.18}><section className="py-20 px-4 bg-primary/5 dark:bg-primary/10">
+      <section className="py-20 px-4 bg-primary/5 dark:bg-primary/10">
         <div className="container mx-auto">
           <div className="max-w-5xl mx-auto bg-card border border-border rounded-3xl p-6 md:p-12 shadow-card relative overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -805,9 +803,9 @@ const GuestHomePage = () => {
             </div>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
       <Footer />
-    </PageTransition>
+    </div>
   );
 };
 
