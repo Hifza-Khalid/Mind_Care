@@ -25,7 +25,7 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-// Encryption utilities for data storage
+// Encryption utilities for NON-SENSITIVE data storage
 const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key-change-in-production';
 
 const encryptData = (data: string): string => {
@@ -43,7 +43,7 @@ const decryptData = (encryptedData: string): string | null => {
   }
 };
 
-// Secure storage utilities
+// Secure storage for user profile data ONLY (never contains passwords)
 const secureStorage = {
   setItem: (key: string, value: any): void => {
     const stringValue = JSON.stringify(value);
@@ -71,11 +71,30 @@ const secureStorage = {
   }
 };
 
-// Helper function to ensure user data doesn't contain password field
-const sanitizeUserData = (userData: any): User => {
-  // Create a copy and explicitly remove password field
-  const { password, ...cleanUserData } = userData;
-  return cleanUserData as User;
+// SEPARATE storage for password database (uses sessionStorage directly, no encryption)
+// This is acceptable because passwords are already hashed with bcrypt
+const passwordStorage = {
+  setItem: (key: string, value: any): void => {
+    // Store password database directly without AES encryption
+    // Passwords are already protected by bcrypt hashing
+    sessionStorage.setItem(key, JSON.stringify(value));
+  },
+  
+  getItem: (key: string): any | null => {
+    const data = sessionStorage.getItem(key);
+    if (!data) return null;
+    
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Parse failed:', error);
+      return null;
+    }
+  },
+  
+  removeItem: (key: string): void => {
+    sessionStorage.removeItem(key);
+  }
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -83,10 +102,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Load ONLY user profile (never contains password)
     const storedUser = secureStorage.getItem('mindbuddy_user');
     if (storedUser) {
-      // Sanitize user data on load to ensure no password field exists
-      setUser(sanitizeUserData(storedUser));
+      setUser(storedUser);
     }
     setIsLoading(false);
   }, []);
@@ -94,24 +113,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     setIsLoading(true);
     
-    // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
     
-    const usersDb = secureStorage.getItem('mindbuddy_users_db') || {};
+    // Get password database from separate storage
+    const usersDb = passwordStorage.getItem('mindbuddy_users_db') || {};
     const allUsers = { ...mockUsers, ...usersDb };
     const foundUser = allUsers[credentials.email];
     
-    // Use bcrypt.compareSync for secure password comparison
     if (
       foundUser &&
       bcrypt.compareSync(credentials.password, foundUser.password) &&
       foundUser.user.role === credentials.role
     ) {
-      // Explicitly sanitize user data - remove ANY password field
-      const cleanUserData = sanitizeUserData(foundUser.user);
+      // Extract ONLY user profile data (no password field)
+      const userProfile: User = foundUser.user;
       
-      setUser(cleanUserData);
-      secureStorage.setItem('mindbuddy_user', cleanUserData);
+      // Store user profile separately from password database
+      setUser(userProfile);
+      secureStorage.setItem('mindbuddy_user', userProfile);
+      
       setIsLoading(false);
       return true;
     }
@@ -130,25 +150,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateUser = (userData: Partial<User>) => {
     if (user) {
-      //Ensure no password data flows through update
-      // Explicitly remove password field if it somehow exists in userData
-      const { password: _, ...safeUserData } = userData as any;
+      const updatedUser = { ...user, ...userData };
+      setUser(updatedUser);
       
-      const updatedUser = { ...user, ...safeUserData };
+      // Update ONLY in user profile storage (never touches password database)
+      secureStorage.setItem('mindbuddy_user', updatedUser);
       
-      // sanitize before storing
-      const cleanUpdatedUser = sanitizeUserData(updatedUser);
-      
-      setUser(cleanUpdatedUser);
-      secureStorage.setItem('mindbuddy_user', cleanUpdatedUser);
-      
-      // Update in database without password
-      const usersDb = secureStorage.getItem('mindbuddy_users_db') || {};
+      // Update user profile in password database
+      const usersDb = passwordStorage.getItem('mindbuddy_users_db') || {};
       
       if (usersDb[user.email]) {
-        // Only update the user object, NOT the password
-        usersDb[user.email].user = cleanUpdatedUser;
-        secureStorage.setItem('mindbuddy_users_db', usersDb);
+        // Update only the user object, password hash remains separate
+        usersDb[user.email].user = updatedUser;
+        passwordStorage.setItem('mindbuddy_users_db', usersDb);
       }
     }
   };

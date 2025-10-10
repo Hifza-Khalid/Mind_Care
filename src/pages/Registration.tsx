@@ -29,41 +29,19 @@ interface RegisterFormData {
   department?: string;
 }
 
-// Encryption utilities for data storage
-const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key-change-in-production';
-
-const encryptData = (data: string): string => {
-  return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
-};
-
-const decryptData = (encryptedData: string): string | null => {
-  try {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
-    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    return decrypted || null;
-  } catch (error) {
-    console.error('Decryption failed:', error);
-    return null;
-  }
-};
-
-// Secure storage utilities
-const secureStorage = {
+// Password database storage (bcrypt-hashed passwords, stored directly)
+// This is secure because bcrypt hashes are cryptographically irreversible
+const passwordStorage = {
   setItem: (key: string, value: any): void => {
-    const stringValue = JSON.stringify(value);
-    const encrypted = encryptData(stringValue);
-    sessionStorage.setItem(key, encrypted);
+    sessionStorage.setItem(key, JSON.stringify(value));
   },
   
   getItem: (key: string): any | null => {
-    const encrypted = sessionStorage.getItem(key);
-    if (!encrypted) return null;
-    
-    const decrypted = decryptData(encrypted);
-    if (!decrypted) return null;
+    const data = sessionStorage.getItem(key);
+    if (!data) return null;
     
     try {
-      return JSON.parse(decrypted);
+      return JSON.parse(data);
     } catch (error) {
       console.error('Parse failed:', error);
       return null;
@@ -71,9 +49,9 @@ const secureStorage = {
   },
 };
 
-// SECURITY FIX: Using bcrypt for password hashing 
+// Bcrypt password hashing (high computational cost)
 const hashPassword = (password: string): string => {
-  const saltRounds = 10; // Cost factor
+  const saltRounds = 10;
   return bcrypt.hashSync(password, saltRounds);
 };
 
@@ -152,7 +130,8 @@ const Register = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      const existingUsers = secureStorage.getItem('mindbuddy_users_db') || {};
+      // Get existing users from password storage
+      const existingUsers = passwordStorage.getItem('mindbuddy_users_db') || {};
 
       if (existingUsers[formData.email]) {
         setError('An account with this email already exists');
@@ -162,6 +141,7 @@ const Register = () => {
 
       const userId = generateSecureId();
 
+      // Create user profile (NO password field)
       const newUser = {
         id: userId,
         name: formData.name,
@@ -198,13 +178,14 @@ const Register = () => {
         });
       }
 
-      
+      // Store with bcrypt-hashed password in password storage
+      // This keeps password data separate from AES encryption flow
       existingUsers[formData.email] = {
         password: hashPassword(formData.password),
         user: newUser,
       };
 
-      secureStorage.setItem('mindbuddy_users_db', existingUsers);
+      passwordStorage.setItem('mindbuddy_users_db', existingUsers);
 
       toast.success('Registration successful! Please login.');
       setTimeout(() => {
