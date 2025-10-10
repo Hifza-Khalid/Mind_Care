@@ -638,18 +638,25 @@ const Resources = () => {
 
                 <TabsContent value="category" className="mt-4">
                   <div className="flex flex-wrap gap-2">
-                    {Object.entries(categories).map(([key, category]) => (
-                      <Button
-                        key={key}
-                        variant={selectedCategory === key ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSelectedCategory(key as keyof typeof categories)}
-                        className={`flex items-center space-x-1 ${category.color.replace('bg-', 'hover:bg-')}`}
-                      >
-                        <category.icon className="h-4 w-4" />
-                        <span>{category[currentLanguageContext] || category.en}</span>
-                      </Button>
-                    ))}
+                    {Object.entries(categories).map(([key, category]) => {
+                      const noHover = ['stress', 'anxiety', 'study', 'crisis'].includes(key);
+                      const hoverClasses = noHover
+                        ? ''
+                        : `${category.color.replace('bg-', 'hover:bg-')} ${category.color.replace('bg-', 'dark:hover:bg-')}`;
+
+                      return (
+                        <Button
+                          key={key}
+                          variant={selectedCategory === key ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setSelectedCategory(key as keyof typeof categories)}
+                          className={`flex items-center space-x-1 text-sm text-foreground dark:text-white ${hoverClasses}`}
+                        >
+                          <category.icon className="h-4 w-4 text-muted-foreground dark:text-white" />
+                          <span>{category[currentLanguageContext] || category.en}</span>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </TabsContent>
 
@@ -661,7 +668,7 @@ const Resources = () => {
                         variant={selectedType === type ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSelectedType(type)}
-                        className="capitalize"
+                        className="capitalize text-foreground dark:text-white"
                       >
                         {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
                       </Button>
@@ -677,13 +684,13 @@ const Resources = () => {
                         variant={selectedLanguage === language ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
-                        className="flex items-center space-x-1"
+                        className="flex items-center space-x-1 text-foreground dark:text-white"
                       >
                         {language === 'all' ? (
                           <span>All Languages</span>
                         ) : (
                           <>
-                            <span>{languages[language as keyof typeof languages]?.icon}</span>
+                            <span className="text-sm">{languages[language as keyof typeof languages]?.icon}</span>
                             <span>{languages[language as keyof typeof languages]?.name}</span>
                           </>
                         )}
