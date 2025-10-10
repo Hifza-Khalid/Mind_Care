@@ -39,6 +39,8 @@ import {
   Bookmark,
   Share2,
 } from 'lucide-react';
+import PageTransition from '@/components/ui/PageTransition';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 // Enhanced language support
 const languages = {
@@ -587,418 +589,432 @@ const Resources = () => {
   };
 
   return (
-    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses} overflow-hidden`}>
-      {/* Header */}
-      <div className="text-center space-y-4 relative">
-        <div className="absolute top-0 right-0">
-          <ReadingModeButton />
-        </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Psychoeducational Resources
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto reading-content">
-          Evidence-based resources to support your mental health journey. All content is reviewed by
-          licensed professionals.
-        </p>
-      </div>
-
-      {/* Search & Filters */}
-      <Card className="shadow-soft">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Filter className="h-5 w-5" />
-            <span>Find Resources</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Search Bar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search resources..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          {/* Filter Tabs */}
-          <Tabs defaultValue="category" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="category">Category</TabsTrigger>
-              <TabsTrigger value="type">Type</TabsTrigger>
-              <TabsTrigger value="language">Language</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="category" className="mt-4">
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(categories).map(([key, category]) => (
-                  <Button
-                    key={key}
-                    variant={selectedCategory === key ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedCategory(key as keyof typeof categories)}
-                    className={`flex items-center space-x-1 ${category.color.replace('bg-', 'hover:bg-')}`}
-                  >
-                    <category.icon className="h-4 w-4" />
-                    <span>{category[currentLanguageContext] || category.en}</span>
-                  </Button>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="type" className="mt-4">
-              <div className="flex flex-wrap gap-2">
-                {(['all', 'article', 'video', 'audio', 'tool', 'pdf'] as const).map((type) => (
-                  <Button
-                    key={type}
-                    variant={selectedType === type ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedType(type)}
-                    className="capitalize"
-                  >
-                    {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
-                  </Button>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="language" className="mt-4">
-              <div className="flex flex-wrap gap-2">
-                {(['all', ...Object.keys(languages)] as const).map((language) => (
-                  <Button
-                    key={language}
-                    variant={selectedLanguage === language ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
-                    className="flex items-center space-x-1"
-                  >
-                    {language === 'all' ? (
-                      <span>All Languages</span>
-                    ) : (
-                      <>
-                        <span>{languages[language as keyof typeof languages]?.icon}</span>
-                        <span>{languages[language as keyof typeof languages]?.name}</span>
-                      </>
-                    )}
-                  </Button>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-
-      {/* Results Summary */}
-      <div className="flex items-center justify-between">
-        <p className="text-muted-foreground">
-          Showing {filteredResources.length} of {mockResources.length} resources
-        </p>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            // Generate a comprehensive PDF with all resources
-            const resourceList = filteredResources
-              .map(
-                (r) =>
-                  `${r.title}\n${r.description}\nType: ${r.type} | Duration: ${r.duration} | Language: ${r.language}\nAuthor: ${r.author || 'N/A'}\nURL: ${r.url || 'N/A'}\n---\n`
-              )
-              .join('\n');
-
-            const blob = new Blob([`Mind Buddy Resources Collection\n\n${resourceList}`], {
-              type: 'text/plain',
-            });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'mind-buddy-resources.txt';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-          }}
-        >
-          <Download className="h-4 w-4 mr-2" />
-          Export Resources
-        </Button>
-      </div>
-
-      {/* Resource Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredResources.map((resource) => {
-          const TypeIcon = getTypeIcon(resource.type);
-
-          return (
-            <Card
-              key={resource.id}
-              className="group hover:shadow-medium transition-all duration-300 hover:scale-[1.02]"
-            >
-              <CardHeader className="space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className={`p-2 rounded-md ${getTypeColor(resource.type)}`}>
-                      <TypeIcon className="h-4 w-4" />
-                    </div>
-                    <Badge
-                      variant="secondary"
-                      className={`${categories[resource.category]?.color} flex items-center space-x-1`}
-                    >
-                      {(() => {
-                        const CategoryIcon = categories[resource.category]?.icon || BookOpen;
-                        return <CategoryIcon className="h-3 w-3" />;
-                      })()}
-                      <span>
-                        {categories[resource.category]?.[currentLanguageContext] ||
-                          categories[resource.category]?.en}
-                      </span>
-                    </Badge>
-                    <Badge variant="secondary" className={getDifficultyColor(resource.difficulty)}>
-                      {resource.difficulty}
-                    </Badge>
-                    <Badge variant="outline" className="flex items-center space-x-1">
-                      <span>{languages[resource.language]?.icon}</span>
-                      <span className="text-xs">{languages[resource.language]?.name}</span>
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => toggleBookmark(resource.id)}
-                      title={resource.isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
-                    >
-                      <Bookmark
-                        className={`h-3 w-3 ${resource.isBookmarked ? 'fill-current text-primary' : 'text-muted-foreground'}`}
-                      />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => shareResource(resource)}
-                      title="Share resource"
-                    >
-                      <Share2 className="h-3 w-3 text-muted-foreground" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <CardTitle className="text-lg leading-tight">{resource.title}</CardTitle>
-                  <CardDescription className="text-sm">{resource.description}</CardDescription>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <div className="flex items-center space-x-1">
-                    <Clock className="h-3 w-3" />
-                    <span>{resource.duration}</span>
-                  </div>
-                  {resource.views && (
-                    <div className="flex items-center space-x-1">
-                      <Users className="h-3 w-3" />
-                      <span>{resource.views.toLocaleString()} views</span>
-                    </div>
-                  )}
-                </div>
-
-                {resource.author && (
-                  <div className="text-xs text-muted-foreground">
-                    <span className="font-medium">By:</span> {resource.author}
-                  </div>
-                )}
-
-                {resource.tags && (
-                  <div className="flex flex-wrap gap-1">
-                    {resource.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-
-                {resource.rating && (
-                  <div className="flex items-center space-x-1">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Heart
-                          key={i}
-                          className={`h-3 w-3 ${
-                            i < Math.floor(resource.rating!)
-                              ? 'text-primary fill-current'
-                              : 'text-muted-foreground'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-muted-foreground">{resource.rating}/5</span>
-                  </div>
-                )}
-
-                <div className="flex space-x-2 pt-2">
-                  <Button
-                    variant="default"
-                    className="flex-1"
-                    onClick={() => {
-                      if (resource.url) {
-                        if (resource.type === 'tool') {
-                          // Open tools in the same tab
-                          window.location.href = resource.url;
-                        } else {
-                          // Open articles, videos, etc. in new tab
-                          window.open(resource.url, '_blank', 'noopener,noreferrer');
-                        }
-                      }
-                    }}
-                  >
-                    {resource.type === 'article'
-                      ? currentLanguageContext === 'hindi'
-                        ? 'लेख पढ़ें'
-                        : currentLanguageContext === 'spanish'
-                          ? 'Leer Artículo'
-                          : 'Read Article'
-                      : resource.type === 'video'
-                        ? currentLanguageContext === 'hindi'
-                          ? 'वीडियो देखें'
-                          : currentLanguageContext === 'spanish'
-                            ? 'Ver Video'
-                            : 'Watch Video'
-                        : resource.type === 'audio'
-                          ? currentLanguageContext === 'hindi'
-                            ? 'सुनें'
-                            : currentLanguageContext === 'spanish'
-                              ? 'Escuchar'
-                              : 'Listen Now'
-                          : resource.type === 'pdf'
-                            ? currentLanguageContext === 'hindi'
-                              ? 'PDF देखें'
-                              : currentLanguageContext === 'spanish'
-                                ? 'Ver PDF'
-                                : 'View PDF'
-                            : currentLanguageContext === 'hindi'
-                              ? 'उपकरण का उपयोग करें'
-                              : currentLanguageContext === 'spanish'
-                                ? 'Usar Herramienta'
-                                : 'Use Tool'}
-                  </Button>
-                  {resource.downloadUrl && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => {
-                        // Create a temporary link to trigger download
-                        const link = document.createElement('a');
-                        link.href = resource.downloadUrl!;
-                        link.download = `${resource.title.replace(/[^a-zA-Z0-9]/g, '-')}.${resource.type === 'pdf' ? 'pdf' : 'mp3'}`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
-                      title={
-                        currentLanguageContext === 'hindi'
-                          ? 'डाउनलोड'
-                          : currentLanguageContext === 'spanish'
-                            ? 'Descargar'
-                            : 'Download'
-                      }
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  )}
-
-                  {/* Cultural Context Indicator */}
-                  {resource.culturalContext && (
-                    <Badge
-                      variant="outline"
-                      className="text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700"
-                    >
-                      {currentLanguageContext === 'hindi'
-                        ? 'स्थानीय संदर्भ'
-                        : currentLanguageContext === 'spanish'
-                          ? 'Contexto Local'
-                          : 'Local Context'}
-                    </Badge>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      {filteredResources.length === 0 && (
-        <div className="text-center py-12">
-          <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No resources found</h3>
-          <p className="text-muted-foreground">Try adjusting your search or filters.</p>
-        </div>
-      )}
-
-      {/* Help Section */}
-      <Card className="bg-gradient-calm border-0">
-        <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center space-x-2">
-            <Heart className="h-5 w-5 text-primary" />
-            <span>Need Immediate Support?</span>
-          </CardTitle>
-          <CardDescription>
-            If you're experiencing a mental health crisis, don't wait - reach out for immediate
-            help.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button
-              variant="safety"
-              onClick={() => window.open('tel:+91-9152987821', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Phone className="h-5 w-5 mb-2" />
-              <span className="font-semibold">AASRA</span>
-              <span className="text-xs">24x7 Helpline</span>
-              <span className="text-xs">+91-91529-87821</span>
-            </Button>
-            <Button
-              variant="trust"
-              onClick={() => window.open('tel:+91-80-25497777', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Phone className="h-5 w-5 mb-2" />
-              <span className="font-semibold">Vandrevala</span>
-              <span className="text-xs">Foundation</span>
-              <span className="text-xs">+91-80-2549-7777</span>
-            </Button>
-            <Button
-              variant="gentle"
-              onClick={() => window.open('tel:+91-22-25563291', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Phone className="h-5 w-5 mb-2" />
-              <span className="font-semibold">Connecting</span>
-              <span className="text-xs">Trust</span>
-              <span className="text-xs">+91-22-2556-3291</span>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => window.open('/booking', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Users className="h-5 w-5 mb-2" />
-              <span className="font-semibold">Book Session</span>
-              <span className="text-xs">Professional Help</span>
-              <span className="text-xs">Available 24/7</span>
-            </Button>
-          </div>
-          <div className="text-center text-sm text-muted-foreground mt-4">
-            <p>
-              In case of emergency, please call <strong>102</strong> (National Emergency Helpline)
-              or visit your nearest hospital.
+    <PageTransition>
+      <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses} overflow-hidden`}>
+        {/* Header */}
+        <ScrollFadeIn yOffset={32}>
+          <div className="text-center space-y-4 relative">
+            <div className="absolute top-0 right-0">
+              <ReadingModeButton />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Psychoeducational Resources
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto reading-content">
+              Evidence-based resources to support your mental health journey. All content is reviewed by
+              licensed professionals.
             </p>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </ScrollFadeIn>
+
+        {/* Search & Filters */}
+        <ScrollFadeIn yOffset={32} delay={0.05}>
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Filter className="h-5 w-5" />
+                <span>Find Resources</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Search Bar */}
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search resources..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+
+              {/* Filter Tabs */}
+              <Tabs defaultValue="category" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="category">Category</TabsTrigger>
+                  <TabsTrigger value="type">Type</TabsTrigger>
+                  <TabsTrigger value="language">Language</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="category" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(categories).map(([key, category]) => (
+                      <Button
+                        key={key}
+                        variant={selectedCategory === key ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory(key as keyof typeof categories)}
+                        className={`flex items-center space-x-1 ${category.color.replace('bg-', 'hover:bg-')}`}
+                      >
+                        <category.icon className="h-4 w-4" />
+                        <span>{category[currentLanguageContext] || category.en}</span>
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="type" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {(['all', 'article', 'video', 'audio', 'tool', 'pdf'] as const).map((type) => (
+                      <Button
+                        key={type}
+                        variant={selectedType === type ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedType(type)}
+                        className="capitalize"
+                      >
+                        {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="language" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {(['all', ...Object.keys(languages)] as const).map((language) => (
+                      <Button
+                        key={language}
+                        variant={selectedLanguage === language ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
+                        className="flex items-center space-x-1"
+                      >
+                        {language === 'all' ? (
+                          <span>All Languages</span>
+                        ) : (
+                          <>
+                            <span>{languages[language as keyof typeof languages]?.icon}</span>
+                            <span>{languages[language as keyof typeof languages]?.name}</span>
+                          </>
+                        )}
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </ScrollFadeIn>
+
+        {/* Results Summary */}
+        <ScrollFadeIn yOffset={24} delay={0.1}>
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">
+              Showing {filteredResources.length} of {mockResources.length} resources
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // Generate a comprehensive PDF with all resources
+                const resourceList = filteredResources
+                  .map(
+                    (r) =>
+                      `${r.title}\n${r.description}\nType: ${r.type} | Duration: ${r.duration} | Language: ${r.language}\nAuthor: ${r.author || 'N/A'}\nURL: ${r.url || 'N/A'}\n---\n`
+                  )
+                  .join('\n');
+
+                const blob = new Blob([`Mind Buddy Resources Collection\n\n${resourceList}`], {
+                  type: 'text/plain',
+                });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'mind-buddy-resources.txt';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+              }}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export Resources
+            </Button>
+          </div>
+        </ScrollFadeIn>
+
+        {/* Resource Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredResources.map((resource, idx) => {
+            const TypeIcon = getTypeIcon(resource.type);
+            return (
+              <ScrollFadeIn key={resource.id} delay={0.05 * idx}>
+                <Card
+                  key={resource.id}
+                  className="group hover:shadow-medium transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <CardHeader className="space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className={`p-2 rounded-md ${getTypeColor(resource.type)}`}>
+                          <TypeIcon className="h-4 w-4" />
+                        </div>
+                        <Badge
+                          variant="secondary"
+                          className={`${categories[resource.category]?.color} flex items-center space-x-1`}
+                        >
+                          {(() => {
+                            const CategoryIcon = categories[resource.category]?.icon || BookOpen;
+                            return <CategoryIcon className="h-3 w-3" />;
+                          })()}
+                          <span>
+                            {categories[resource.category]?.[currentLanguageContext] ||
+                              categories[resource.category]?.en}
+                          </span>
+                        </Badge>
+                        <Badge variant="secondary" className={getDifficultyColor(resource.difficulty)}>
+                          {resource.difficulty}
+                        </Badge>
+                        <Badge variant="outline" className="flex items-center space-x-1">
+                          <span>{languages[resource.language]?.icon}</span>
+                          <span className="text-xs">{languages[resource.language]?.name}</span>
+                        </Badge>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => toggleBookmark(resource.id)}
+                          title={resource.isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+                        >
+                          <Bookmark
+                            className={`h-3 w-3 ${resource.isBookmarked ? 'fill-current text-primary' : 'text-muted-foreground'}`}
+                          />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => shareResource(resource)}
+                          title="Share resource"
+                        >
+                          <Share2 className="h-3 w-3 text-muted-foreground" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <CardTitle className="text-lg leading-tight">{resource.title}</CardTitle>
+                      <CardDescription className="text-sm">{resource.description}</CardDescription>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <div className="flex items-center space-x-1">
+                        <Clock className="h-3 w-3" />
+                        <span>{resource.duration}</span>
+                      </div>
+                      {resource.views && (
+                        <div className="flex items-center space-x-1">
+                          <Users className="h-3 w-3" />
+                          <span>{resource.views.toLocaleString()} views</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {resource.author && (
+                      <div className="text-xs text-muted-foreground">
+                        <span className="font-medium">By:</span> {resource.author}
+                      </div>
+                    )}
+
+                    {resource.tags && (
+                      <div className="flex flex-wrap gap-1">
+                        {resource.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+
+                    {resource.rating && (
+                      <div className="flex items-center space-x-1">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Heart
+                              key={i}
+                              className={`h-3 w-3 ${
+                                i < Math.floor(resource.rating!)
+                                  ? 'text-primary fill-current'
+                                  : 'text-muted-foreground'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-muted-foreground">{resource.rating}/5</span>
+                      </div>
+                    )}
+
+                    <div className="flex space-x-2 pt-2">
+                      <Button
+                        variant="default"
+                        className="flex-1"
+                        onClick={() => {
+                          if (resource.url) {
+                            if (resource.type === 'tool') {
+                              // Open tools in the same tab
+                              window.location.href = resource.url;
+                            } else {
+                              // Open articles, videos, etc. in new tab
+                              window.open(resource.url, '_blank', 'noopener,noreferrer');
+                            }
+                          }
+                        }}
+                      >
+                        {resource.type === 'article'
+                          ? currentLanguageContext === 'hindi'
+                            ? 'लेख पढ़ें'
+                            : currentLanguageContext === 'spanish'
+                              ? 'Leer Artículo'
+                              : 'Read Article'
+                          : resource.type === 'video'
+                            ? currentLanguageContext === 'hindi'
+                              ? 'वीडियो देखें'
+                              : currentLanguageContext === 'spanish'
+                                ? 'Ver Video'
+                                : 'Watch Video'
+                            : resource.type === 'audio'
+                              ? currentLanguageContext === 'hindi'
+                                ? 'सुनें'
+                                : currentLanguageContext === 'spanish'
+                                  ? 'Escuchar'
+                                  : 'Listen Now'
+                              : resource.type === 'pdf'
+                                ? currentLanguageContext === 'hindi'
+                                  ? 'PDF देखें'
+                                  : currentLanguageContext === 'spanish'
+                                    ? 'Ver PDF'
+                                    : 'View PDF'
+                                : currentLanguageContext === 'hindi'
+                                  ? 'उपकरण का उपयोग करें'
+                                  : currentLanguageContext === 'spanish'
+                                    ? 'Usar Herramienta'
+                                    : 'Use Tool'}
+                      </Button>
+                      {resource.downloadUrl && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => {
+                            // Create a temporary link to trigger download
+                            const link = document.createElement('a');
+                            link.href = resource.downloadUrl!;
+                            link.download = `${resource.title.replace(/[^a-zA-Z0-9]/g, '-')}.${resource.type === 'pdf' ? 'pdf' : 'mp3'}`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                          title={
+                            currentLanguageContext === 'hindi'
+                              ? 'डाउनलोड'
+                              : currentLanguageContext === 'spanish'
+                                ? 'Descargar'
+                                : 'Download'
+                          }
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                      )}
+
+                      {/* Cultural Context Indicator */}
+                      {resource.culturalContext && (
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700"
+                        >
+                          {currentLanguageContext === 'hindi'
+                            ? 'स्थानीय संदर्भ'
+                            : currentLanguageContext === 'spanish'
+                              ? 'Contexto Local'
+                              : 'Local Context'}
+                        </Badge>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </ScrollFadeIn>
+            );
+          })}
+        </div>
+
+        {/* No resources found */}
+        {filteredResources.length === 0 && (
+          <ScrollFadeIn delay={0.2}>
+            <div className="text-center py-12">
+              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No resources found</h3>
+              <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+            </div>
+          </ScrollFadeIn>
+        )}
+
+        {/* Help Section */}
+        <ScrollFadeIn yOffset={32} delay={0.1}>
+          <Card className="bg-gradient-calm border-0">
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center space-x-2">
+                <Heart className="h-5 w-5 text-primary" />
+                <span>Need Immediate Support?</span>
+              </CardTitle>
+              <CardDescription>
+                If you're experiencing a mental health crisis, don't wait - reach out for immediate
+                help.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Button
+                  variant="safety"
+                  onClick={() => window.open('tel:+91-9152987821', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Phone className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">AASRA</span>
+                  <span className="text-xs">24x7 Helpline</span>
+                  <span className="text-xs">+91-91529-87821</span>
+                </Button>
+                <Button
+                  variant="trust"
+                  onClick={() => window.open('tel:+91-80-25497777', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Phone className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">Vandrevala</span>
+                  <span className="text-xs">Foundation</span>
+                  <span className="text-xs">+91-80-2549-7777</span>
+                </Button>
+                <Button
+                  variant="gentle"
+                  onClick={() => window.open('tel:+91-22-25563291', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Phone className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">Connecting</span>
+                  <span className="text-xs">Trust</span>
+                  <span className="text-xs">+91-22-2556-3291</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.open('/booking', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Users className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">Book Session</span>
+                  <span className="text-xs">Professional Help</span>
+                  <span className="text-xs">Available 24/7</span>
+                </Button>
+              </div>
+              <div className="text-center text-sm text-muted-foreground mt-4">
+                <p>
+                  In case of emergency, please call <strong>102</strong> (National Emergency Helpline)
+                  or visit your nearest hospital.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </ScrollFadeIn>
+      </div>
+    </PageTransition>
   );
 };
 
