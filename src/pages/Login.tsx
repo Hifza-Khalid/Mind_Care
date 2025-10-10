@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { Heart, Mail, Lock, User, Shield, GraduationCap } from 'lucide-react';
+import { Heart, Mail, Lock, User, Shield, GraduationCap, EyeIcon, EyeOffIcon } from 'lucide-react';
 import { LoginCredentials } from '@/types/auth';
 
 const Login = () => {
@@ -20,18 +20,28 @@ const Login = () => {
     role: 'student',
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // toast.promise requires a promise that rejects on failure.
     // We'll wrap the original login function to achieve this.
-    const loginAndCheckPromise = new Promise(async (resolve, reject) => {
-        const success = await login(credentials);
-        if (success) {
-            resolve('Login successful');
-        } else {
+    const loginAndCheckPromise = new Promise((resolve, reject) => {
+        login(credentials).then(success => {
+            if (success) {
+                resolve('Login successful');
+            } else {
+                reject('Login failed');
+            }
+        }).catch(() => {
             reject('Login failed');
-        }
+        });
     });
 
     toast.promise(loginAndCheckPromise, {
@@ -179,13 +189,25 @@ const Login = () => {
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="password"
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Enter your password"
                       value={credentials.password}
                       onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                       className="pl-10"
                       required
                     />
+                    <button
+                      className="absolute right-4 top-3"
+                      onClick={togglePasswordVisibility}
+                      type="button"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <EyeOffIcon className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <EyeIcon className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </button>
                   </div>
                 </div>
 
@@ -236,4 +258,3 @@ const Login = () => {
 };
 
 export default Login;
-
