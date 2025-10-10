@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { Heart, Mail, Lock, User, Shield, GraduationCap, EyeIcon, EyeOffIcon } from 'lucide-react';
+import { Heart, Mail, Lock, User, Shield, GraduationCap, EyeIcon, EyeOffIcon, CheckCircle, X } from 'lucide-react';
 import { LoginCredentials } from '@/types/auth';
 
 const Login = () => {
@@ -63,13 +63,11 @@ const Login = () => {
   };
 
   const handleRoleChange = (role: 'student' | 'counselor' | 'admin') => {
-
-    const handleRoleChange = (role: 'student' | 'counselor' | 'admin') => {
-      setCredentials((prev) => ({
-        ...prev,
-        role,
-      }));
-    };
+    setCredentials((prev) => ({
+      ...prev,
+      role,
+    }));
+  };
 
   const getRoleIcon = (role: string) => {
     switch (role) {
@@ -95,6 +93,17 @@ const Login = () => {
       default:
         return '';
     }
+  };
+
+  // Live password validations
+  const password = credentials.password || '';
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const passwordValidations = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[^A-Za-z0-9]/.test(password),
   };
 
   return (
@@ -190,6 +199,8 @@ const Login = () => {
                       onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                       className="pl-10"
                       required
+                      onFocus={() => setPasswordFocused(true)}
+                      onBlur={() => setPasswordFocused(false)}
                     />
                     <button
                       className="absolute right-4 top-3"
@@ -204,7 +215,36 @@ const Login = () => {
                       )}
                     </button>
                   </div>
-                </div>
+
+                  {/* Password validation checklist (visible while typing or focused) */}
+                  {(passwordFocused || password.length > 0) && (
+                    <div className="mt-2 text-sm space-y-1" role="status" aria-live="polite">
+                    {(
+                      [
+                        { key: 'length', label: 'At least 8 characters' },
+                        { key: 'uppercase', label: 'An uppercase letter (A-Z)' },
+                        { key: 'lowercase', label: 'A lowercase letter (a-z)' },
+                        { key: 'number', label: 'A number (0-9)' },
+                        { key: 'special', label: 'A special character (!@#$...)' },
+                      ] as const
+                    ).map((rule) => {
+                      const ok = passwordValidations[rule.key as keyof typeof passwordValidations];
+                      return (
+                        <div key={rule.key} className="flex items-center gap-2">
+                          {ok ? (
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <X className="h-4 w-4 text-red-400" />
+                          )}
+                          <span className={`${ok ? 'text-green-600' : 'text-muted-foreground'}`}>
+                            {rule.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                      </div>
+                    )}
+                  </div>
 
                 <Button
                   type="submit"

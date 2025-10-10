@@ -11,7 +11,7 @@ const Layout = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'hsl(var(--background))' }}>
+    <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
         <Outlet />

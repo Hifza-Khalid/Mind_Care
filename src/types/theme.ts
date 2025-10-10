@@ -21,14 +21,36 @@ export interface ReadingModeSettings {
   customBackground?: string;
 }
 
+export interface WallpaperSettings {
+  enabled: boolean;
+  type: 'gradient' | 'image';
+  light: {
+    gradient?: {
+      from: string;
+      to: string;
+    };
+    imageUrl?: string;
+  };
+  dark: {
+    gradient?: {
+      from: string;
+      to: string;
+    };
+    imageUrl?: string;
+  };
+}
+
 export interface EnhancedThemeSettings {
   theme: 'light' | 'dark' | 'system' | 'auto';
   schedule: ThemeSchedule;
   readingMode: ReadingModeSettings;
+  wallpaper: WallpaperSettings;
   preferences: {
     smoothTransitions: boolean;
     highContrast: boolean;
     reduceBlueLight: boolean;
+    // Respect user's reduced motion preference (global)
+    reduceMotion?: boolean;
     customAccentColor?: string;
   };
 }
@@ -51,10 +73,27 @@ export const DEFAULT_THEME_SETTINGS: EnhancedThemeSettings = {
     warmColors: false,
     backgroundColor: 'default',
   },
+  wallpaper: {
+    enabled: false,
+    type: 'gradient',
+    light: {
+      gradient: {
+        from: '#fde68a',
+        to: '#93c5fd',
+      },
+    },
+    dark: {
+      gradient: {
+        from: '#0f172a',
+        to: '#1e293b',
+      },
+    },
+  },
   preferences: {
     smoothTransitions: true,
     highContrast: false,
     reduceBlueLight: false,
+    reduceMotion: false,
   },
 };
 
