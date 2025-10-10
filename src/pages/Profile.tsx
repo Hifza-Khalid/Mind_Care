@@ -149,18 +149,18 @@ const Profile = () => {
 
   return (
     <PageTransition>
-      <div className="container mx-auto p-6 max-w-4xl space-y-12">
+  <div className="container mx-auto px-8 py-10 max-w-screen-xl space-y-12">
         <ScrollFadeIn yOffset={32}><div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Profile</h1>
           <p className="text-muted-foreground">Manage your personal information and preferences</p>
         </div></ScrollFadeIn>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <ScrollFadeIn yOffset={32} delay={0.06}><Card className="lg:col-span-1">
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
+          <ScrollFadeIn yOffset={32} delay={0.06}><Card className="w-full lg:w-96 flex-shrink-0 h-full min-h-[560px] relative overflow-hidden z-10">
             <CardHeader className="text-center">
-              <div className="relative mx-auto mb-4">
-                <Avatar className="h-24 w-24">
+                <div className="relative mx-auto mb-6">
+                <Avatar className="h-32 w-32">
                   <AvatarImage src={editData.avatar || user.avatar} alt={user.name} />
-                  <AvatarFallback className="text-xl">{getInitials(user.name)}</AvatarFallback>
+                  <AvatarFallback className="text-2xl">{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
                 <input
                   id="profile-image-upload"
@@ -174,7 +174,7 @@ const Profile = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full"
+                      className="absolute bottom-3 right-3 h-9 w-9 rounded-full"
                       disabled={isUploadingImage}
                       title="Change profile picture"
                     >
@@ -202,9 +202,9 @@ const Profile = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <CardTitle className="text-xl">{user.name}</CardTitle>
-              <CardDescription className="flex items-center justify-center space-x-2">
-                <Badge className={`${getRoleColor(user.role)} text-white`}>
+              <CardTitle className="text-2xl font-semibold">{user.name}</CardTitle>
+              <CardDescription className="flex items-center justify-center space-x-3 mt-2">
+                <Badge className={`${getRoleColor(user.role)} text-white px-3 py-1 text-sm`}>
                   {user.role === 'student' && <GraduationCap className="h-3 w-3 mr-1" />}
                   {user.role === 'counselor' && <Award className="h-3 w-3 mr-1" />}
                   {user.role === 'admin' && <Shield className="h-3 w-3 mr-1" />}
@@ -212,8 +212,8 @@ const Profile = () => {
                 </Badge>
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center space-x-2 text-sm">
+            <CardContent className="space-y-4 text-sm">
+              <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <span>{user.email}</span>
               </div>
@@ -238,11 +238,11 @@ const Profile = () => {
             </CardContent>
           </Card></ScrollFadeIn>
 
-          <ScrollFadeIn yOffset={32} delay={0.10}><Card className="lg:col-span-2">
+          <ScrollFadeIn yOffset={32} delay={0.10}><Card className="w-full flex-1 h-full min-h-[560px]">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Personal Information</CardTitle>
-                <CardDescription>Update your personal details and preferences</CardDescription>
+                <CardTitle className="text-2xl font-semibold">Personal Information</CardTitle>
+                <CardDescription className="text-sm text-muted-foreground">Update your personal details and preferences</CardDescription>
               </div>
               <Button
                 variant={isEditing ? 'default' : 'outline'}
@@ -267,7 +267,7 @@ const Profile = () => {
                 </TabsList>
 
                 <TabsContent value="basic" className="space-y-4 mt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name</Label>
                       <Input
@@ -275,6 +275,7 @@ const Profile = () => {
                         value={isEditing ? editData.name || '' : user.name || ''}
                         onChange={(e) => setEditData({ ...editData, name: e.target.value })}
                         disabled={!isEditing}
+                        className="h-12"
                       />
                     </div>
                     <div className="space-y-2">
@@ -284,6 +285,7 @@ const Profile = () => {
                         value={isEditing ? editData.email || '' : user.email || ''}
                         onChange={(e) => setEditData({ ...editData, email: e.target.value })}
                         disabled={!isEditing}
+                        className="h-12"
                       />
                     </div>
                     <div className="space-y-2">
@@ -294,19 +296,19 @@ const Profile = () => {
                         value={isEditing ? editData.dateOfBirth || '' : user.dateOfBirth || ''}
                         onChange={(e) => setEditData({ ...editData, dateOfBirth: e.target.value })}
                         disabled={!isEditing}
+                        className="h-12"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="preferredLanguage">Preferred Language</Label>
                       <Input
                         id="preferredLanguage"
-                        value={
-                          isEditing ? editData.preferredLanguage || '' : user.preferredLanguage || ''
-                        }
+                        value={isEditing ? editData.preferredLanguage || '' : user.preferredLanguage || ''}
                         onChange={(e) =>
                           setEditData({ ...editData, preferredLanguage: e.target.value })
                         }
                         disabled={!isEditing}
+                        className="h-12"
                       />
                     </div>
                   </div>
