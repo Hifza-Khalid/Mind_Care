@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Footer from '@/components/layout/Footer';
-import heroImage from '@/assets/freepik__retouch__90823.png';
 import {
   MessageCircle,
   Calendar,
@@ -61,10 +60,11 @@ const Index = () => {
     );
   }
 
+  // Debug: Always show guest page for now to test
+  console.log('Auth state:', { user, isLoading });
+  
   // Always show the landing page, but customize content based on auth status
-  return user ? (
-    <AuthenticatedHomePage user={user} showWelcomeBack={showWelcomeBack} />
-  ) : (
+  return (
     <GuestHomePage />
   );
 };
@@ -436,13 +436,7 @@ const GuestHomePage = () => {
 
         {/* Background Image with Overlay */}
         <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `url(${heroImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
+          className="absolute inset-0 opacity-30 bg-gradient-to-br from-primary/10 to-secondary/10"
         />
         <div className="absolute inset-0 bg-gradient-hero opacity-20" />
 
@@ -790,11 +784,9 @@ const GuestHomePage = () => {
               </div>
 
               <div className="flex justify-center md:justify-end">
-                <img
-                  src={heroImage}
-                  alt="Mental health and wellness illustration showing people supporting each other in a caring community environment"
-                  className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] object-cover rounded-xl shadow-card gentle-transition gentle-hover"
-                />
+                <div className="w-72 md:w-96 lg:w-[520px] h-72 md:h-96 lg:h-[520px] bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl shadow-card gentle-transition gentle-hover flex items-center justify-center">
+                  <Heart className="h-24 w-24 text-primary/40" />
+                </div>
               </div>
             </div>
 
