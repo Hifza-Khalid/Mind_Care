@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -10,14 +16,14 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Sun, 
-  Moon, 
-  Monitor, 
-  Clock, 
-  BookOpen, 
-  Eye, 
-  Palette, 
+import {
+  Sun,
+  Moon,
+  Monitor,
+  Clock,
+  BookOpen,
+  Eye,
+  Palette,
   MapPin,
   Sunrise,
   Sunset,
@@ -26,13 +32,24 @@ import {
   Zap,
   Settings,
   Info,
-  Check
+  Check,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const EnhancedThemeSettings = () => {
-  const { theme, actualTheme, setTheme, settings, updateSettings, readingMode, toggleReadingMode, isScheduledTime } = useTheme();
-  const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+  const {
+    theme,
+    actualTheme,
+    setTheme,
+    settings,
+    updateSettings,
+    readingMode,
+    toggleReadingMode,
+    isScheduledTime,
+  } = useTheme();
+  const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>(
+    'prompt'
+  );
 
   useEffect(() => {
     if ('geolocation' in navigator) {
@@ -48,15 +65,15 @@ const EnhancedThemeSettings = () => {
         const position = await new Promise<GeolocationPosition>((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject);
         });
-        
+
         updateSettings({
           schedule: {
             ...settings.schedule,
             location: {
               latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            }
-          }
+              longitude: position.coords.longitude,
+            },
+          },
         });
         setLocationPermission('granted');
       } catch (error) {
@@ -71,7 +88,7 @@ const EnhancedThemeSettings = () => {
     rose: '#f43f5e',
     purple: '#8b5cf6',
     orange: '#f97316',
-    teal: '#14b8a6'
+    teal: '#14b8a6',
   };
 
   return (
@@ -87,7 +104,8 @@ const EnhancedThemeSettings = () => {
           </div>
         </div>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Customize your visual experience with advanced theming options, auto-scheduling, and reading mode for optimal comfort.
+          Customize your visual experience with advanced theming options, auto-scheduling, and
+          reading mode for optimal comfort.
         </p>
       </div>
 
@@ -102,7 +120,9 @@ const EnhancedThemeSettings = () => {
                 <Sun className="h-5 w-5 text-orange-600" />
               )}
               <div>
-                <p className="font-medium">Currently using <span className="capitalize">{actualTheme}</span> theme</p>
+                <p className="font-medium">
+                  Currently using <span className="capitalize">{actualTheme}</span> theme
+                </p>
                 {isScheduledTime && (
                   <p className="text-sm text-muted-foreground">Automatically scheduled</p>
                 )}
@@ -143,13 +163,15 @@ const EnhancedThemeSettings = () => {
                   { id: 'light', label: 'Light', icon: Sun, desc: 'Always light' },
                   { id: 'dark', label: 'Dark', icon: Moon, desc: 'Always dark' },
                   { id: 'system', label: 'System', icon: Monitor, desc: 'Follow system' },
-                  { id: 'auto', label: 'Auto', icon: Clock, desc: 'Time-based' }
+                  { id: 'auto', label: 'Auto', icon: Clock, desc: 'Time-based' },
                 ].map(({ id, label, icon: Icon, desc }) => (
-                  <Card 
+                  <Card
                     key={id}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
-                      theme === id ? 'ring-2 ring-primary bg-primary/5' : ''
-                    }`}
+                    className={`cursor-pointer transition-all duration-200 ease-in-out border hover:border-primary/50 hover:shadow-lg hover:-translate-y-1 ${
+  theme === id
+    ? 'border-primary ring-2 ring-primary/50 shadow-lg shadow-primary/40 bg-primary/5'
+    : 'border-border shadow-md bg-background'
+}`}
                     onClick={() => setTheme(id as any)}
                   >
                     <CardContent className="p-4 text-center space-y-2">
@@ -158,9 +180,7 @@ const EnhancedThemeSettings = () => {
                         <p className="font-medium">{label}</p>
                         <p className="text-xs text-muted-foreground">{desc}</p>
                       </div>
-                      {theme === id && (
-                        <Check className="h-4 w-4 mx-auto text-primary" />
-                      )}
+                      {theme === id && <Check className="h-4 w-4 mx-auto text-primary" />}
                     </CardContent>
                   </Card>
                 ))}
@@ -174,18 +194,20 @@ const EnhancedThemeSettings = () => {
                   <Eye className="h-4 w-4 mr-2" />
                   Visual Preferences
                 </h4>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <Label>High Contrast</Label>
-                      <p className="text-sm text-muted-foreground">Enhanced contrast for better readability</p>
+                      <p className="text-sm text-muted-foreground">
+                        Enhanced contrast for better readability
+                      </p>
                     </div>
                     <Switch
                       checked={settings.preferences.highContrast}
                       onCheckedChange={(checked) =>
                         updateSettings({
-                          preferences: { ...settings.preferences, highContrast: checked }
+                          preferences: { ...settings.preferences, highContrast: checked },
                         })
                       }
                     />
@@ -200,7 +222,7 @@ const EnhancedThemeSettings = () => {
                       checked={settings.preferences.reduceBlueLight}
                       onCheckedChange={(checked) =>
                         updateSettings({
-                          preferences: { ...settings.preferences, reduceBlueLight: checked }
+                          preferences: { ...settings.preferences, reduceBlueLight: checked },
                         })
                       }
                     />
@@ -215,7 +237,7 @@ const EnhancedThemeSettings = () => {
                       checked={settings.preferences.smoothTransitions}
                       onCheckedChange={(checked) =>
                         updateSettings({
-                          preferences: { ...settings.preferences, smoothTransitions: checked }
+                          preferences: { ...settings.preferences, smoothTransitions: checked },
                         })
                       }
                     />
@@ -240,7 +262,7 @@ const EnhancedThemeSettings = () => {
                       style={{ backgroundColor: color }}
                       onClick={() =>
                         updateSettings({
-                          preferences: { ...settings.preferences, customAccentColor: color }
+                          preferences: { ...settings.preferences, customAccentColor: color },
                         })
                       }
                     />
@@ -251,7 +273,7 @@ const EnhancedThemeSettings = () => {
                   value={settings.preferences.customAccentColor || '#3b82f6'}
                   onChange={(e) =>
                     updateSettings({
-                      preferences: { ...settings.preferences, customAccentColor: e.target.value }
+                      preferences: { ...settings.preferences, customAccentColor: e.target.value },
                     })
                   }
                   className="w-full h-12"
@@ -285,7 +307,7 @@ const EnhancedThemeSettings = () => {
                   checked={settings.schedule.enabled}
                   onCheckedChange={(checked) =>
                     updateSettings({
-                      schedule: { ...settings.schedule, enabled: checked }
+                      schedule: { ...settings.schedule, enabled: checked },
                     })
                   }
                 />
@@ -304,7 +326,7 @@ const EnhancedThemeSettings = () => {
                       checked={settings.schedule.useSunrise}
                       onCheckedChange={(checked) =>
                         updateSettings({
-                          schedule: { ...settings.schedule, useSunrise: checked }
+                          schedule: { ...settings.schedule, useSunrise: checked },
                         })
                       }
                     />
@@ -346,7 +368,7 @@ const EnhancedThemeSettings = () => {
                           value={settings.schedule.darkModeStart}
                           onChange={(e) =>
                             updateSettings({
-                              schedule: { ...settings.schedule, darkModeStart: e.target.value }
+                              schedule: { ...settings.schedule, darkModeStart: e.target.value },
                             })
                           }
                         />
@@ -361,7 +383,7 @@ const EnhancedThemeSettings = () => {
                           value={settings.schedule.darkModeEnd}
                           onChange={(e) =>
                             updateSettings({
-                              schedule: { ...settings.schedule, darkModeEnd: e.target.value }
+                              schedule: { ...settings.schedule, darkModeEnd: e.target.value },
                             })
                           }
                         />
@@ -403,10 +425,7 @@ const EnhancedThemeSettings = () => {
                     Enhanced typography and comfortable colors for long reading sessions
                   </p>
                 </div>
-                <Switch
-                  checked={readingMode}
-                  onCheckedChange={toggleReadingMode}
-                />
+                <Switch checked={readingMode} onCheckedChange={toggleReadingMode} />
               </div>
 
               {readingMode && (
@@ -417,7 +436,7 @@ const EnhancedThemeSettings = () => {
                       <Type className="h-4 w-4 mr-2" />
                       Typography
                     </h4>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label>Font Size</Label>
@@ -425,7 +444,7 @@ const EnhancedThemeSettings = () => {
                           value={settings.readingMode.fontSize}
                           onValueChange={(value: any) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, fontSize: value }
+                              readingMode: { ...settings.readingMode, fontSize: value },
                             })
                           }
                         >
@@ -447,7 +466,7 @@ const EnhancedThemeSettings = () => {
                           value={settings.readingMode.lineHeight}
                           onValueChange={(value: any) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, lineHeight: value }
+                              readingMode: { ...settings.readingMode, lineHeight: value },
                             })
                           }
                         >
@@ -468,7 +487,7 @@ const EnhancedThemeSettings = () => {
                           value={settings.readingMode.fontFamily}
                           onValueChange={(value: any) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, fontFamily: value }
+                              readingMode: { ...settings.readingMode, fontFamily: value },
                             })
                           }
                         >
@@ -490,7 +509,7 @@ const EnhancedThemeSettings = () => {
                           value={settings.readingMode.backgroundColor}
                           onValueChange={(value: any) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, backgroundColor: value }
+                              readingMode: { ...settings.readingMode, backgroundColor: value },
                             })
                           }
                         >
@@ -515,7 +534,10 @@ const EnhancedThemeSettings = () => {
                           value={settings.readingMode.customBackground || '#ffffff'}
                           onChange={(e) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, customBackground: e.target.value }
+                              readingMode: {
+                                ...settings.readingMode,
+                                customBackground: e.target.value,
+                              },
                             })
                           }
                           className="w-full h-12"
@@ -532,21 +554,23 @@ const EnhancedThemeSettings = () => {
                       <Eye className="h-4 w-4 mr-2" />
                       Comfort Options
                     </h4>
-                    
+
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <Label>High Contrast</Label>
-                          <p className="text-sm text-muted-foreground">Enhanced contrast for better readability</p>
+                          <p className="text-sm text-muted-foreground">
+                            Enhanced contrast for better readability
+                          </p>
                         </div>
                         <Switch
                           checked={settings.readingMode.contrast === 'high'}
                           onCheckedChange={(checked) =>
                             updateSettings({
-                              readingMode: { 
-                                ...settings.readingMode, 
-                                contrast: checked ? 'high' : 'normal' 
-                              }
+                              readingMode: {
+                                ...settings.readingMode,
+                                contrast: checked ? 'high' : 'normal',
+                              },
                             })
                           }
                         />
@@ -555,13 +579,15 @@ const EnhancedThemeSettings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label>Warm Colors</Label>
-                          <p className="text-sm text-muted-foreground">Reduce blue light for evening reading</p>
+                          <p className="text-sm text-muted-foreground">
+                            Reduce blue light for evening reading
+                          </p>
                         </div>
                         <Switch
                           checked={settings.readingMode.warmColors}
                           onCheckedChange={(checked) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, warmColors: checked }
+                              readingMode: { ...settings.readingMode, warmColors: checked },
                             })
                           }
                         />
@@ -570,13 +596,15 @@ const EnhancedThemeSettings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label>Reduced Motion</Label>
-                          <p className="text-sm text-muted-foreground">Minimize animations and transitions</p>
+                          <p className="text-sm text-muted-foreground">
+                            Minimize animations and transitions
+                          </p>
                         </div>
                         <Switch
                           checked={settings.readingMode.reducedMotion}
                           onCheckedChange={(checked) =>
                             updateSettings({
-                              readingMode: { ...settings.readingMode, reducedMotion: checked }
+                              readingMode: { ...settings.readingMode, reducedMotion: checked },
                             })
                           }
                         />
@@ -599,14 +627,16 @@ const EnhancedThemeSettings = () => {
                 <div className="prose prose-sm max-w-none">
                   <h3>Mental Health and Wellbeing</h3>
                   <p>
-                    Mental health is just as important as physical health. It affects how we think, feel, and act. 
-                    It also helps determine how we handle stress, relate to others, and make choices. Mental health 
-                    is important at every stage of life, from childhood and adolescence through adulthood.
+                    Mental health is just as important as physical health. It affects how we think,
+                    feel, and act. It also helps determine how we handle stress, relate to others,
+                    and make choices. Mental health is important at every stage of life, from
+                    childhood and adolescence through adulthood.
                   </p>
                   <p>
-                    Taking care of your mental health is an ongoing process. It involves developing healthy coping 
-                    strategies, building strong relationships, and seeking support when needed. Remember, it's okay 
-                    to not be okay, and reaching out for help is a sign of strength, not weakness.
+                    Taking care of your mental health is an ongoing process. It involves developing
+                    healthy coping strategies, building strong relationships, and seeking support
+                    when needed. Remember, it's okay to not be okay, and reaching out for help is a
+                    sign of strength, not weakness.
                   </p>
                 </div>
               </CardContent>

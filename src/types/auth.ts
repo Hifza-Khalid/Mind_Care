@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs';
+
 export interface User {
   id: string;
   name: string;
@@ -32,10 +34,21 @@ export interface LoginCredentials {
   role: 'student' | 'counselor' | 'admin';
 }
 
-// Mock users for demo
-export const mockUsers: Record<string, { user: User; password: string }> = {
+export interface UserWithPassword {
+  password: string;
+  user: User;
+}
+
+// Helper function to hash passwords with bcrypt
+const hashPassword = (password: string): string => {
+  const saltRounds = 10; // Cost factor - higher = more secure but slower
+  return bcrypt.hashSync(password, saltRounds);
+};
+
+// Mock users with SECURELY HASHED passwords using bcrypt
+export const mockUsers: Record<string, UserWithPassword> = {
   'student@mindbuddy.com': {
-    password: 'student123',
+    password: hashPassword('student123'), 
     user: {
       id: '1',
       name: 'Alex Student',
@@ -53,11 +66,11 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
       university: 'State University',
       major: 'Psychology',
       year: 'Junior',
-      studentId: 'STU-2024-001'
-    }
+      studentId: 'STU-2024-001',
+    },
   },
   'counselor@mindbuddy.com': {
-    password: 'counselor123',
+    password: hashPassword('counselor123'), 
     user: {
       id: '2',
       name: 'Dr. Sarah Wilson',
@@ -73,12 +86,17 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
       joinDate: '2023-06-01',
       lastActive: new Date().toISOString(),
       license: 'Licensed Clinical Social Worker (LCSW)',
-      specialization: ['Anxiety Disorders', 'Depression', 'Student Counseling', 'Crisis Intervention'],
-      experience: '8 years'
-    }
+      specialization: [
+        'Anxiety Disorders',
+        'Depression',
+        'Student Counseling',
+        'Crisis Intervention',
+      ],
+      experience: '8 years',
+    },
   },
   'admin@mindbuddy.com': {
-    password: 'admin123',
+    password: hashPassword('admin123'), 
     user: {
       id: '3',
       name: 'Admin User',
@@ -94,7 +112,7 @@ export const mockUsers: Record<string, { user: User; password: string }> = {
       joinDate: '2023-01-01',
       lastActive: new Date().toISOString(),
       department: 'System Administration',
-      permissions: ['user_management', 'system_settings', 'analytics_view', 'content_moderation']
-    }
-  }
+      permissions: ['user_management', 'system_settings', 'analytics_view', 'content_moderation'],
+    },
+  },
 };
