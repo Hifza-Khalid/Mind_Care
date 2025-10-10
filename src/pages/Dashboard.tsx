@@ -101,6 +101,7 @@ import {
   Target,
 } from 'lucide-react';
 import PageTransition from '@/components/ui/PageTransition';
+import { useAuth } from '@/contexts/AuthContext';
 import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 /**
@@ -146,6 +147,8 @@ const AdminDashboard = () => {
     filterStudents,
     getStudentAnalytics,
   } = useAdminData();
+
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>('all');
@@ -290,15 +293,17 @@ const AdminDashboard = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setAutoRefresh(!autoRefresh)}
-                  className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-                  {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
-                </Button>
+                {user?.role !== 'admin' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setAutoRefresh(!autoRefresh)}
+                    className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
+                    {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
+                  </Button>
+                )}
                 <Button variant="outline" size="sm" onClick={refreshData}>
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Refresh
