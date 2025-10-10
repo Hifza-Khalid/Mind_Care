@@ -63,18 +63,13 @@ const Login = () => {
   };
 
   const handleRoleChange = (role: 'student' | 'counselor' | 'admin') => {
-    // Auto-fill credentials for demo
-    const demoCredentials = {
-      student: { email: 'student@mindbuddy.com', password: 'student123' },
-      counselor: { email: 'counselor@mindbuddy.com', password: 'counselor123' },
-      admin: { email: 'admin@mindbuddy.com', password: 'admin123' },
-    };
 
-    setCredentials({
-      ...demoCredentials[role],
-      role,
-    });
-  };
+    const handleRoleChange = (role: 'student' | 'counselor' | 'admin') => {
+      setCredentials((prev) => ({
+        ...prev,
+        role,
+      }));
+    };
 
   const getRoleIcon = (role: string) => {
     switch (role) {
