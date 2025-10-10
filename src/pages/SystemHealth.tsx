@@ -20,8 +20,6 @@ import {
   RefreshCw,
   Download,
 } from 'lucide-react';
-import PageTransition from '@/components/ui/PageTransition';
-import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const SystemHealth = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -119,254 +117,248 @@ const SystemHealth = () => {
   };
 
   return (
-    <PageTransition>
-      <div className="container mx-auto px-4 py-8 space-y-8">
-        <ScrollFadeIn yOffset={32}>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                System Health Monitor
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                Real-time platform performance and security monitoring
-              </p>
+    <div className="container mx-auto px-4 py-8 space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            System Health Monitor
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Real-time platform performance and security monitoring
+          </p>
+        </div>
+        <div className="flex space-x-2">
+          <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          <Button variant="hero">
+            <Download className="h-4 w-4 mr-2" />
+            Export Report
+          </Button>
+        </div>
+      </div>
+
+      {/* Overall System Status */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card className="bg-gradient-calm border-0 text-white">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <Activity className="h-6 w-6" />
+              <Badge className="bg-white/20 text-white">Live</Badge>
             </div>
-            <div className="flex space-x-2">
-              <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing}>
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-                Refresh
-              </Button>
-              <Button variant="hero">
-                <Download className="h-4 w-4 mr-2" />
-                Export Report
-              </Button>
+            <CardTitle className="text-2xl">System Status</CardTitle>
+            <CardDescription className="text-white/80">Overall Health</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">98.5%</div>
+            <p className="text-sm text-white/80">All systems operational</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <Globe className="h-6 w-6 text-primary" />
+              <CheckCircle className="h-5 w-5 text-severity-low" />
             </div>
+            <CardTitle>Uptime</CardTitle>
+            <CardDescription>Last 30 days</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-severity-low">99.97%</div>
+            <p className="text-sm text-muted-foreground">23h 45m downtime</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <Shield className="h-6 w-6 text-primary" />
+              <AlertTriangle className="h-5 w-5 text-severity-medium" />
+            </div>
+            <CardTitle>Security</CardTitle>
+            <CardDescription>Active threats</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-severity-medium">3</div>
+            <p className="text-sm text-muted-foreground">2 medium, 1 high</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <Clock className="h-6 w-6 text-primary" />
+              <Badge variant="secondary">Avg</Badge>
+            </div>
+            <CardTitle>Response Time</CardTitle>
+            <CardDescription>API latency</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">89ms</div>
+            <p className="text-sm text-muted-foreground">-12ms from yesterday</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Tabs defaultValue="performance" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="services">Services</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="logs">System Logs</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="performance" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {serverMetrics.map((metric, index) => (
+              <Card key={index}>
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <metric.icon className="h-5 w-5 text-primary" />
+                      <CardTitle className="text-lg">{metric.name}</CardTitle>
+                    </div>
+                    <Badge className={`text-white ${getMetricColor(metric.status)}`}>
+                      {metric.status}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Usage</span>
+                      <span className="font-medium">{metric.value}%</span>
+                    </div>
+                    <Progress value={metric.value} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </ScrollFadeIn>
+        </TabsContent>
 
-        <ScrollFadeIn yOffset={28} delay={0.05}>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="bg-gradient-calm border-0 text-white">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <Activity className="h-6 w-6" />
-                  <Badge className="bg-white/20 text-white">Live</Badge>
-                </div>
-                <CardTitle className="text-2xl">System Status</CardTitle>
-                <CardDescription className="text-white/80">Overall Health</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">98.5%</div>
-                <p className="text-sm text-white/80">All systems operational</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <Globe className="h-6 w-6 text-primary" />
-                  <CheckCircle className="h-5 w-5 text-severity-low" />
-                </div>
-                <CardTitle>Uptime</CardTitle>
-                <CardDescription>Last 30 days</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-severity-low">99.97%</div>
-                <p className="text-sm text-muted-foreground">23h 45m downtime</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <Shield className="h-6 w-6 text-primary" />
-                  <AlertTriangle className="h-5 w-5 text-severity-medium" />
-                </div>
-                <CardTitle>Security</CardTitle>
-                <CardDescription>Active threats</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-severity-medium">3</div>
-                <p className="text-sm text-muted-foreground">2 medium, 1 high</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <Clock className="h-6 w-6 text-primary" />
-                  <Badge variant="secondary">Avg</Badge>
-                </div>
-                <CardTitle>Response Time</CardTitle>
-                <CardDescription>API latency</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">89ms</div>
-                <p className="text-sm text-muted-foreground">-12ms from yesterday</p>
-              </CardContent>
-            </Card>
-          </div>
-        </ScrollFadeIn>
-
-        <ScrollFadeIn yOffset={20} delay={0.08}>
-          <Tabs defaultValue="performance" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="performance">Performance</TabsTrigger>
-              <TabsTrigger value="services">Services</TabsTrigger>
-              <TabsTrigger value="security">Security</TabsTrigger>
-              <TabsTrigger value="logs">System Logs</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="performance" className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {serverMetrics.map((metric, index) => (
-                  <Card key={index}>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <metric.icon className="h-5 w-5 text-primary" />
-                          <CardTitle className="text-lg">{metric.name}</CardTitle>
-                        </div>
-                        <Badge className={`text-white ${getMetricColor(metric.status)}`}>
-                          {metric.status}
-                        </Badge>
+        <TabsContent value="services" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Server className="h-5 w-5" />
+                <span>Service Status</span>
+              </CardTitle>
+              <CardDescription>Current status of all platform services</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {systemStatus.map((service, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 rounded-lg bg-muted/50"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`w-3 h-3 rounded-full ${getStatusColor(service.status)}`}
+                      ></div>
+                      <div>
+                        <p className="font-medium">{service.service}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Uptime: {service.uptime} • Response: {service.responseTime}
+                        </p>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Usage</span>
-                          <span className="font-medium">{metric.value}%</span>
-                        </div>
-                        <Progress value={metric.value} className="h-2" />
-                      </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className={`capitalize text-white ${getStatusColor(service.status)}`}
+                    >
+                      {service.status}
+                    </Badge>
+                  </div>
                 ))}
               </div>
-            </TabsContent>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <TabsContent value="services" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Server className="h-5 w-5" />
-                    <span>Service Status</span>
-                  </CardTitle>
-                  <CardDescription>Current status of all platform services</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {systemStatus.map((service, index) => (
+        <TabsContent value="security" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Shield className="h-5 w-5" />
+                <span>Security Events</span>
+              </CardTitle>
+              <CardDescription>Recent security incidents and alerts</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {securityEvents.map((event, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start justify-between p-4 rounded-lg bg-muted/50"
+                  >
+                    <div className="flex items-start space-x-3">
                       <div
-                        key={index}
-                        className="flex items-center justify-between p-4 rounded-lg bg-muted/50"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div
-                            className={`w-3 h-3 rounded-full ${getStatusColor(service.status)}`}
-                          ></div>
-                          <div>
-                            <p className="font-medium">{service.service}</p>
-                            <p className="text-sm text-muted-foreground">
-                              Uptime: {service.uptime} • Response: {service.responseTime}
-                            </p>
-                          </div>
+                        className={`w-2 h-2 rounded-full mt-2 ${getSeverityColor(event.severity)}`}
+                      ></div>
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <p className="font-medium">{event.type}</p>
+                          <Badge
+                            variant="secondary"
+                            className={`text-xs text-white ${getSeverityColor(event.severity)}`}
+                          >
+                            {event.severity}
+                          </Badge>
                         </div>
-                        <Badge
-                          variant="secondary"
-                          className={`capitalize text-white ${getStatusColor(service.status)}`}
-                        >
-                          {service.status}
-                        </Badge>
+                        <p className="text-sm text-muted-foreground">{event.description}</p>
+                        <p className="text-xs text-muted-foreground">{event.timestamp}</p>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <TabsContent value="security" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Shield className="h-5 w-5" />
-                    <span>Security Events</span>
-                  </CardTitle>
-                  <CardDescription>Recent security incidents and alerts</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {securityEvents.map((event, index) => (
-                      <div
-                        key={index}
-                        className="flex items-start justify-between p-4 rounded-lg bg-muted/50"
-                      >
-                        <div className="flex items-start space-x-3">
-                          <div
-                            className={`w-2 h-2 rounded-full mt-2 ${getSeverityColor(event.severity)}`}
-                          ></div>
-                          <div className="space-y-1">
-                            <div className="flex items-center space-x-2">
-                              <p className="font-medium">{event.type}</p>
-                              <Badge
-                                variant="secondary"
-                                className={`text-xs text-white ${getSeverityColor(event.severity)}`}
-                              >
-                                {event.severity}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">{event.description}</p>
-                            <p className="text-xs text-muted-foreground">{event.timestamp}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="logs" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Database className="h-5 w-5" />
-                    <span>System Logs</span>
-                  </CardTitle>
-                  <CardDescription>Recent system events and error logs</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-background border rounded-lg p-4 font-mono text-sm space-y-1 max-h-96 overflow-y-auto">
-                    <div className="text-severity-low">
-                      [2024-01-15 14:23:15] INFO: System health check completed successfully
-                    </div>
-                    <div className="text-muted-foreground">
-                      [2024-01-15 14:22:45] DEBUG: Database connection pool optimized
-                    </div>
-                    <div className="text-severity-medium">
-                      [2024-01-15 14:21:33] WARN: High memory usage detected on server-02
-                    </div>
-                    <div className="text-muted-foreground">
-                      [2024-01-15 14:20:12] INFO: Backup process initiated
-                    </div>
-                    <div className="text-severity-high">
-                      [2024-01-15 14:19:45] ERROR: Failed to connect to external API endpoint
-                    </div>
-                    <div className="text-muted-foreground">
-                      [2024-01-15 14:18:23] INFO: User session cleanup completed
-                    </div>
-                    <div className="text-severity-low">
-                      [2024-01-15 14:17:56] INFO: Security scan completed - no threats detected
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </ScrollFadeIn>
-      </div>
-    </PageTransition>
+        <TabsContent value="logs" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Database className="h-5 w-5" />
+                <span>System Logs</span>
+              </CardTitle>
+              <CardDescription>Recent system events and error logs</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-background border rounded-lg p-4 font-mono text-sm space-y-1 max-h-96 overflow-y-auto">
+                <div className="text-severity-low">
+                  [2024-01-15 14:23:15] INFO: System health check completed successfully
+                </div>
+                <div className="text-muted-foreground">
+                  [2024-01-15 14:22:45] DEBUG: Database connection pool optimized
+                </div>
+                <div className="text-severity-medium">
+                  [2024-01-15 14:21:33] WARN: High memory usage detected on server-02
+                </div>
+                <div className="text-muted-foreground">
+                  [2024-01-15 14:20:12] INFO: Backup process initiated
+                </div>
+                <div className="text-severity-high">
+                  [2024-01-15 14:19:45] ERROR: Failed to connect to external API endpoint
+                </div>
+                <div className="text-muted-foreground">
+                  [2024-01-15 14:18:23] INFO: User session cleanup completed
+                </div>
+                <div className="text-severity-low">
+                  [2024-01-15 14:17:56] INFO: Security scan completed - no threats detected
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 
