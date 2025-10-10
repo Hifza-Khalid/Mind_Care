@@ -100,6 +100,9 @@ import {
   Zap,
   Target,
 } from 'lucide-react';
+import PageTransition from '@/components/ui/PageTransition';
+import { useAuth } from '@/contexts/AuthContext';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 /**
  * AdminDashboard Component - Real-time mental health platform administration.
@@ -144,6 +147,8 @@ const AdminDashboard = () => {
     filterStudents,
     getStudentAnalytics,
   } = useAdminData();
+
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>('all');
@@ -308,18 +313,27 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Crisis Alerts */}
-        {crisisAlerts.filter((alert) => alert.status === 'active').length > 0 && (
-          <Alert className="border-red-200 bg-red-50">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-800">
-              <strong>
-                {crisisAlerts.filter((alert) => alert.status === 'active').length} active crisis
-                alerts
-              </strong>{' '}
-              require immediate attention.
-              <Button variant="link" className="p-0 ml-2 text-red-600 underline">
-                View Details
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex items-center space-x-2">
+                {user?.role !== 'admin' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setAutoRefresh(!autoRefresh)}
+                    className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
+                    {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
+                  </Button>
+                )}
+                <Button variant="outline" size="sm" onClick={refreshData}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh
+                </Button>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => exportData('all')}>
+                <Download className="h-4 w-4 mr-2" />
+                Export Data
               </Button>
             </AlertDescription>
           </Alert>

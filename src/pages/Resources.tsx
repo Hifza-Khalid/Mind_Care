@@ -723,81 +723,174 @@ const Resources = () => {
         </Button>
       </div>
 
-      {/* Resource Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredResources.map((resource) => {
-          const TypeIcon = getTypeIcon(resource.type);
+              {/* Filter Tabs */}
+              <Tabs defaultValue="category" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="category">Category</TabsTrigger>
+                  <TabsTrigger value="type">Type</TabsTrigger>
+                  <TabsTrigger value="language">Language</TabsTrigger>
+                </TabsList>
 
-          return (
-            <Card
-              key={resource.id}
-              className="group hover:shadow-medium transition-all duration-300 hover:scale-[1.02]"
+                <TabsContent value="category" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(categories).map(([key, category]) => {
+                      const noHover = ['stress', 'anxiety', 'study', 'crisis'].includes(key);
+                      const hoverClasses = noHover
+                        ? ''
+                        : `${category.color.replace('bg-', 'hover:bg-')} ${category.color.replace('bg-', 'dark:hover:bg-')}`;
+
+                      return (
+                        <Button
+                          key={key}
+                          variant={selectedCategory === key ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setSelectedCategory(key as keyof typeof categories)}
+                          className={`flex items-center space-x-1 text-sm text-foreground dark:text-white ${hoverClasses}`}
+                        >
+                          <category.icon className="h-4 w-4 text-muted-foreground dark:text-white" />
+                          <span>{category[currentLanguageContext] || category.en}</span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="type" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {(['all', 'article', 'video', 'audio', 'tool', 'pdf'] as const).map((type) => (
+                      <Button
+                        key={type}
+                        variant={selectedType === type ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedType(type)}
+                        className="capitalize text-foreground dark:text-white"
+                      >
+                        {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="language" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {(['all', ...Object.keys(languages)] as const).map((language) => (
+                      <Button
+                        key={language}
+                        variant={selectedLanguage === language ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
+                        className="flex items-center space-x-1 text-foreground dark:text-white"
+                      >
+                        {language === 'all' ? (
+                          <span>All Languages</span>
+                        ) : (
+                          <>
+                            <span className="text-sm">{languages[language as keyof typeof languages]?.icon}</span>
+                            <span>{languages[language as keyof typeof languages]?.name}</span>
+                          </>
+                        )}
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </ScrollFadeIn>
+
+        {/* Results Summary */}
+        <ScrollFadeIn yOffset={24} delay={0.1}>
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">
+              Showing {filteredResources.length} of {mockResources.length} resources
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // Generate a comprehensive PDF with all resources
+                const resourceList = filteredResources
+                  .map(
+                    (r) =>
+                      `${r.title}\n${r.description}\nType: ${r.type} | Duration: ${r.duration} | Language: ${r.language}\nAuthor: ${r.author || 'N/A'}\nURL: ${r.url || 'N/A'}\n---\n`
+                  )
+                  .join('\n');
+
+                const blob = new Blob([`Mind Buddy Resources Collection\n\n${resourceList}`], {
+                  type: 'text/plain',
+                });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'mind-buddy-resources.txt';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+              }}
             >
-              <CardHeader className="space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className={`p-2 rounded-md ${getTypeColor(resource.type)}`}>
-                      <TypeIcon className="h-4 w-4" />
-                    </div>
-                    <Badge
-                      variant="secondary"
-                      className={`${categories[resource.category]?.color} flex items-center space-x-1`}
-                    >
-                      {(() => {
-                        const CategoryIcon = categories[resource.category]?.icon || BookOpen;
-                        return <CategoryIcon className="h-3 w-3" />;
-                      })()}
-                      <span>
-                        {categories[resource.category]?.[currentLanguageContext] ||
-                          categories[resource.category]?.en}
-                      </span>
-                    </Badge>
-                    <Badge variant="secondary" className={getDifficultyColor(resource.difficulty)}>
-                      {resource.difficulty}
-                    </Badge>
-                    <Badge variant="outline" className="flex items-center space-x-1">
-                      <span>{languages[resource.language]?.icon}</span>
-                      <span className="text-xs">{languages[resource.language]?.name}</span>
-                    </Badge>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => toggleBookmark(resource.id)}
-                      title={resource.isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
-                    >
-                      <Bookmark
-                        className={`h-3 w-3 ${resource.isBookmarked ? 'fill-current text-primary' : 'text-muted-foreground'}`}
-                      />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => shareResource(resource)}
-                      title="Share resource"
-                    >
-                      <Share2 className="h-3 w-3 text-muted-foreground" />
-                    </Button>
-                  </div>
-                </div>
+              <Download className="h-4 w-4 mr-2" />
+              Export Resources
+            </Button>
+          </div>
+        </ScrollFadeIn>
 
-                <div className="space-y-2">
-                  <CardTitle className="text-lg leading-tight">{resource.title}</CardTitle>
-                  <CardDescription className="text-sm">{resource.description}</CardDescription>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <div className="flex items-center space-x-1">
-                    <Clock className="h-3 w-3" />
-                    <span>{resource.duration}</span>
-                  </div>
-                  {resource.views && (
-                    <div className="flex items-center space-x-1">
-                      <Users className="h-3 w-3" />
-                      <span>{resource.views.toLocaleString()} views</span>
+        {/* Resource Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredResources.map((resource, idx) => {
+            const TypeIcon = getTypeIcon(resource.type);
+            return (
+              <ScrollFadeIn key={resource.id} delay={0.05 * idx}>
+                <Card
+                  key={resource.id}
+                  className="group hover:shadow-medium transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <CardHeader className="space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className={`p-2 rounded-md ${getTypeColor(resource.type)}`}>
+                          <TypeIcon className="h-4 w-4" />
+                        </div>
+                        <Badge
+                          variant="secondary"
+                          className={`${categories[resource.category]?.color} flex items-center space-x-1`}
+                        >
+                          {(() => {
+                            const CategoryIcon = categories[resource.category]?.icon || BookOpen;
+                            return <CategoryIcon className="h-3 w-3" />;
+                          })()}
+                          <span>
+                            {categories[resource.category]?.[currentLanguageContext] ||
+                              categories[resource.category]?.en}
+                          </span>
+                        </Badge>
+                        <Badge variant="secondary" className={getDifficultyColor(resource.difficulty)}>
+                          {resource.difficulty}
+                        </Badge>
+                        <Badge variant="outline" className="flex items-center space-x-1">
+                          <span>{languages[resource.language]?.icon}</span>
+                          <span className="text-xs">{languages[resource.language]?.name}</span>
+                        </Badge>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => toggleBookmark(resource.id)}
+                          title={resource.isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+                        >
+                          <Bookmark
+                            className={`h-3 w-3 ${resource.isBookmarked ? 'fill-current text-primary' : 'text-muted-foreground'}`}
+                          />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => shareResource(resource)}
+                          title="Share resource"
+                        >
+                          <Share2 className="h-3 w-3 text-muted-foreground" />
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>
