@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import Footer from '@/components/layout/Footer';
-import heroImage from '@/assets/freepik__retouch__90823.png';
 import {
   MessageCircle,
   Calendar,
@@ -32,8 +31,6 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, ComponentType, SVGProps } from 'react';
 import type { User } from '@/types/auth';
-import PageTransition from '@/components/ui/PageTransition';
-import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -63,15 +60,12 @@ const Index = () => {
     );
   }
 
+  // Debug: Always show guest page for now to test
+  console.log('Auth state:', { user, isLoading });
+  
   // Always show the landing page, but customize content based on auth status
-  return user ? (
-    <PageTransition>
-      <AuthenticatedHomePage user={user} showWelcomeBack={showWelcomeBack} />
-    </PageTransition>
-  ) : (
-    <PageTransition>
-      <GuestHomePage />
-    </PageTransition>
+  return (
+    <GuestHomePage />
   );
 };
 
@@ -401,7 +395,7 @@ const AuthenticatedHomePage = ({
         </section>
       </ScrollFadeIn>
       <Footer />
-    </PageTransition>
+    </div>
   );
 };
 
@@ -892,7 +886,7 @@ const GuestHomePage = () => {
         </section>
       </ScrollFadeIn>
       <Footer />
-    </PageTransition>
+    </div>
   );
 };
 
