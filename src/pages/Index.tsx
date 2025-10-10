@@ -31,6 +31,9 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, ComponentType, SVGProps } from 'react';
 import type { User } from '@/types/auth';
+import PageTransition from '@/components/ui/PageTransition';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
+import heroImage from '../assets/freepik__retouch__90823.png';
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -395,7 +398,7 @@ const AuthenticatedHomePage = ({
         </section>
       </ScrollFadeIn>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 
@@ -886,7 +889,7 @@ const GuestHomePage = () => {
         </section>
       </ScrollFadeIn>
       <Footer />
-    </div>
+    </PageTransition>
   );
 };
 

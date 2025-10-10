@@ -59,6 +59,19 @@ const EnhancedThemeSettings = () => {
     }
   }, []);
 
+  // Apply reduce-motion class if the user previously set it
+  useEffect(() => {
+    try {
+      if (settings?.preferences?.reduceMotion) {
+        document.documentElement.classList.add('reduce-motion');
+      } else {
+        document.documentElement.classList.remove('reduce-motion');
+      }
+    } catch (e) {
+      // ignore (SSR)
+    }
+  }, [settings?.preferences?.reduceMotion]);
+
   const requestLocation = async () => {
     if ('geolocation' in navigator) {
       try {
@@ -139,10 +152,11 @@ const EnhancedThemeSettings = () => {
       </Card>
 
       <Tabs defaultValue="basic" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="basic">Basic Settings</TabsTrigger>
           <TabsTrigger value="schedule">Auto-Schedule</TabsTrigger>
           <TabsTrigger value="reading">Reading Mode</TabsTrigger>
+          <TabsTrigger value="wallpaper">Wallpaper</TabsTrigger>
         </TabsList>
 
         {/* Basic Theme Settings */}
@@ -240,6 +254,33 @@ const EnhancedThemeSettings = () => {
                           preferences: { ...settings.preferences, smoothTransitions: checked },
                         })
                       }
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>Respect reduced motion</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Reduce animations and motion to respect system accessibility settings
+                      </p>
+                    </div>
+                    <Switch
+                      checked={settings.preferences.reduceMotion || false}
+                      onCheckedChange={(checked) => {
+                        updateSettings({
+                          preferences: { ...settings.preferences, reduceMotion: checked },
+                        });
+
+                        try {
+                          if (checked) {
+                            document.documentElement.classList.add('reduce-motion');
+                          } else {
+                            document.documentElement.classList.remove('reduce-motion');
+                          }
+                        } catch (e) {
+                          // server-side rendering guard
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -642,6 +683,249 @@ const EnhancedThemeSettings = () => {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        {/* Dynamic Wallpaper Settings */}
+        <TabsContent value="wallpaper" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Palette className="h-5 w-5" />
+                <span>Dynamic Wallpaper</span>
+              </CardTitle>
+              <CardDescription>
+                Customize your background with dynamic gradients or images that change with your theme
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>Enable Dynamic Wallpaper</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Automatically change background based on theme
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.wallpaper.enabled}
+                  onCheckedChange={(checked) =>
+                    updateSettings({
+                      wallpaper: { ...settings.wallpaper, enabled: checked },
+                    })
+                  }
+                />
+              </div>
+
+              {settings.wallpaper.enabled && (
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label>Wallpaper Type</Label>
+                    <Select
+                      value={settings.wallpaper.type}
+                      onValueChange={(value: 'gradient' | 'image') =>
+                        updateSettings({
+                          wallpaper: { ...settings.wallpaper, type: value },
+                        })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="gradient">Gradient</SelectItem>
+                        <SelectItem value="image">Image</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {settings.wallpaper.type === 'gradient' ? (
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <Label>Light Theme Gradient</Label>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>From Color</Label>
+                            <Input
+                              type="color"
+                              value={settings.wallpaper.light.gradient?.from || '#fde68a'}
+                              onChange={(e) =>
+                                updateSettings({
+                                  wallpaper: {
+                                    ...settings.wallpaper,
+                                    light: {
+                                      ...settings.wallpaper.light,
+                                      gradient: {
+                                        ...settings.wallpaper.light.gradient,
+                                        from: e.target.value,
+                                      },
+                                    },
+                                  },
+                                })
+                              }
+                              className="w-full h-12"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>To Color</Label>
+                            <Input
+                              type="color"
+                              value={settings.wallpaper.light.gradient?.to || '#93c5fd'}
+                              onChange={(e) =>
+                                updateSettings({
+                                  wallpaper: {
+                                    ...settings.wallpaper,
+                                    light: {
+                                      ...settings.wallpaper.light,
+                                      gradient: {
+                                        ...settings.wallpaper.light.gradient,
+                                        to: e.target.value,
+                                      },
+                                    },
+                                  },
+                                })
+                              }
+                              className="w-full h-12"
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="h-24 rounded-lg transition-all"
+                          style={{
+                            background: `linear-gradient(to right, ${
+                              settings.wallpaper.light.gradient?.from || '#fde68a'
+                            }, ${settings.wallpaper.light.gradient?.to || '#93c5fd'})`,
+                          }}
+                        />
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label>Dark Theme Gradient</Label>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>From Color</Label>
+                            <Input
+                              type="color"
+                              value={settings.wallpaper.dark.gradient?.from || '#0f172a'}
+                              onChange={(e) =>
+                                updateSettings({
+                                  wallpaper: {
+                                    ...settings.wallpaper,
+                                    dark: {
+                                      ...settings.wallpaper.dark,
+                                      gradient: {
+                                        ...settings.wallpaper.dark.gradient,
+                                        from: e.target.value,
+                                      },
+                                    },
+                                  },
+                                })
+                              }
+                              className="w-full h-12"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>To Color</Label>
+                            <Input
+                              type="color"
+                              value={settings.wallpaper.dark.gradient?.to || '#1e293b'}
+                              onChange={(e) =>
+                                updateSettings({
+                                  wallpaper: {
+                                    ...settings.wallpaper,
+                                    dark: {
+                                      ...settings.wallpaper.dark,
+                                      gradient: {
+                                        ...settings.wallpaper.dark.gradient,
+                                        to: e.target.value,
+                                      },
+                                    },
+                                  },
+                                })
+                              }
+                              className="w-full h-12"
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="h-24 rounded-lg transition-all"
+                          style={{
+                            background: `linear-gradient(to right, ${
+                              settings.wallpaper.dark.gradient?.from || '#0f172a'
+                            }, ${settings.wallpaper.dark.gradient?.to || '#1e293b'})`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <Label>Light Theme Image</Label>
+                        <Input
+                          type="url"
+                          placeholder="Enter image URL for light theme"
+                          value={settings.wallpaper.light.imageUrl || ''}
+                          onChange={(e) =>
+                            updateSettings({
+                              wallpaper: {
+                                ...settings.wallpaper,
+                                light: {
+                                  ...settings.wallpaper.light,
+                                  imageUrl: e.target.value,
+                                },
+                              },
+                            })
+                          }
+                        />
+                        {settings.wallpaper.light.imageUrl && (
+                          <div
+                            className="h-48 rounded-lg bg-cover bg-center transition-all"
+                            style={{
+                              backgroundImage: `url(${settings.wallpaper.light.imageUrl})`,
+                            }}
+                          />
+                        )}
+                      </div>
+
+                      <div className="space-y-4">
+                        <Label>Dark Theme Image</Label>
+                        <Input
+                          type="url"
+                          placeholder="Enter image URL for dark theme"
+                          value={settings.wallpaper.dark.imageUrl || ''}
+                          onChange={(e) =>
+                            updateSettings({
+                              wallpaper: {
+                                ...settings.wallpaper,
+                                dark: {
+                                  ...settings.wallpaper.dark,
+                                  imageUrl: e.target.value,
+                                },
+                              },
+                            })
+                          }
+                        />
+                        {settings.wallpaper.dark.imageUrl && (
+                          <div
+                            className="h-48 rounded-lg bg-cover bg-center transition-all"
+                            style={{
+                              backgroundImage: `url(${settings.wallpaper.dark.imageUrl})`,
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertDescription>
+                      Changes will be applied immediately. The wallpaper will update automatically when
+                      switching between light and dark themes.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

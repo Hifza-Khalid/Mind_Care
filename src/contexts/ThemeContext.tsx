@@ -118,6 +118,31 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       root.style.setProperty('--custom-accent', settings.preferences.customAccentColor);
     }
 
+    // Apply dynamic wallpaper
+    if (settings.wallpaper?.enabled) {
+      if (settings.wallpaper.type === 'gradient') {
+        const gradient = newTheme === 'dark' ? settings.wallpaper.dark.gradient : settings.wallpaper.light.gradient;
+        if (gradient) {
+          document.body.style.setProperty(
+            '--dynamic-wallpaper',
+            `linear-gradient(to right, ${gradient.from}, ${gradient.to})`
+          );
+          document.body.style.background = `linear-gradient(to right, ${gradient.from}, ${gradient.to})`;
+        }
+      } else {
+        const imageUrl = newTheme === 'dark' ? settings.wallpaper.dark.imageUrl : settings.wallpaper.light.imageUrl;
+        if (imageUrl) {
+          document.body.style.setProperty('--dynamic-wallpaper', `url(${imageUrl})`);
+          document.body.style.background = `url(${imageUrl})`;
+        }
+      }
+      document.body.classList.add('has-dynamic-wallpaper');
+    } else {
+      document.body.classList.remove('has-dynamic-wallpaper');
+      document.body.style.removeProperty('--dynamic-wallpaper');
+      document.body.style.background = '';
+    }
+
     // Save settings
     localStorage.setItem('enhanced-theme-settings', JSON.stringify(settings));
   }, [settings, determineTheme, checkScheduledTime]);
