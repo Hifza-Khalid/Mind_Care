@@ -468,16 +468,11 @@ const GuestHomePage = () => {
     },
   ];
 
-<<<<<<< HEAD
-  // faq rendering 
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-=======
   // faq rendering
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
->>>>>>> 5a04779f76268b7512a60f094ca48d8482410776
 
   return (
     <PageTransition>
@@ -535,7 +530,6 @@ const GuestHomePage = () => {
                 </span>
               </h1>
 
-<<<<<<< HEAD
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
@@ -637,12 +631,6 @@ const GuestHomePage = () => {
               <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
                 Join thousands of students who have found support, community, and professional care
                 through MindBuddy.
-=======
-              <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed">
-                Experience stigma-free, confidential mental health support designed specifically for
-                students. Get immediate AI assistance, book professional counseling, and connect
-                with a supportive community.
->>>>>>> 5a04779f76268b7512a60f094ca48d8482410776
               </p>
             </div>
 
@@ -856,7 +844,6 @@ const GuestHomePage = () => {
                     />
                   ))}
                 </div>
-<<<<<<< HEAD
 
                 <blockquote className="text-xl md:text-2xl font-medium leading-relaxed">
                   "{testimonials[activeTestimonial].content}"
@@ -882,8 +869,6 @@ const GuestHomePage = () => {
                       }`}
                   />
                 ))}
-=======
->>>>>>> 5a04779f76268b7512a60f094ca48d8482410776
               </div>
             </div>
           </div>
@@ -1148,14 +1133,10 @@ const StatsCard = ({ title, stats }: StatsCardProps) => {
   );
 };
 
-<<<<<<< HEAD
 // new updated one 
 
 import { motion, AnimatePresence } from "framer-motion";
 
-=======
-// new updated one
->>>>>>> 5a04779f76268b7512a60f094ca48d8482410776
 interface FAQItemProps {
   question: string;
   answer: string;
@@ -1166,7 +1147,6 @@ interface FAQItemProps {
 const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
   return (
     <div
-<<<<<<< HEAD
       className="border rounded-2xl p-4 mb-4 shadow-sm cursor-pointer bg-background transition hover:shadow-md"
       onClick={onClick}
     >
@@ -1189,27 +1169,6 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
           </motion.div>
         )}
       </AnimatePresence>
-=======
-      className={`enhanced-card ${isOpen ? 'border border-black rounded-lg' : 'border border-white rounded-lg'}`}
-    >
-      <button
-        onClick={onClick}
-        className="w-full p-6 text-left flex justify-between items-center hover:bg-muted/10 transition-colors duration-200"
-      >
-        <span className="font-medium text-lg pr-4">{question}</span>
-        <ChevronDown
-          className={`h-5 w-5 text-muted-foreground transition-transform duration-400 flex-shrink-0 ${
-            isOpen ? 'transform rotate-180' : ''
-          }`}
-        />
-      </button>
-
-      <div
-        className={`overflow-hidden transition-all duration-400 ease-in-out ${isOpen ? 'max-h-40 p-5 opacity-100' : 'max-h-0 opacity-0 p-0'}`}
-      >
-        <div className="text-muted-foreground leading-relaxed border-t pt-4">{answer}</div>
-      </div>
->>>>>>> 5a04779f76268b7512a60f094ca48d8482410776
     </div>
   );
 };
