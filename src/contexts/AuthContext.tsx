@@ -71,6 +71,13 @@ const secureStorage = {
   }
 };
 
+// Helper function to ensure user data doesn't contain password field
+const sanitizeUserData = (userData: any): User => {
+  // Create a copy and explicitly remove password field
+  const { password, ...cleanUserData } = userData;
+  return cleanUserData as User;
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -78,7 +85,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const storedUser = secureStorage.getItem('mindbuddy_user');
     if (storedUser) {
-      setUser(storedUser);
+      // Sanitize user data on load to ensure no password field exists
+      setUser(sanitizeUserData(storedUser));
     }
     setIsLoading(false);
   }, []);
@@ -86,23 +94,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     setIsLoading(true);
     
-    
+    // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
     
     const usersDb = secureStorage.getItem('mindbuddy_users_db') || {};
     const allUsers = { ...mockUsers, ...usersDb };
     const foundUser = allUsers[credentials.email];
     
-    //using bcrypt here
+    // Use bcrypt.compareSync for secure password comparison
     if (
       foundUser &&
       bcrypt.compareSync(credentials.password, foundUser.password) &&
       foundUser.user.role === credentials.role
     ) {
-      // Store only user data
-      const userDataWithoutPassword = { ...foundUser.user };
-      setUser(userDataWithoutPassword);
-      secureStorage.setItem('mindbuddy_user', userDataWithoutPassword);
+      // Explicitly sanitize user data - remove ANY password field
+      const cleanUserData = sanitizeUserData(foundUser.user);
+      
+      setUser(cleanUserData);
+      secureStorage.setItem('mindbuddy_user', cleanUserData);
       setIsLoading(false);
       return true;
     }
@@ -121,15 +130,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateUser = (userData: Partial<User>) => {
     if (user) {
-      const updatedUser = { ...user, ...userData };
-      setUser(updatedUser);
-      secureStorage.setItem('mindbuddy_user', updatedUser);
+      //Ensure no password data flows through update
+      // Explicitly remove password field if it somehow exists in userData
+      const { password: _, ...safeUserData } = userData as any;
       
+      const updatedUser = { ...user, ...safeUserData };
+      
+      // sanitize before storing
+      const cleanUpdatedUser = sanitizeUserData(updatedUser);
+      
+      setUser(cleanUpdatedUser);
+      secureStorage.setItem('mindbuddy_user', cleanUpdatedUser);
+      
+      // Update in database without password
       const usersDb = secureStorage.getItem('mindbuddy_users_db') || {};
       
       if (usersDb[user.email]) {
-        // Update user data 
-        usersDb[user.email].user = updatedUser;
+        // Only update the user object, NOT the password
+        usersDb[user.email].user = cleanUpdatedUser;
         secureStorage.setItem('mindbuddy_users_db', usersDb);
       }
     }
