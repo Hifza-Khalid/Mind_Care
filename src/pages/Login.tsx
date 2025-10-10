@@ -45,20 +45,20 @@ const Login = () => {
     });
 
     toast.promise(loginAndCheckPromise, {
-        pending: 'Signing in...',
-        success: 'Logged in successfully!',
-        error: 'Login failed. Please check your credentials.'
+      pending: 'Signing in...',
+      success: 'Logged in successfully!',
+      error: 'Login failed. Please check your credentials.',
     });
 
     try {
-        await loginAndCheckPromise;
-        // On success, navigate after a delay to let the user see the toast.
-        setTimeout(() => {
-            navigate('/');
-        }, 1500); // 1.5-second delay
+      await loginAndCheckPromise;
+      // On success, navigate after a delay to let the user see the toast.
+      setTimeout(() => {
+        navigate('/');
+      }, 1500); // 1.5-second delay
     } catch (error) {
-        // The error is already handled by toast.promise, so we just catch it here.
-        console.error("Authentication attempt failed.");
+      // The error is already handled by toast.promise, so we just catch it here.
+      console.error('Authentication attempt failed.');
     }
   };
 

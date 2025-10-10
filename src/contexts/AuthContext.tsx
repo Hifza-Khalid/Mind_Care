@@ -24,6 +24,78 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
+// Encryption utilities for NON-SENSITIVE data storage
+const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key-change-in-production';
+
+const encryptData = (data: string): string => {
+  return CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
+};
+
+const decryptData = (encryptedData: string): string | null => {
+  try {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    return decrypted || null;
+  } catch (error) {
+    console.error('Decryption failed:', error);
+    return null;
+  }
+};
+
+// Secure storage for user profile data ONLY (never contains passwords)
+const secureStorage = {
+  setItem: (key: string, value: any): void => {
+    const stringValue = JSON.stringify(value);
+    const encrypted = encryptData(stringValue);
+    sessionStorage.setItem(key, encrypted);
+  },
+  
+  getItem: (key: string): any | null => {
+    const encrypted = sessionStorage.getItem(key);
+    if (!encrypted) return null;
+    
+    const decrypted = decryptData(encrypted);
+    if (!decrypted) return null;
+    
+    try {
+      return JSON.parse(decrypted);
+    } catch (error) {
+      console.error('Parse failed:', error);
+      return null;
+    }
+  },
+  
+  removeItem: (key: string): void => {
+    sessionStorage.removeItem(key);
+  }
+};
+
+// SEPARATE storage for password database (uses sessionStorage directly, no encryption)
+// This is acceptable because passwords are already hashed with bcrypt
+const passwordStorage = {
+  setItem: (key: string, value: any): void => {
+    // Store password database directly without AES encryption
+    // Passwords are already protected by bcrypt hashing
+    sessionStorage.setItem(key, JSON.stringify(value));
+  },
+  
+  getItem: (key: string): any | null => {
+    const data = sessionStorage.getItem(key);
+    if (!data) return null;
+    
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Parse failed:', error);
+      return null;
+    }
+  },
+  
+  removeItem: (key: string): void => {
+    sessionStorage.removeItem(key);
+  }
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
