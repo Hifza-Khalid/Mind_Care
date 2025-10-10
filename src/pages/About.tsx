@@ -184,7 +184,7 @@ const About = () => {
           </div>
         </section></ScrollFadeIn>
 
-        <ScrollFadeIn yOffset={24} delay={0.1}><section className="py-16 bg-gradient-aurora text-white">
+  <ScrollFadeIn yOffset={24} delay={0.1}><section className="py-16 bg-gradient-aurora text-white dark:bg-gradient-to-br dark:from-primary/20 dark:via-transparent dark:to-accent/10">
           <div className="container mx-auto text-center">
             <div className="max-w-3xl mx-auto space-y-6">
               <h3 className="text-2xl md:text-3xl font-bold">Ready to learn more or get help?</h3>
@@ -193,7 +193,10 @@ const About = () => {
                 services.
               </p>
               <div className="flex justify-center gap-4">
-                <Button asChild className="text-white px-8 py-3 rounded-full">
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-primary to-primary/90 shadow-premium hover:shadow-floating hover:scale-[1.02] text-white px-8 py-3 rounded-full"
+                >
                   <Link to="/login">Get Started</Link>
                 </Button>
               </div>
