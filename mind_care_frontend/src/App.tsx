@@ -13,6 +13,7 @@ import NotificationContainer from '@/components/notifications/NotificationContai
 import { lazy, Suspense } from 'react';
 import { ErrorBoundary, PageErrorBoundary } from '@/components/error';
 import ScrollToTop from './components/layout/scrollToTop';
+import Signup from './pages/Signup';
 
 // Lazy load pages for better performance
 const Index = lazy(() => import('./pages/Index'));
@@ -94,6 +95,7 @@ const App = () => (
                       <Route path="/" element={<Index />} />
                       <Route path="/contact" element={<ContactUs />} />
                       <Route path="*" element={<NotFound />} />
+                      <Route path="/signup" element={<Signup />} />
                       <Route path="/app" element={<Layout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
@@ -114,6 +116,7 @@ const App = () => (
                         <Route path="moderation" element={<ContentModeration />} />
                         <Route path="chat" element={<AIChat />} />
                         <Route path="error-demo" element={<ErrorBoundaryDemo />} />
+                        
 
                         <Route path="*" element={<NotFound />} />
                         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
