@@ -458,18 +458,120 @@ const GuestHomePage = () => {
               Trusted by 10,000+ Students
             </Badge>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
-              Your Mental Health
-              <br />
-              <span className="bg-gradient-aurora bg-clip-text text-transparent">Matters Most</span>
-            </h1>
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
+                Your Mental Health
+                <br />
+                <span className="bg-gradient-aurora bg-clip-text text-transparent">
+                  Matters Most
+                </span>
+              </h1>
+            </div>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto font-medium leading-relaxed">
-              Experience stigma-free, confidential mental health support designed specifically for
-              students. Get immediate AI assistance, book professional counseling, and connect with
-              a supportive community.
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: Users,
+                number: 10000,
+                suffix: '+',
+                label: 'Students Helped',
+                description: 'Across 200+ Universities',
+              },
+              {
+                icon: MessageCircle,
+                number: 95,
+                suffix: '%',
+                label: 'Crisis Detection Rate',
+                description: 'AI-Powered Screening',
+              },
+              {
+                icon: Heart,
+                number: 4.9,
+                suffix: '/5',
+                label: 'Satisfaction Rating',
+                description: 'From Our Students',
+              },
+              {
+                icon: TrendingUp,
+                number: 78,
+                suffix: '%',
+                label: 'Improved Wellbeing',
+                description: 'Within First Month',
+              },
+            ].map((stat, index) => (
+              <div key={index} className="enhanced-card p-6 text-center">
+                <stat.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
+                <div className="text-4xl font-bold text-primary mb-2">
+                  <AnimatedCounter end={stat.number} suffix={stat.suffix} />
+                </div>
+                <div className="font-semibold text-lg mb-1">{stat.label}</div>
+                <div className="text-sm text-muted-foreground">{stat.description}</div>
+              </div>
+            ))}
+          </div>
+          </div>
+        </section>
+      </ScrollFadeIn>
+
+      {/* Enhanced Features Section */}
+      <ScrollFadeIn yOffset={24} delay={0.1}>
+        <section id="learn-more" className="py-20 px-4 bg-background">
+        <div className="container mx-auto">
+          <div className="text-center space-y-4 mb-16">
+            <Badge variant="outline" className="mb-4">
+              <Award className="h-4 w-4 mr-2" />
+              Award-Winning Platform
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-bold">
+              Everything You Need for Mental Wellness
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Comprehensive, evidence-based support designed specifically for students,
+              backed by mental health professionals and cutting-edge AI technology.
             </p>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <FeatureCard
+              icon={MessageCircle}
+              title="AI Crisis Detection"
+              description="Advanced PHQ-9 and GAD-7 screening with immediate crisis intervention and professional referrals"
+              badge="Instant Help"
+              features={['24/7 Availability', 'Crisis Detection', 'Immediate Response']}
+            />
+            <FeatureCard
+              icon={Calendar}
+              title="Professional Counseling"
+              description="Licensed therapists and counselors available for confidential sessions with flexible scheduling"
+              badge="Licensed Care"
+              features={['Licensed Therapists', 'Flexible Scheduling', 'Complete Privacy']}
+            />
+            <FeatureCard
+              icon={BookOpen}
+              title="Wellness Resources"
+              description="Evidence-based materials, guided meditations, stress management tools, and academic support"
+              badge="Self-Help Tools"
+              features={['Guided Meditation', 'Study Tips', 'Stress Management']}
+            />
+            <FeatureCard
+              icon={Users}
+              title="Peer Community"
+              description="Anonymous support groups, peer mentorship, and moderated discussions in a safe environment"
+              badge="Safe Community"
+              features={['Anonymous Groups', 'Peer Mentors', 'Moderated Chats']}
+            />
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <div className="bg-gradient-primary p-8 rounded-2xl text-white mb-8 flex flex-col ">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white drop-shadow-sm">
+                Ready to Start Your Wellness Journey?
+              </h3>
+              <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
+                Join thousands of students who have found support, community, and professional care
+                through MindBuddy.
+              </p>
+            </div>
 
           <div className="flex justify-center items-center slide-up">
             <Button
@@ -484,26 +586,28 @@ const GuestHomePage = () => {
             </Button>
           </div>
 
-          {/* Enhanced Trust Indicators */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pt-6 sm:pt-8 pb-8 sm:pb-12 max-w-4xl mx-auto px-2 sm:px-4">
-            {[
-              { icon: Shield, text: 'HIPAA Compliant', desc: 'Privacy Protected' },
-              { icon: Clock, text: '24/7 Available', desc: 'Always Here' },
-              { icon: Heart, text: 'Stigma-Free', desc: 'Safe Space' },
-              { icon: UserCheck, text: 'Licensed Staff', desc: 'Professional Care' },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="glass-card p-4 rounded-lg text-center hover:scale-105 transition-all duration-300"
-              >
-                <item.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <div className="text-sm font-semibold">{item.text}</div>
-                <div className="text-xs text-muted-foreground">{item.desc}</div>
-              </div>
-            ))}
+            {/* Enhanced Trust Indicators */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pt-6 sm:pt-8 pb-8 sm:pb-12 max-w-4xl mx-auto px-2 sm:px-4">
+              {[
+                { icon: Shield, text: 'HIPAA Compliant', desc: 'Privacy Protected' },
+                { icon: Clock, text: '24/7 Available', desc: 'Always Here' },
+                { icon: Heart, text: 'Stigma-Free', desc: 'Safe Space' },
+                { icon: UserCheck, text: 'Licensed Staff', desc: 'Professional Care' },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="glass-card p-4 rounded-lg text-center hover:scale-105 transition-all duration-300"
+                >
+                  <item.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  <div className="text-sm font-semibold">{item.text}</div>
+                  <div className="text-xs text-muted-foreground">{item.desc}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </section></ScrollFadeIn>
+      </section>
+      </ScrollFadeIn>
 
       {/* Statistics Section */}
       <ScrollFadeIn yOffset={28} delay={0.06}><section className="py-20 bg-gradient-calm">

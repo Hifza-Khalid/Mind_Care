@@ -288,45 +288,28 @@ const AdminDashboard = () => {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setAutoRefresh(!autoRefresh)}
-                  className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-                  {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
-                </Button>
-                <Button variant="outline" size="sm" onClick={refreshData}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh
-                </Button>
-              </div>
-              <Button variant="outline" size="sm" onClick={() => exportData('all')}>
-                <Download className="h-4 w-4 mr-2" />
-                Export Data
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
+                {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
+              </Button>
+              <Button variant="outline" size="sm" onClick={refreshData}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
               </Button>
             </div>
-          </div></ScrollFadeIn>
-
-          {/* Crisis Alerts */}
-          {crisisAlerts.filter((alert) => alert.status === 'active').length > 0 && (
-            <ScrollFadeIn yOffset={20} delay={0.06}><Alert className="border-red-200 bg-red-50">
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-800">
-                <strong>
-                  {crisisAlerts.filter((alert) => alert.status === 'active').length} active crisis
-                  alerts
-                </strong>{' '}
-                require immediate attention.
-                <Button variant="link" className="p-0 ml-2 text-red-600 underline">
-                  View Details
-                </Button>
-              </AlertDescription>
-            </Alert></ScrollFadeIn>
-          )}
+            <Button variant="outline" size="sm" onClick={() => exportData('all')}>
+              <Download className="h-4 w-4 mr-2" />
+              Export Data
+            </Button>
+          </div>
+        </div>
 
           {/* Search and Filters */}
           <ScrollFadeIn yOffset={18} delay={0.10}><Card className="bg-white/10 backdrop-blur-xl border-white/20">

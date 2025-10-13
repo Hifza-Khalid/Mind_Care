@@ -6,7 +6,6 @@ import Header from '@/components/layout/Header';
 import heroImage from '@/assets/freepik__retouch__90823.png';
 import { Shield, Heart, UserCheck, CheckCircle, Play } from 'lucide-react';
 import { useEffect } from 'react';
-import PageTransition from '@/components/ui/PageTransition';
 import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const About = () => {
@@ -184,7 +183,8 @@ const About = () => {
           </div>
         </section></ScrollFadeIn>
 
-        <ScrollFadeIn yOffset={24} delay={0.1}><section className="py-16 bg-gradient-aurora text-white">
+      <ScrollFadeIn yOffset={24} delay={0.1}>
+        <section className="py-16 bg-gradient-aurora text-white dark:bg-gradient-to-br dark:from-primary/20 dark:via-transparent dark:to-accent/10">
           <div className="container mx-auto text-center">
             <div className="max-w-3xl mx-auto space-y-6">
               <h3 className="text-2xl md:text-3xl font-bold">Ready to learn more or get help?</h3>
@@ -199,10 +199,10 @@ const About = () => {
               </div>
             </div>
           </div>
-        </section></ScrollFadeIn>
-        <Footer />
-      </div>
-    </PageTransition>
+        </section>
+      </ScrollFadeIn>
+      <Footer />
+    </div>
   );
 };
 

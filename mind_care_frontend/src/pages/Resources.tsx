@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import ReadingModeButton from '@/components/ui/reading-mode-button';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
   BookOpen,
@@ -607,26 +608,26 @@ const Resources = () => {
           </div>
         </ScrollFadeIn>
 
-        {/* Search & Filters */}
-        <ScrollFadeIn yOffset={32} delay={0.05}>
-          <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Filter className="h-5 w-5" />
-                <span>Find Resources</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search resources..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+      {/* Search & Filters */}
+      <ScrollFadeIn yOffset={24} delay={0.1}>
+        <Card className="shadow-soft">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Filter className="h-5 w-5" />
+            <span>Find Resources</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search resources..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
 
               {/* Filter Tabs */}
               <Tabs defaultValue="category" className="w-full">
@@ -669,32 +670,66 @@ const Resources = () => {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="language" className="mt-4">
-                  <div className="flex flex-wrap gap-2">
-                    {(['all', ...Object.keys(languages)] as const).map((language) => (
-                      <Button
-                        key={language}
-                        variant={selectedLanguage === language ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
-                        className="flex items-center space-x-1"
-                      >
-                        {language === 'all' ? (
-                          <span>All Languages</span>
-                        ) : (
-                          <>
-                            <span>{languages[language as keyof typeof languages]?.icon}</span>
-                            <span>{languages[language as keyof typeof languages]?.name}</span>
-                          </>
-                        )}
-                      </Button>
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </ScrollFadeIn>
+            <TabsContent value="language" className="mt-4">
+              <div className="flex flex-wrap gap-2">
+                {(['all', ...Object.keys(languages)] as const).map((language) => (
+                  <Button
+                    key={language}
+                    variant={selectedLanguage === language ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
+                    className="flex items-center space-x-1"
+                  >
+                    {language === 'all' ? (
+                      <span>All Languages</span>
+                    ) : (
+                      <>
+                        <span>{languages[language as keyof typeof languages]?.icon}</span>
+                        <span>{languages[language as keyof typeof languages]?.name}</span>
+                      </>
+                    )}
+                  </Button>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Results Summary */}
+      <div className="flex items-center justify-between">
+        <p className="text-muted-foreground">
+          Showing {filteredResources.length} of {mockResources.length} resources
+        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            // Generate a comprehensive PDF with all resources
+            const resourceList = filteredResources
+              .map(
+                (r) =>
+                  `${r.title}\n${r.description}\nType: ${r.type} | Duration: ${r.duration} | Language: ${r.language}\nAuthor: ${r.author || 'N/A'}\nURL: ${r.url || 'N/A'}\n---\n`
+              )
+              .join('\n');
+
+            const blob = new Blob([`Mind Buddy Resources Collection\n\n${resourceList}`], {
+              type: 'text/plain',
+            });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'mind-buddy-resources.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+          }}
+        >
+          <Download className="h-4 w-4 mr-2" />
+          Export Resources
+        </Button>
+      </div>
+      </ScrollFadeIn>
 
         {/* Results Summary */}
         <ScrollFadeIn yOffset={24} delay={0.1}>
@@ -790,26 +825,11 @@ const Resources = () => {
                         </Button>
                       </div>
                     </div>
-
-                    <div className="space-y-2">
-                      <CardTitle className="text-lg leading-tight">{resource.title}</CardTitle>
-                      <CardDescription className="text-sm">{resource.description}</CardDescription>
-                    </div>
                   </CardHeader>
 
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <div className="flex items-center space-x-1">
-                        <Clock className="h-3 w-3" />
-                        <span>{resource.duration}</span>
-                      </div>
-                      {resource.views && (
-                        <div className="flex items-center space-x-1">
-                          <Users className="h-3 w-3" />
-                          <span>{resource.views.toLocaleString()} views</span>
-                        </div>
-                      )}
-                    </div>
+                  <CardContent className="space-y-3">
+                    <h3 className="font-semibold text-lg leading-tight">{resource.title}</h3>
+                    <p className="text-muted-foreground text-sm">{resource.description}</p>
 
                     {resource.author && (
                       <div className="text-xs text-muted-foreground">
@@ -916,23 +936,23 @@ const Resources = () => {
                         </Button>
                       )}
 
-                      {/* Cultural Context Indicator */}
-                      {resource.culturalContext && (
-                        <Badge
-                          variant="outline"
-                          className="text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700"
-                        >
-                          {currentLanguageContext === 'hindi'
-                            ? 'स्थानीय संदर्भ'
-                            : currentLanguageContext === 'spanish'
-                              ? 'Contexto Local'
-                              : 'Local Context'}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </ScrollFadeIn>
+                  {/* Cultural Context Indicator */}
+                  {resource.culturalContext && (
+                    <Badge
+                      variant="outline"
+                      className="text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700"
+                    >
+                      {currentLanguageContext === 'hindi'
+                        ? 'स्थानीय संदर्भ'
+                        : currentLanguageContext === 'spanish'
+                          ? 'Contexto Local'
+                          : 'Local Context'}
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollFadeIn>
             );
           })}
         </div>
