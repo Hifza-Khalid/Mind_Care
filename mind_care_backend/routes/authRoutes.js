@@ -10,32 +10,52 @@ const router = express.Router();
 router.get("/google", (req, res, next) => {
   const role = req.query.role || "student"; // default role if not provided
   // Store role in session temporarily
-  req.session.role = role;
-  next();
-}, passport.authenticate("google", { scope: ["profile", "email"] }));
+  // Pass role in OAuth 'state' parameter (Google returns it back safely)
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    state: JSON.stringify({ role }),
+  })(req, res, next);
+});
 
-router.get("/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  async (req, res) => {
-    try {
-      const role = req.session.role || "student";
+router.get(
+  "/google/callback",
+  (req, res, next) => {
+    passport.authenticate(
+      "google",
+      { session: false }, // if you use JWT
+      (err, user, info) => {
+        if (err) {
+          console.error("Passport error:", err);
+          return res.redirect(`http://localhost:8081/login?error=internal`);
+        }
+        if (!user) {
+          // This is the role mismatch case
+          const message = info?.message || "Authentication failed";
+          return res.redirect(
+            `http://localhost:8081/login?error=${encodeURIComponent(message)}`
+          );
+        }
 
-      // Update user role in DB
-      await User.findByIdAndUpdate(req.user._id, { role });
+        // User authenticated, generate JWT
+        const token = jwt.sign(
+          { id: user._id, role: user.role,name: user.name },
+          process.env.JWT_SECRET,
+          { expiresIn: "7d" }
+        );
 
-      // Generate JWT
-      const token = jwt.sign(
-        { id: req.user._id, role },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" }
-      );
+        res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
 
-      res.cookie("token", token, { httpOnly: true });
-      res.redirect(`http://localhost:8081/dashboard`);
-    } catch (err) {
-      console.error(err);
-      res.redirect("/login");
-    }
+        // Redirect based on user role
+        let redirectUrl = "http://localhost:8081/app/dashboard";
+        if (user.role === "student")
+          redirectUrl = "http://localhost:8081/app/student-dashboard";
+        if (user.role === "counselor")
+          redirectUrl = "http://localhost:8081/app/counselor-dashboard";
+        if (user.role === "admin") redirectUrl = "http://localhost:8081/app/users";
+
+        res.redirect(redirectUrl);
+      }
+    )(req, res, next);
   }
 );
 

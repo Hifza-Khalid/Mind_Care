@@ -211,8 +211,8 @@ const AuthenticatedHomePage = ({
                   size="lg"
                   className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-4 rounded-full"
                 >
-                  <Link to={getDashboardPath()}>
-                    Go to My Dashboard
+                  <Link to="/signup">
+                    Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>

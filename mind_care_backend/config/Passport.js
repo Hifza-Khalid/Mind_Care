@@ -4,33 +4,62 @@ import { User } from "../models/user.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      passReqToCallback: true,
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ googleId: profile.id });
+        console.log("🔹 Google OAuth callback triggered");
+        console.log("🔹 Profile:", profile.emails[0].value);
 
-        if (!user) {
-          let role = "student"; // default role
-          if (profile.emails[0].value.endsWith("@counselor.com")) role = "counselor";
-          if (profile.emails[0].value.endsWith("@admin.com")) role = "admin";
+        const email = profile.emails?.[0]?.value;
+        const googleId = profile.id;
 
-          user = await User.create({
-            googleId: profile.id,
-            email: profile.emails[0].value,
-            name: profile.displayName,
-            role,
-          });
+        // Parse state param safely
+        let requestedRole = "student";
+        if (req.query.state) {
+          try {
+            const stateData = JSON.parse(req.query.state);
+            requestedRole = stateData.role || "student";
+          } catch (err) {
+            console.warn("⚠️ Failed to parse state:", err);
+          }
         }
 
-        return done(null, user);
+        let user = await User.findOne({ email });
+
+        if (user) {
+          console.log("✅ User found in DB:", user.email);
+          if (user.role !== requestedRole) {
+            console.log(
+              `❌ Role mismatch: existing=${user.role}, requested=${requestedRole}`
+            );
+            return done(
+              null,
+              false,
+              { message: `Role mismatch: You are already registered as a ${user.role}` }
+            );
+          }
+          return done(null, user);
+        }
+
+        console.log("🆕 Creating new user...");
+        const newUser = await User.create({
+          googleId,
+          email,
+          name: profile.displayName,
+          role: requestedRole,
+        });
+
+        console.log("✅ User created:", newUser);
+        return done(null, newUser);
       } catch (err) {
+        console.error("🔥 Error in GoogleStrategy:", err);
         return done(err, null);
       }
     }

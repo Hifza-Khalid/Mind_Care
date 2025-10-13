@@ -22,7 +22,7 @@ const InstitutionSelection = lazy(() => import('./pages/InstitutionSelection'));
 const Resources = lazy(() => import('./pages/Resources'));
 const Forum = lazy(() => import('./pages/Forum'));
 const Booking = lazy(() => import('./pages/Booking'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Dashboard = lazy(() => import('./pages/admin-Dashboard'));
 const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
@@ -98,7 +98,7 @@ const App = () => (
                       <Route path="/signup" element={<Signup />} />
                       <Route path="/app" element={<Layout />}>
                         <Route index element={<Dashboard />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="admin-dashboard" element={<Dashboard />} />
                         <Route path="student-dashboard" element={<StudentDashboard />} />
                         <Route path="resources" element={<Resources />} />
                         <Route path="forum" element={<Forum />} />
