@@ -126,14 +126,19 @@ const NotificationSettings = () => {
 
       {/* Permission Alert */}
       {!hasPermission && (
-        <Alert className="border-orange-200 bg-orange-50">
-          <Info className="h-4 w-4" />
-          <AlertDescription className="flex items-center justify-between">
-            <span>
+        <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/20">
+          <Info className="h-4 w-4 text-orange-600 dark:text-orange-300" />
+          <AlertDescription className="flex items-center justify-between text-sm">
+            <span className="text-orange-700 dark:text-orange-100">
               Enable browser notifications to receive wellness reminders even when the app is
               closed.
             </span>
-            <Button onClick={requestPermission} size="sm" variant="outline">
+            <Button
+              onClick={requestPermission}
+              size="sm"
+              variant="outline"
+              className="text-orange-700 border-orange-300 hover:bg-orange-50 dark:text-orange-100 dark:border-orange-600 dark:hover:bg-orange-900/40"
+            >
               Enable Notifications
             </Button>
           </AlertDescription>

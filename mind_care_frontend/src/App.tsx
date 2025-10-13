@@ -1,5 +1,5 @@
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // for styling!
+import 'react-toastify/dist/ReactToastify.css';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -11,13 +11,14 @@ import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
 import { lazy, Suspense } from 'react';
-import { ErrorBoundary, PageErrorBoundary } from '@/components/error';
+import { ErrorBoundary } from '@/components/error';
 import ScrollToTop from './components/layout/scrollToTop';
 import Signup from './pages/Signup';
 
-// Lazy load pages for better performance
+
 const Index = lazy(() => import('./pages/Index'));
 const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Registration'));
 const InstitutionSelection = lazy(() => import('./pages/InstitutionSelection'));
 const Resources = lazy(() => import('./pages/Resources'));
 const Forum = lazy(() => import('./pages/Forum'));
@@ -38,11 +39,7 @@ const FeedbackDemo = lazy(() => import('./pages/FeedbackDemo'));
 const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
-
-// ✅ New: MentalHealthBlog
 const MentalHealthBlog = lazy(() => import('./pages/MentalHealthBlog'));
-
-// ✅ New: Error Boundary Demo
 const ErrorBoundaryDemo = lazy(() => import('./pages/ErrorBoundaryDemo'));
 
 const queryClient = new QueryClient();
@@ -126,7 +123,6 @@ const App = () => (
                 </PageErrorBoundary>
                 <ChatWidget />
                 <NotificationContainer />
-                {/* Scroll-to-Top button */}
                 <ScrollToTop />
               </BrowserRouter>
             </TooltipProvider>
@@ -136,6 +132,5 @@ const App = () => (
     </QueryClientProvider>
   </ErrorBoundary>
 );
-
 
 export default App;

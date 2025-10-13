@@ -1,48 +1,8 @@
-import { motion, useAnimation, useInView } from "framer-motion";
-import React, { useRef, useEffect } from "react";
+import { ReactNode } from 'react';
 
-interface ScrollFadeInProps {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-  yOffset?: number;
-}
-
-const ScrollFadeIn: React.FC<ScrollFadeInProps> = ({
-  children,
-  className,
-  delay = 0,
-  yOffset = 24,
-}) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-20% 0px" });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (inView) {
-      controls.start("animate");
-    }
-  }, [inView, controls]);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="initial"
-      animate={controls}
-      variants={{
-        initial: { opacity: 0, y: yOffset },
-        animate: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, delay, ease: [0.4, 0, 0.2, 1] },
-        },
-      }}
-      className={className}
-      style={{ willChange: "opacity, transform" }}
-    >
-      {children}
-    </motion.div>
-  );
+const ScrollFadeIn = ({ children, yOffset = 24, delay = 0 }: { children: ReactNode; yOffset?: number; delay?: number }) => {
+  // minimal wrapper - real implementation can add IntersectionObserver and animations
+  return <div className="scroll-fade-in" data-y-offset={yOffset} data-delay={delay}>{children}</div>;
 };
 
 export default ScrollFadeIn;

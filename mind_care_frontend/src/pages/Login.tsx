@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { Heart, Mail, Lock, User, Shield, GraduationCap } from 'lucide-react';
+import { Heart, Mail, Lock, User, Shield, GraduationCap, EyeIcon, EyeOffIcon, CheckCircle, X } from 'lucide-react';
 import { LoginCredentials } from '@/types/auth';
 import PageTransition from '@/components/ui/PageTransition';
 import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
@@ -47,6 +47,13 @@ const Login = () => {
       navigate('/'); // redirect to dashboard
     }
   }, [location, navigate]);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,22 +117,32 @@ const Login = () => {
     }
   };
 
+  // Live password validations
+  const password = credentials.password || '';
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const passwordValidations = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[^A-Za-z0-9]/.test(password),
+  };
+
   return (
-    <PageTransition>
-      <div className="flex flex-col bg-gradient-calm">
-        <main className="min-h-screen flex items-center justify-center p-4">
-          <div className="w-full max-w-md space-y-6">
-            <ScrollFadeIn yOffset={20}>
+    <div className="flex flex-col bg-gradient-calm">
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md space-y-6">
+          
               <div className="text-center space-y-2">
-                <Link to="/" className="flex items-center justify-center space-x-2 group">
-                  <Heart className="h-10 w-10 text-primary group-hover:text-secondary transition-colors" />
-                  <span className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    MindBuddy
-                  </span>
-                </Link>
-                <p className="text-muted-foreground">Your trusted mental health companion</p>
-              </div>
-            </ScrollFadeIn>
+              <Link to="/" className="flex items-center justify-center space-x-2 group">
+                <Heart className="h-10 w-10 text-primary group-hover:text-secondary transition-colors" />
+                <span className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  MindBuddy
+                </span>
+              </Link>
+              <p className="text-muted-foreground">Your trusted mental health companion</p>
+            </div>
+            
 
             <ScrollFadeIn yOffset={16} delay={0.07}>
               <Card className="shadow-trust">
@@ -184,34 +201,77 @@ const Login = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="password"
-                          type="password"
-                          placeholder="Enter your password"
-                          value={credentials.password}
-                          onChange={(e) =>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        value={credentials.password}
+                        onChange={(e) =>
                             setCredentials({ ...credentials, password: e.target.value })
                           }
-                          className="pl-10"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      variant="hero"
-                      size="lg"
-                      className="w-full"
-                      disabled={isLoading}
+                        className="pl-10"
+                        required
+                        onFocus={() => setPasswordFocused(true)}
+                      onBlur={() => setPasswordFocused(false)}
+                    />
+                    <button
+                      className="absolute right-4 top-3"
+                      onClick={togglePasswordVisibility}
+                      type="button"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
-                      {isLoading ? 'Signing In...' : 'Sign In'}
-                    </Button>
-                  </form>
+                      {showPassword ? (
+                        <EyeOffIcon className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <EyeIcon className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Password validation checklist (visible while typing or focused) */}
+                  {(passwordFocused || password.length > 0) && (
+                    <div className="mt-2 text-sm space-y-1" role="status" aria-live="polite">
+                    {(
+                      [
+                        { key: 'length', label: 'At least 8 characters' },
+                        { key: 'uppercase', label: 'An uppercase letter (A-Z)' },
+                        { key: 'lowercase', label: 'A lowercase letter (a-z)' },
+                        { key: 'number', label: 'A number (0-9)' },
+                        { key: 'special', label: 'A special character (!@#$...)' },
+                      ] as const
+                    ).map((rule) => {
+                      const ok = passwordValidations[rule.key as keyof typeof passwordValidations];
+                      return (
+                        <div key={rule.key} className="flex items-center gap-2">
+                          {ok ? (
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <X className="h-4 w-4 text-red-400" />
+                          )}
+                          <span className={`${ok ? 'text-green-600' : 'text-muted-foreground'}`}>
+                            {rule.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                        </div>
+                      )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    size="lg"
+                    className="w-full"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Signing In...' : 'Sign In'}
+                  </Button>
+                </form>
 
                   <Button
                     onClick={handleGoogleLogin}
@@ -223,27 +283,26 @@ const Login = () => {
                     <span>Sign in with Google</span>
                   </Button>
 
-                  <div className="mt-6 text-center text-sm">
-                    <span className="text-muted-foreground">Don’t have an account? </span>
-                    <Link to="/signup" className="text-primary hover:underline font-medium">
-                      Sign up
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </ScrollFadeIn>
+                <div className="mt-6 text-center text-sm">
+                  <span className="text-muted-foreground">Don’t have an account? </span>
+                  <Link to="/signup" className="text-primary hover:underline font-medium">
+                    Sign up
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+            
 
-            <ScrollFadeIn delay={0.11}>
+          
               <div className="text-center space-y-2 text-sm md:text-base text-muted-foreground">
-                <p>🔒 Your privacy is protected with end-to-end encryption</p>
-                <p>💬 Confidential support available 24/7</p>
-                <p>🏥 HIPAA compliant and stigma-free environment</p>
-              </div>
-            </ScrollFadeIn>
-          </div>
-        </main>
-      </div>
-    </PageTransition>
+              <p>🔒 Your privacy is protected with end-to-end encryption</p>
+              <p>💬 Confidential support available 24/7</p>
+              <p>🏥 HIPAA compliant and stigma-free environment</p>
+            </div>
+            
+        </div>
+      </main>
+    </div>
   );
 };
 

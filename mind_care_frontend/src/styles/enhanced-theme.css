@@ -1,5 +1,22 @@
 /* Simplified Theme Styles for Mental Health Platform */
 
+/* Dynamic Wallpaper */
+.has-dynamic-wallpaper {
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  transition: background 0.5s ease-in-out !important;
+}
+
+.has-dynamic-wallpaper .min-h-screen {
+  background: transparent !important;
+}
+
+.has-dynamic-wallpaper [data-theme="dark"],
+.has-dynamic-wallpaper [data-theme="light"] {
+  background: transparent !important;
+}
+
 /* Essential High Contrast Mode */
 .high-contrast {
   --background: 255 255 255;
