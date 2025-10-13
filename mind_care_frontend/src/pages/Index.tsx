@@ -532,8 +532,9 @@ const GuestHomePage = () => {
                   Matters Most
                 </span>
               </h1>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 icon: Users,
@@ -574,11 +575,13 @@ const GuestHomePage = () => {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </ScrollFadeIn>
 
       {/* Enhanced Features Section */}
-      <section id="learn-more" className="py-20 px-4 bg-background">
+      <ScrollFadeIn yOffset={24} delay={0.1}>
+        <section id="learn-more" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
           <div className="text-center space-y-4 mb-16">
             <Badge variant="outline" className="mb-4">
@@ -669,7 +672,8 @@ const GuestHomePage = () => {
               ))}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
       </ScrollFadeIn>
 
       {/* Statistics Section */}

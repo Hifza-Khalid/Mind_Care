@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import ReadingModeButton from '@/components/ui/reading-mode-button';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
   BookOpen,
@@ -603,7 +604,8 @@ const Resources = () => {
       </div>
 
       {/* Search & Filters */}
-      <Card className="shadow-soft">
+      <ScrollFadeIn yOffset={24} delay={0.1}>
+        <Card className="shadow-soft">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Filter className="h-5 w-5" />
@@ -722,81 +724,7 @@ const Resources = () => {
           Export Resources
         </Button>
       </div>
-
-              {/* Filter Tabs */}
-              <Tabs defaultValue="category" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="category">Category</TabsTrigger>
-                  <TabsTrigger value="type">Type</TabsTrigger>
-                  <TabsTrigger value="language">Language</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="category" className="mt-4">
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(categories).map(([key, category]) => {
-                      const noHover = ['stress', 'anxiety', 'study', 'crisis'].includes(key);
-                      const hoverClasses = noHover
-                        ? ''
-                        : `${category.color.replace('bg-', 'hover:bg-')} ${category.color.replace('bg-', 'dark:hover:bg-')}`;
-
-                      return (
-                        <Button
-                          key={key}
-                          variant={selectedCategory === key ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setSelectedCategory(key as keyof typeof categories)}
-                          className={`flex items-center space-x-1 text-sm text-foreground dark:text-white ${hoverClasses}`}
-                        >
-                          <category.icon className="h-4 w-4 text-muted-foreground dark:text-white" />
-                          <span>{category[currentLanguageContext] || category.en}</span>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="type" className="mt-4">
-                  <div className="flex flex-wrap gap-2">
-                    {(['all', 'article', 'video', 'audio', 'tool', 'pdf'] as const).map((type) => (
-                      <Button
-                        key={type}
-                        variant={selectedType === type ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSelectedType(type)}
-                        className="capitalize text-foreground dark:text-white"
-                      >
-                        {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
-                      </Button>
-                    ))}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="language" className="mt-4">
-                  <div className="flex flex-wrap gap-2">
-                    {(['all', ...Object.keys(languages)] as const).map((language) => (
-                      <Button
-                        key={language}
-                        variant={selectedLanguage === language ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSelectedLanguage(language as typeof selectedLanguage)}
-                        className="flex items-center space-x-1 text-foreground dark:text-white"
-                      >
-                        {language === 'all' ? (
-                          <span>All Languages</span>
-                        ) : (
-                          <>
-                            <span className="text-sm">{languages[language as keyof typeof languages]?.icon}</span>
-                            <span>{languages[language as keyof typeof languages]?.name}</span>
-                          </>
-                        )}
-                      </Button>
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </ScrollFadeIn>
+      </ScrollFadeIn>
 
         {/* Results Summary */}
         <ScrollFadeIn yOffset={24} delay={0.1}>
@@ -892,8 +820,11 @@ const Resources = () => {
                         </Button>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3">
+                    <h3 className="font-semibold text-lg leading-tight">{resource.title}</h3>
+                    <p className="text-muted-foreground text-sm">{resource.description}</p>
 
                 {resource.author && (
                   <div className="text-xs text-muted-foreground">
@@ -1016,9 +947,10 @@ const Resources = () => {
                 </div>
               </CardContent>
             </Card>
-          );
-        })}
-      </div>
+          </ScrollFadeIn>
+            );
+          })}
+        </div>
 
       {filteredResources.length === 0 && (
         <div className="text-center py-12">

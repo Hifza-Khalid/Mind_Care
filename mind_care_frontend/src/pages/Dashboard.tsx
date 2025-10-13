@@ -313,32 +313,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center space-x-2">
-                {user?.role !== 'admin' && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setAutoRefresh(!autoRefresh)}
-                    className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
-                  >
-                    <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-                    {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
-                  </Button>
-                )}
-                <Button variant="outline" size="sm" onClick={refreshData}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh
-                </Button>
-              </div>
-              <Button variant="outline" size="sm" onClick={() => exportData('all')}>
-                <Download className="h-4 w-4 mr-2" />
-                Export Data
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
-
         {/* Search and Filters */}
         <Card className="bg-white/10 backdrop-blur-xl border-white/20">
           <CardContent className="p-6">
