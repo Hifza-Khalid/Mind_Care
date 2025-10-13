@@ -11,7 +11,7 @@ import Layout from '@/components/layout/Layout';
 import ChatWidget from '@/components/chat/ChatWidget';
 import NotificationContainer from '@/components/notifications/NotificationContainer';
 import { lazy, Suspense } from 'react';
-import { ErrorBoundary } from '@/components/error';
+import { ErrorBoundary, PageErrorBoundary } from '@/components/error';
 import ScrollToTop from './components/layout/scrollToTop';
 import Signup from './pages/Signup';
 
@@ -40,7 +40,7 @@ const About = lazy(() => import('./pages/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 const MentalHealthBlog = lazy(() => import('./pages/MentalHealthBlog'));
-const ErrorBoundaryDemo = lazy(() => import('./pages/ErrorBoundaryDemo'));
+
 
 const queryClient = new QueryClient();
 
@@ -72,7 +72,7 @@ const App = () => (
               />
               <Sonner />
               <BrowserRouter>
-                <PageErrorBoundary>
+               
                   <Suspense
                     fallback={
                       <div className="flex items-center justify-center min-h-screen">
@@ -112,7 +112,7 @@ const App = () => (
                         <Route path="users" element={<UserManagement />} />
                         <Route path="moderation" element={<ContentModeration />} />
                         <Route path="chat" element={<AIChat />} />
-                        <Route path="error-demo" element={<ErrorBoundaryDemo />} />
+                     
                         
 
                         <Route path="*" element={<NotFound />} />
@@ -120,7 +120,6 @@ const App = () => (
                       </Route>
                     </Routes>
                   </Suspense>
-                </PageErrorBoundary>
                 <ChatWidget />
                 <NotificationContainer />
                 <ScrollToTop />
