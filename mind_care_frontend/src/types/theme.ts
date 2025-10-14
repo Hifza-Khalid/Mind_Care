@@ -11,14 +11,10 @@ export interface ThemeSchedule {
 
 export interface ReadingModeSettings {
   enabled: boolean;
-  fontSize: 'small' | 'medium' | 'large' | 'extra-large';
-  lineHeight: 'normal' | 'relaxed' | 'loose';
-  fontFamily: 'default' | 'serif' | 'mono' | 'dyslexic';
-  contrast: 'normal' | 'high';
-  reducedMotion: boolean;
-  warmColors: boolean;
-  backgroundColor: 'default' | 'sepia' | 'dark' | 'custom';
-  customBackground?: string;
+  fontSize: number;
+  lineHeight: number;
+  contrast: number;
+  isDyslexicFont: boolean;
 }
 
 export interface WallpaperSettings {
@@ -65,13 +61,10 @@ export const DEFAULT_THEME_SETTINGS: EnhancedThemeSettings = {
   },
   readingMode: {
     enabled: false,
-    fontSize: 'medium',
-    lineHeight: 'normal',
-    fontFamily: 'default',
-    contrast: 'normal',
-    reducedMotion: false,
-    warmColors: false,
-    backgroundColor: 'default',
+    fontSize: 16,
+    lineHeight: 1.5,
+    contrast: 100,
+    isDyslexicFont: false,
   },
   wallpaper: {
     enabled: false,
@@ -98,6 +91,36 @@ export const DEFAULT_THEME_SETTINGS: EnhancedThemeSettings = {
 };
 
 // CSS variables for reading mode
+export const readingModeStyles = `
+  :root {
+    --content-font-size: 16px;
+    --content-line-height: 1.5;
+    --content-contrast: 100%;
+  }
+
+  /* Add reading mode styles to text content when reading mode is enabled */
+  body.reading-mode {
+    font-size: var(--content-font-size) !important;
+    line-height: var(--content-line-height) !important;
+    filter: contrast(var(--content-contrast)) !important;
+  }
+
+  /* Target main content areas when reading mode is active */
+  body.reading-mode article,
+  body.reading-mode main,
+  body.reading-mode .content-area,
+  body.reading-mode p,
+  body.reading-mode h1,
+  body.reading-mode h2,
+  body.reading-mode h3,
+  body.reading-mode h4,
+  body.reading-mode h5,
+  body.reading-mode h6 {
+    font-size: var(--content-font-size) !important;
+    line-height: var(--content-line-height) !important;
+    font-family: var(--content-font-family, inherit) !important;
+  }
+`;
 export const READING_MODE_STYLES = {
   fontSize: {
     small: '14px',
