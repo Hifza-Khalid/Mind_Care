@@ -59,6 +59,12 @@ router.get(
   }
 );
 
+router.get('/me', requireAuth(), (req, res) => {
+  res.json({ user: req.user });
+});
+
+
+
 
 // Protected Routes
 router.get("/student/dashboard", requireAuth(["student"]), (req, res) => {

@@ -5,11 +5,8 @@ import ChatWidget from '@/components/chat/ChatWidget';
 import { BackgroundMusicPlayer } from '@/components/music/BackgroundMusicPlayer';
 import { AchievementNotificationManager } from '@/components/dashboard/AchievementNotification';
 import { RealTimeNotificationManager } from '@/components/dashboard/RealTimeFeedback';
-import { useAuth } from '@/contexts/AuthContext';
 
 const Layout = () => {
-  const { user } = useAuth();
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -18,17 +15,11 @@ const Layout = () => {
       </main>
       <Footer />
 
-      {/* Floating Chat Widget - only show for authenticated users */}
-      {user && <ChatWidget />}
-
-      {/* Background Music Player - only show for authenticated users */}
-      {user && <BackgroundMusicPlayer />}
-
-      {/* Achievement Notifications - only show for authenticated users */}
-      {user && <AchievementNotificationManager />}
-
-      {/* Real-time Feedback Notifications - only show for authenticated users */}
-      {user && <RealTimeNotificationManager />}
+      {/* All features rendered unconditionally; ProtectedRoute ensures only logged-in users can access */}
+      <ChatWidget />
+      <BackgroundMusicPlayer />
+      <AchievementNotificationManager />
+      <RealTimeNotificationManager />
     </div>
   );
 };

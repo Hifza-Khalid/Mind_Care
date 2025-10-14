@@ -40,6 +40,8 @@ import {
   Bookmark,
   Share2,
 } from 'lucide-react';
+import PageTransition from '@/components/ui/PageTransition';
+import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 // Enhanced language support
 const languages = {
@@ -588,20 +590,23 @@ const Resources = () => {
   };
 
   return (
-    <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses} overflow-hidden`}>
-      {/* Header */}
-      <div className="text-center space-y-4 relative">
-        <div className="absolute top-0 right-0">
-          <ReadingModeButton />
-        </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Psychoeducational Resources
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto reading-content">
-          Evidence-based resources to support your mental health journey. All content is reviewed by
-          licensed professionals.
-        </p>
-      </div>
+    <PageTransition>
+      <div className={`container mx-auto px-4 py-8 space-y-8 ${readingModeClasses} overflow-hidden`}>
+        {/* Header */}
+        <ScrollFadeIn yOffset={32}>
+          <div className="text-center space-y-4 relative">
+            <div className="absolute top-0 right-0">
+              <ReadingModeButton />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Psychoeducational Resources
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto reading-content">
+              Evidence-based resources to support your mental health journey. All content is reviewed by
+              licensed professionals.
+            </p>
+          </div>
+        </ScrollFadeIn>
 
       {/* Search & Filters */}
       <ScrollFadeIn yOffset={24} delay={0.1}>
@@ -624,46 +629,46 @@ const Resources = () => {
             />
           </div>
 
-          {/* Filter Tabs */}
-          <Tabs defaultValue="category" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="category">Category</TabsTrigger>
-              <TabsTrigger value="type">Type</TabsTrigger>
-              <TabsTrigger value="language">Language</TabsTrigger>
-            </TabsList>
+              {/* Filter Tabs */}
+              <Tabs defaultValue="category" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="category">Category</TabsTrigger>
+                  <TabsTrigger value="type">Type</TabsTrigger>
+                  <TabsTrigger value="language">Language</TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="category" className="mt-4">
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(categories).map(([key, category]) => (
-                  <Button
-                    key={key}
-                    variant={selectedCategory === key ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedCategory(key as keyof typeof categories)}
-                    className={`flex items-center space-x-1 ${category.color.replace('bg-', 'hover:bg-')}`}
-                  >
-                    <category.icon className="h-4 w-4" />
-                    <span>{category[currentLanguageContext] || category.en}</span>
-                  </Button>
-                ))}
-              </div>
-            </TabsContent>
+                <TabsContent value="category" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(categories).map(([key, category]) => (
+                      <Button
+                        key={key}
+                        variant={selectedCategory === key ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedCategory(key as keyof typeof categories)}
+                        className={`flex items-center space-x-1 ${category.color.replace('bg-', 'hover:bg-')}`}
+                      >
+                        <category.icon className="h-4 w-4" />
+                        <span>{category[currentLanguageContext] || category.en}</span>
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
 
-            <TabsContent value="type" className="mt-4">
-              <div className="flex flex-wrap gap-2">
-                {(['all', 'article', 'video', 'audio', 'tool', 'pdf'] as const).map((type) => (
-                  <Button
-                    key={type}
-                    variant={selectedType === type ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedType(type)}
-                    className="capitalize"
-                  >
-                    {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
-                  </Button>
-                ))}
-              </div>
-            </TabsContent>
+                <TabsContent value="type" className="mt-4">
+                  <div className="flex flex-wrap gap-2">
+                    {(['all', 'article', 'video', 'audio', 'tool', 'pdf'] as const).map((type) => (
+                      <Button
+                        key={type}
+                        variant={selectedType === type ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setSelectedType(type)}
+                        className="capitalize"
+                      >
+                        {type === 'all' ? 'All Types' : type === 'pdf' ? 'PDF Documents' : type}
+                      </Button>
+                    ))}
+                  </div>
+                </TabsContent>
 
             <TabsContent value="language" className="mt-4">
               <div className="flex flex-wrap gap-2">
@@ -826,110 +831,110 @@ const Resources = () => {
                     <h3 className="font-semibold text-lg leading-tight">{resource.title}</h3>
                     <p className="text-muted-foreground text-sm">{resource.description}</p>
 
-                {resource.author && (
-                  <div className="text-xs text-muted-foreground">
-                    <span className="font-medium">By:</span> {resource.author}
-                  </div>
-                )}
+                    {resource.author && (
+                      <div className="text-xs text-muted-foreground">
+                        <span className="font-medium">By:</span> {resource.author}
+                      </div>
+                    )}
 
-                {resource.tags && (
-                  <div className="flex flex-wrap gap-1">
-                    {resource.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
+                    {resource.tags && (
+                      <div className="flex flex-wrap gap-1">
+                        {resource.tags.slice(0, 3).map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
 
-                {resource.rating && (
-                  <div className="flex items-center space-x-1">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Heart
-                          key={i}
-                          className={`h-3 w-3 ${
-                            i < Math.floor(resource.rating!)
-                              ? 'text-primary fill-current'
-                              : 'text-muted-foreground'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-muted-foreground">{resource.rating}/5</span>
-                  </div>
-                )}
+                    {resource.rating && (
+                      <div className="flex items-center space-x-1">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Heart
+                              key={i}
+                              className={`h-3 w-3 ${
+                                i < Math.floor(resource.rating!)
+                                  ? 'text-primary fill-current'
+                                  : 'text-muted-foreground'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-muted-foreground">{resource.rating}/5</span>
+                      </div>
+                    )}
 
-                <div className="flex space-x-2 pt-2">
-                  <Button
-                    variant="default"
-                    className="flex-1"
-                    onClick={() => {
-                      if (resource.url) {
-                        if (resource.type === 'tool') {
-                          // Open tools in the same tab
-                          window.location.href = resource.url;
-                        } else {
-                          // Open articles, videos, etc. in new tab
-                          window.open(resource.url, '_blank', 'noopener,noreferrer');
-                        }
-                      }
-                    }}
-                  >
-                    {resource.type === 'article'
-                      ? currentLanguageContext === 'hindi'
-                        ? 'लेख पढ़ें'
-                        : currentLanguageContext === 'spanish'
-                          ? 'Leer Artículo'
-                          : 'Read Article'
-                      : resource.type === 'video'
-                        ? currentLanguageContext === 'hindi'
-                          ? 'वीडियो देखें'
-                          : currentLanguageContext === 'spanish'
-                            ? 'Ver Video'
-                            : 'Watch Video'
-                        : resource.type === 'audio'
+                    <div className="flex space-x-2 pt-2">
+                      <Button
+                        variant="default"
+                        className="flex-1"
+                        onClick={() => {
+                          if (resource.url) {
+                            if (resource.type === 'tool') {
+                              // Open tools in the same tab
+                              window.location.href = resource.url;
+                            } else {
+                              // Open articles, videos, etc. in new tab
+                              window.open(resource.url, '_blank', 'noopener,noreferrer');
+                            }
+                          }
+                        }}
+                      >
+                        {resource.type === 'article'
                           ? currentLanguageContext === 'hindi'
-                            ? 'सुनें'
+                            ? 'लेख पढ़ें'
                             : currentLanguageContext === 'spanish'
-                              ? 'Escuchar'
-                              : 'Listen Now'
-                          : resource.type === 'pdf'
+                              ? 'Leer Artículo'
+                              : 'Read Article'
+                          : resource.type === 'video'
                             ? currentLanguageContext === 'hindi'
-                              ? 'PDF देखें'
+                              ? 'वीडियो देखें'
                               : currentLanguageContext === 'spanish'
-                                ? 'Ver PDF'
-                                : 'View PDF'
-                            : currentLanguageContext === 'hindi'
-                              ? 'उपकरण का उपयोग करें'
+                                ? 'Ver Video'
+                                : 'Watch Video'
+                            : resource.type === 'audio'
+                              ? currentLanguageContext === 'hindi'
+                                ? 'सुनें'
+                                : currentLanguageContext === 'spanish'
+                                  ? 'Escuchar'
+                                  : 'Listen Now'
+                              : resource.type === 'pdf'
+                                ? currentLanguageContext === 'hindi'
+                                  ? 'PDF देखें'
+                                  : currentLanguageContext === 'spanish'
+                                    ? 'Ver PDF'
+                                    : 'View PDF'
+                                : currentLanguageContext === 'hindi'
+                                  ? 'उपकरण का उपयोग करें'
+                                  : currentLanguageContext === 'spanish'
+                                    ? 'Usar Herramienta'
+                                    : 'Use Tool'}
+                      </Button>
+                      {resource.downloadUrl && (
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => {
+                            // Create a temporary link to trigger download
+                            const link = document.createElement('a');
+                            link.href = resource.downloadUrl!;
+                            link.download = `${resource.title.replace(/[^a-zA-Z0-9]/g, '-')}.${resource.type === 'pdf' ? 'pdf' : 'mp3'}`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                          title={
+                            currentLanguageContext === 'hindi'
+                              ? 'डाउनलोड'
                               : currentLanguageContext === 'spanish'
-                                ? 'Usar Herramienta'
-                                : 'Use Tool'}
-                  </Button>
-                  {resource.downloadUrl && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => {
-                        // Create a temporary link to trigger download
-                        const link = document.createElement('a');
-                        link.href = resource.downloadUrl!;
-                        link.download = `${resource.title.replace(/[^a-zA-Z0-9]/g, '-')}.${resource.type === 'pdf' ? 'pdf' : 'mp3'}`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
-                      title={
-                        currentLanguageContext === 'hindi'
-                          ? 'डाउनलोड'
-                          : currentLanguageContext === 'spanish'
-                            ? 'Descargar'
-                            : 'Download'
-                      }
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  )}
+                                ? 'Descargar'
+                                : 'Download'
+                          }
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                      )}
 
                   {/* Cultural Context Indicator */}
                   {resource.culturalContext && (
@@ -952,78 +957,84 @@ const Resources = () => {
           })}
         </div>
 
-      {filteredResources.length === 0 && (
-        <div className="text-center py-12">
-          <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No resources found</h3>
-          <p className="text-muted-foreground">Try adjusting your search or filters.</p>
-        </div>
-      )}
+        {/* No resources found */}
+        {filteredResources.length === 0 && (
+          <ScrollFadeIn delay={0.2}>
+            <div className="text-center py-12">
+              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No resources found</h3>
+              <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+            </div>
+          </ScrollFadeIn>
+        )}
 
-      {/* Help Section */}
-      <Card className="bg-gradient-calm border-0">
-        <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center space-x-2">
-            <Heart className="h-5 w-5 text-primary" />
-            <span>Need Immediate Support?</span>
-          </CardTitle>
-          <CardDescription>
-            If you're experiencing a mental health crisis, don't wait - reach out for immediate
-            help.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button
-              variant="safety"
-              onClick={() => window.open('tel:+91-9152987821', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Phone className="h-5 w-5 mb-2" />
-              <span className="font-semibold">AASRA</span>
-              <span className="text-xs">24x7 Helpline</span>
-              <span className="text-xs">+91-91529-87821</span>
-            </Button>
-            <Button
-              variant="trust"
-              onClick={() => window.open('tel:+91-80-25497777', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Phone className="h-5 w-5 mb-2" />
-              <span className="font-semibold">Vandrevala</span>
-              <span className="text-xs">Foundation</span>
-              <span className="text-xs">+91-80-2549-7777</span>
-            </Button>
-            <Button
-              variant="gentle"
-              onClick={() => window.open('tel:+91-22-25563291', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Phone className="h-5 w-5 mb-2" />
-              <span className="font-semibold">Connecting</span>
-              <span className="text-xs">Trust</span>
-              <span className="text-xs">+91-22-2556-3291</span>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => window.open('/booking', '_self')}
-              className="flex flex-col items-center p-4 h-auto"
-            >
-              <Users className="h-5 w-5 mb-2" />
-              <span className="font-semibold">Book Session</span>
-              <span className="text-xs">Professional Help</span>
-              <span className="text-xs">Available 24/7</span>
-            </Button>
-          </div>
-          <div className="text-center text-sm text-muted-foreground mt-4">
-            <p>
-              In case of emergency, please call <strong>102</strong> (National Emergency Helpline)
-              or visit your nearest hospital.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        {/* Help Section */}
+        <ScrollFadeIn yOffset={32} delay={0.1}>
+          <Card className="bg-gradient-calm border-0">
+            <CardHeader className="text-center">
+              <CardTitle className="flex items-center justify-center space-x-2">
+                <Heart className="h-5 w-5 text-primary" />
+                <span>Need Immediate Support?</span>
+              </CardTitle>
+              <CardDescription>
+                If you're experiencing a mental health crisis, don't wait - reach out for immediate
+                help.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Button
+                  variant="safety"
+                  onClick={() => window.open('tel:+91-9152987821', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Phone className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">AASRA</span>
+                  <span className="text-xs">24x7 Helpline</span>
+                  <span className="text-xs">+91-91529-87821</span>
+                </Button>
+                <Button
+                  variant="trust"
+                  onClick={() => window.open('tel:+91-80-25497777', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Phone className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">Vandrevala</span>
+                  <span className="text-xs">Foundation</span>
+                  <span className="text-xs">+91-80-2549-7777</span>
+                </Button>
+                <Button
+                  variant="gentle"
+                  onClick={() => window.open('tel:+91-22-25563291', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Phone className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">Connecting</span>
+                  <span className="text-xs">Trust</span>
+                  <span className="text-xs">+91-22-2556-3291</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.open('/booking', '_self')}
+                  className="flex flex-col items-center p-4 h-auto"
+                >
+                  <Users className="h-5 w-5 mb-2" />
+                  <span className="font-semibold">Book Session</span>
+                  <span className="text-xs">Professional Help</span>
+                  <span className="text-xs">Available 24/7</span>
+                </Button>
+              </div>
+              <div className="text-center text-sm text-muted-foreground mt-4">
+                <p>
+                  In case of emergency, please call <strong>102</strong> (National Emergency Helpline)
+                  or visit your nearest hospital.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </ScrollFadeIn>
+      </div>
+    </PageTransition>
   );
 };
 

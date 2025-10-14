@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/contexts/AuthContext';
+
 import { Heart, Mail, Lock, User, Shield, GraduationCap } from 'lucide-react';
 import { LoginCredentials } from '@/types/auth';
 import PageTransition from '@/components/ui/PageTransition';
@@ -15,8 +15,9 @@ import { toast } from '@/components/ui/sonner';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false); // add this at the top
+
 
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: '',
@@ -49,27 +50,34 @@ const Login = () => {
   }, [location, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
+  setIsLoading(true);
 
-    try {
-      const user = await login(credentials);
-      if (user) {
-        handleLoginSuccess({
-          name: user.name,
-          role: user.role,
-          token: user.token,
-        });
+  try {
+    // Replace this with your actual login API call
+    const res = await axios.post('/api/auth/login', credentials, { withCredentials: true });
+    const user = res.data.user;
 
-        toast.success('Logged in successfully!');
-        navigate('/'); // redirect after login
-      } else {
-        toast.error('Login failed. Please check your credentials.');
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Login failed. Please try again.');
+    if (user) {
+      handleLoginSuccess({
+        name: user.name,
+        role: user.role,
+        token: user.token,
+      });
+
+      toast.success('Logged in successfully!');
+      navigate('/'); // redirect after login
+    } else {
+      toast.error('Login failed. Please check your credentials.');
     }
-  };
+  } catch (error) {
+    console.error(error);
+    toast.error('Login failed. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleRoleChange = (role: 'student' | 'counselor' | 'admin') => {
     const demoCredentials = {

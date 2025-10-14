@@ -4,7 +4,6 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { MusicProvider } from '@/contexts/MusicContext';
 import Layout from '@/components/layout/Layout';
@@ -14,7 +13,7 @@ import { lazy, Suspense } from 'react';
 import { ErrorBoundary, PageErrorBoundary } from '@/components/error';
 import ScrollToTop from './components/layout/scrollToTop';
 import Signup from './pages/Signup';
-
+import ProtectedRoute from './contexts/ProtectedRoutes';
 
 const Index = lazy(() => import('./pages/Index'));
 const Login = lazy(() => import('./pages/Login'));
@@ -55,7 +54,7 @@ const App = () => (
   >
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <AuthProvider>
+       
           <MusicProvider>
             <TooltipProvider>
               <ToastContainer
@@ -93,7 +92,16 @@ const App = () => (
                       <Route path="/contact" element={<ContactUs />} />
                       <Route path="*" element={<NotFound />} />
                       <Route path="/signup" element={<Signup />} />
-                      <Route path="/app" element={<Layout />}>
+                      
+                    {/* Protected Routes */}
+                    <Route
+                      path="/app"
+                      element={
+                        <ProtectedRoute>
+                          <Layout />
+                        </ProtectedRoute>
+                      }
+                    >
                         <Route index element={<Dashboard />} />
                         <Route path="admin-dashboard" element={<Dashboard />} />
                         <Route path="student-dashboard" element={<StudentDashboard />} />
@@ -126,7 +134,6 @@ const App = () => (
               </BrowserRouter>
             </TooltipProvider>
           </MusicProvider>
-        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </ErrorBoundary>
