@@ -263,7 +263,8 @@ const AdminDashboard = () => {
 
         <div className="relative container mx-auto px-6 py-8 space-y-8 max-w-7xl">
           {/* Header with Real-time Status */}
-          <ScrollFadeIn yOffset={32}><div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-6 lg:space-y-0 animate-fade-in">
+        <ScrollFadeIn yOffset={32}>
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-6 lg:space-y-0 animate-fade-in">
             <div className="space-y-3">
               <div className="flex items-center space-x-4">
                 <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground/80 bg-clip-text text-transparent leading-tight">
@@ -288,28 +289,29 @@ const AdminDashboard = () => {
               </p>
             </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setAutoRefresh(!autoRefresh)}
-                className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-                {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
-              </Button>
-              <Button variant="outline" size="sm" onClick={refreshData}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setAutoRefresh(!autoRefresh)}
+                  className={autoRefresh ? 'bg-green-50 border-green-200' : ''}
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
+                  {autoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
+                </Button>
+                <Button variant="outline" size="sm" onClick={refreshData}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh
+                </Button>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => exportData('all')}>
+                <Download className="h-4 w-4 mr-2" />
+                Export Data
               </Button>
             </div>
-            <Button variant="outline" size="sm" onClick={() => exportData('all')}>
-              <Download className="h-4 w-4 mr-2" />
-              Export Data
-            </Button>
           </div>
-        </div>
+        </ScrollFadeIn>
 
           {/* Search and Filters */}
           <ScrollFadeIn yOffset={18} delay={0.10}><Card className="bg-white/10 backdrop-blur-xl border-white/20">
