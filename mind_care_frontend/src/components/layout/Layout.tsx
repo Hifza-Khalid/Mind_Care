@@ -5,6 +5,7 @@ import ChatWidget from '@/components/chat/ChatWidget';
 import { BackgroundMusicPlayer } from '@/components/music/BackgroundMusicPlayer';
 import { AchievementNotificationManager } from '@/components/dashboard/AchievementNotification';
 import { RealTimeNotificationManager } from '@/components/dashboard/RealTimeFeedback';
+import '@/styles/reading-mode.css';
 
 const Layout = () => {
   return (
