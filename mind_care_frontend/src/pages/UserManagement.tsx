@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -239,6 +240,39 @@ const UserManagement = () => {
     notes: '',
   });
 
+  // Memoized event handlers to prevent unnecessary re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const handleRoleFilterChange = useCallback((value: string) => {
+    setRoleFilter(value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  }, []);
+
+  const handleStatusFilterChange = useCallback((value: string) => {
+    setStatusFilter(value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  }, []);
+
+  const handleRiskFilterChange = useCallback((value: string) => {
+    setRiskFilter(value);
+    setCurrentPage(1); // Reset to first page when filter changes
+  }, []);
+
+  const handleSortChange = useCallback((newSortBy: string) => {
+    if (sortBy === newSortBy) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(newSortBy);
+      setSortOrder('asc');
+    }
+  }, [sortBy, sortOrder]);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
   // Real-time data simulation
   useEffect(() => {
     const interval = setInterval(() => {
@@ -255,55 +289,64 @@ const UserManagement = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Filtering and sorting logic
-  const filteredAndSortedUsers = users
-    .filter((user) => {
-      const matchesSearch =
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (user.department && user.department.toLowerCase().includes(searchTerm.toLowerCase()));
-      const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-      const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
-      const matchesRisk = riskFilter === 'all' || user.riskLevel === riskFilter;
-      return matchesSearch && matchesRole && matchesStatus && matchesRisk;
-    })
-    .sort((a, b) => {
-      let aValue, bValue;
-      switch (sortBy) {
-        case 'name':
-          aValue = a.name;
-          bValue = b.name;
-          break;
-        case 'joinDate':
-          aValue = new Date(a.joinDate);
-          bValue = new Date(b.joinDate);
-          break;
-        case 'lastActive':
-          aValue = a.lastActive;
-          bValue = b.lastActive;
-          break;
-        case 'sessionsCount':
-          aValue = a.sessionsCount;
-          bValue = b.sessionsCount;
-          break;
-        default:
-          aValue = a.name;
-          bValue = b.name;
-      }
+  // Debounce search term to avoid excessive filtering operations
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-      return 0;
-    });
+  // Memoized filtering and sorting logic to prevent unnecessary recalculations
+  const filteredAndSortedUsers = useMemo(() => {
+    return users
+      .filter((user) => {
+        const matchesSearch =
+          user.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+          (user.department && user.department.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
+        const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+        const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+        const matchesRisk = riskFilter === 'all' || user.riskLevel === riskFilter;
+        return matchesSearch && matchesRole && matchesStatus && matchesRisk;
+      })
+      .sort((a, b) => {
+        let aValue, bValue;
+        switch (sortBy) {
+          case 'name':
+            aValue = a.name;
+            bValue = b.name;
+            break;
+          case 'joinDate':
+            aValue = new Date(a.joinDate);
+            bValue = new Date(b.joinDate);
+            break;
+          case 'lastActive':
+            aValue = a.lastActive;
+            bValue = b.lastActive;
+            break;
+          case 'sessionsCount':
+            aValue = a.sessionsCount;
+            bValue = b.sessionsCount;
+            break;
+          default:
+            aValue = a.name;
+            bValue = b.name;
+        }
 
-  // Pagination
-  const totalPages = Math.ceil(filteredAndSortedUsers.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentUsers = filteredAndSortedUsers.slice(startIndex, endIndex);
+        if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+  }, [users, debouncedSearchTerm, roleFilter, statusFilter, riskFilter, sortBy, sortOrder]);
 
-  // User statistics
-  const userStats = {
+  // Memoized pagination to avoid recalculation on every render
+  const paginationData = useMemo(() => {
+    const totalPages = Math.ceil(filteredAndSortedUsers.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentUsers = filteredAndSortedUsers.slice(startIndex, endIndex);
+    
+    return { totalPages, startIndex, endIndex, currentUsers };
+  }, [filteredAndSortedUsers, currentPage, itemsPerPage]);
+
+  // Memoized user statistics to prevent unnecessary recalculations
+  const userStats = useMemo(() => ({
     total: users.length,
     active: users.filter((u) => u.status === 'active').length,
     students: users.filter((u) => u.role === 'student').length,
@@ -316,7 +359,7 @@ const UserManagement = () => {
       const now = new Date();
       return joinDate.getMonth() === now.getMonth() && joinDate.getFullYear() === now.getFullYear();
     }).length,
-  };
+  }), [users]);
 
   // CRUD Operations
   const handleCreateUser = () => {
@@ -518,13 +561,13 @@ const UserManagement = () => {
   };
 
   // Select all functionality
-  const handleSelectAll = () => {
-    if (selectedUsers.length === currentUsers.length) {
+  const handleSelectAll = useCallback(() => {
+    if (selectedUsers.length === paginationData.currentUsers.length) {
       setSelectedUsers([]);
     } else {
-      setSelectedUsers(currentUsers.map((user) => user.id));
+      setSelectedUsers(paginationData.currentUsers.map((user) => user.id));
     }
-  };
+  }, [selectedUsers.length, paginationData.currentUsers]);
 
   // Helper functions for styling
   const getRoleColor = (role: string) => {
@@ -861,7 +904,7 @@ const UserManagement = () => {
                     id="search"
                     placeholder="Search by name, email, or department..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={handleSearchChange}
                     className="pl-10 bg-white/50"
                   />
                 </div>
@@ -870,7 +913,7 @@ const UserManagement = () => {
                 <Label htmlFor="role-filter" className="text-sm font-semibold">
                   Role
                 </Label>
-                <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <Select value={roleFilter} onValueChange={handleRoleFilterChange}>
                   <SelectTrigger className="bg-white/50">
                     <SelectValue />
                   </SelectTrigger>
@@ -886,7 +929,7 @@ const UserManagement = () => {
                 <Label htmlFor="status-filter" className="text-sm font-semibold">
                   Status
                 </Label>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
                   <SelectTrigger className="bg-white/50">
                     <SelectValue />
                   </SelectTrigger>
@@ -903,7 +946,7 @@ const UserManagement = () => {
                 <Label htmlFor="risk-filter" className="text-sm font-semibold">
                   Risk Level
                 </Label>
-                <Select value={riskFilter} onValueChange={setRiskFilter}>
+                <Select value={riskFilter} onValueChange={handleRiskFilterChange}>
                   <SelectTrigger className="bg-white/50">
                     <SelectValue />
                   </SelectTrigger>
@@ -1069,13 +1112,13 @@ const UserManagement = () => {
                     Previous
                   </Button>
                   <span className="text-sm font-semibold px-3 py-1 rounded bg-primary/20 text-primary">
-                    {currentPage} / {totalPages}
+                    {currentPage} / {paginationData.totalPages}
                   </span>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, paginationData.totalPages))}
+                    disabled={currentPage === paginationData.totalPages}
                   >
                     Next
                   </Button>
@@ -1089,7 +1132,7 @@ const UserManagement = () => {
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     checked={
-                      selectedUsers.length === currentUsers.length && currentUsers.length > 0
+                      selectedUsers.length === paginationData.currentUsers.length && paginationData.currentUsers.length > 0
                     }
                     onCheckedChange={handleSelectAll}
                   />
@@ -1099,7 +1142,7 @@ const UserManagement = () => {
             </div>
 
             <div className="space-y-4">
-              {currentUsers.map((user) => (
+              {paginationData.currentUsers.map((user) => (
                 <div
                   key={user.id}
                   className={`group relative p-6 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${

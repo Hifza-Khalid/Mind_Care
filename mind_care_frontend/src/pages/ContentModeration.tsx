@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -97,15 +98,38 @@ const ContentModeration = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [severityFilter, setSeverityFilter] = useState<string>('all');
 
-  const filteredContent = content.filter((item) => {
-    const matchesSearch =
-      item.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.author.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = typeFilter === 'all' || item.type === typeFilter;
-    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    const matchesSeverity = severityFilter === 'all' || item.severity === severityFilter;
-    return matchesSearch && matchesType && matchesStatus && matchesSeverity;
-  });
+  // Debounce search term to avoid excessive filtering operations
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  // Memoized filtering logic to prevent unnecessary recalculations
+  const filteredContent = useMemo(() => {
+    return content.filter((item) => {
+      const matchesSearch =
+        item.content.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        item.author.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+      const matchesType = typeFilter === 'all' || item.type === typeFilter;
+      const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+      const matchesSeverity = severityFilter === 'all' || item.severity === severityFilter;
+      return matchesSearch && matchesType && matchesStatus && matchesSeverity;
+    });
+  }, [content, debouncedSearchTerm, typeFilter, statusFilter, severityFilter]);
+
+  // Memoized event handlers to prevent unnecessary re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const handleTypeFilterChange = useCallback((value: string) => {
+    setTypeFilter(value);
+  }, []);
+
+  const handleStatusFilterChange = useCallback((value: string) => {
+    setStatusFilter(value);
+  }, []);
+
+  const handleSeverityFilterChange = useCallback((value: string) => {
+    setSeverityFilter(value);
+  }, []);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -278,7 +302,7 @@ const ContentModeration = () => {
                   id="search"
                   placeholder="Search content..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleSearchChange}
                   className="pl-10"
                 />
               </div>
@@ -288,7 +312,7 @@ const ContentModeration = () => {
               <select
                 className="w-full p-2 border rounded-md bg-background"
                 value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
+                onChange={(e) => handleTypeFilterChange(e.target.value)}
               >
                 <option value="all">All Types</option>
                 <option value="chat">Chat Messages</option>
@@ -302,7 +326,7 @@ const ContentModeration = () => {
               <select
                 className="w-full p-2 border rounded-md bg-background"
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
+                onChange={(e) => handleStatusFilterChange(e.target.value)}
               >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
@@ -316,7 +340,7 @@ const ContentModeration = () => {
               <select
                 className="w-full p-2 border rounded-md bg-background"
                 value={severityFilter}
-                onChange={(e) => setSeverityFilter(e.target.value)}
+                onChange={(e) => handleSeverityFilterChange(e.target.value)}
               >
                 <option value="all">All Severity</option>
                 <option value="low">Low</option>
