@@ -205,33 +205,34 @@ const AuthenticatedHomePage = ({
                 sessions, and connect with your supportive community.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-4 rounded-full"
-                >
-                  <Link to={getDashboardPath()}>
-                    Go to My Dashboard
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="text-lg px-8 py-4 rounded-full"
-                >
-                  <Link to="/app/chat">
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    Quick AI Chat
-                  </Link>
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-4 rounded-full"
+                  >
+                    <Link to="/signup">
+                      Get Started
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="text-lg px-8 py-4 rounded-full"
+                  >
+                    <Link to="/app/chat">
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      Quick AI Chat
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section></ScrollFadeIn>
+        </section>
+      </ScrollFadeIn>
 
       {/* Quick Access Cards for Authenticated Users */}
       <ScrollFadeIn yOffset={28} delay={0.08}><section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">

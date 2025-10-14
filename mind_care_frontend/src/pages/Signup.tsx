@@ -1,113 +1,78 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useAuth } from '@/contexts/AuthContext';
 import { Heart, Mail, Lock, User, Shield, GraduationCap } from 'lucide-react';
-import { LoginCredentials } from '@/types/auth';
 import PageTransition from '@/components/ui/PageTransition';
 import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 import { FaGoogle } from 'react-icons/fa';
-import { toast } from '@/components/ui/sonner';
+interface SignupCredentials {
+  email: string;
+  password: string;
+  role: 'student' | 'counselor' | 'admin';
+}
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
-  const location = useLocation();
-
-  const [credentials, setCredentials] = useState<LoginCredentials>({
+  const [credentials, setCredentials] = useState<SignupCredentials>({
     email: '',
     password: '',
     role: 'student',
   });
-
-  // Store user info in localStorage
-  const handleLoginSuccess = (user: { name: string; role: string; token: string }) => {
-    localStorage.setItem('userName', user.name);
-    localStorage.setItem('userRole', user.role);
-    localStorage.setItem('token', user.token);
-  };
-
-  // Handle Google OAuth redirect
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const name = params.get('name');
-    const role = params.get('role');
-    const token = params.get('token');
-    const error = params.get('error');
-
-    if (error) {
-      toast.error(error);
-    } else if (name && role && token) {
-      handleLoginSuccess({ name, role, token });
-      toast.success(`Welcome back, ${name}!`);
-      navigate('/'); // redirect to dashboard
-    }
-  }, [location, navigate]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const user = await login(credentials);
-      if (user) {
-        handleLoginSuccess({
-          name: user.name,
-          role: user.role,
-          token: user.token,
-        });
-
-        toast.success('Logged in successfully!');
-        navigate('/'); // redirect after login
-      } else {
-        toast.error('Login failed. Please check your credentials.');
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Login failed. Please try again.');
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleRoleChange = (role: 'student' | 'counselor' | 'admin') => {
-    const demoCredentials = {
-      student: { email: 'student@mindbuddy.com', password: 'student123' },
-      counselor: { email: 'counselor@mindbuddy.com', password: 'counselor123' },
-      admin: { email: 'admin@mindbuddy.com', password: 'admin123' },
-    };
-    setCredentials({ ...demoCredentials[role], role });
-  };
-
-  const handleGoogleLogin = () => {
-    window.open(`http://localhost:5000/auth/google?role=${credentials.role}`, '_self');
+    setCredentials({ ...credentials, role });
   };
 
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case 'student':
-        return <GraduationCap className="h-4 w-4" />;
-      case 'counselor':
-        return <Heart className="h-4 w-4" />;
-      case 'admin':
-        return <Shield className="h-4 w-4" />;
-      default:
-        return <User className="h-4 w-4" />;
+      case 'student': return <GraduationCap className="h-4 w-4" />;
+      case 'counselor': return <Heart className="h-4 w-4" />;
+      case 'admin': return <Shield className="h-4 w-4" />;
+      default: return <User className="h-4 w-4" />;
     }
   };
 
   const getRoleDescription = (role: string) => {
     switch (role) {
-      case 'student':
-        return 'Access AI support, book sessions, and join peer forums';
-      case 'counselor':
-        return 'Manage sessions, provide support, and access resources';
-      case 'admin':
-        return 'View analytics, manage users, and oversee platform';
-      default:
-        return '';
+      case 'student': return 'Access AI support, book sessions, and join peer forums';
+      case 'counselor': return 'Manage sessions, provide support, and access resources';
+      case 'admin': return 'View analytics, manage users, and oversee platform';
+      default: return '';
     }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:5000/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+        credentials: 'include', // to accept cookies if JWT is set as httpOnly
+      });
+
+      if (!res.ok) throw new Error('Signup failed');
+
+      toast.success('Account created successfully!');
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      toast.error('Signup failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = () => {
+    // Redirect to backend Google OAuth route with selected role
+    window.location.href = `http://localhost:5000/auth/google?role=${credentials.role}`;
   };
 
   return (
@@ -130,9 +95,9 @@ const Login = () => {
             <ScrollFadeIn yOffset={16} delay={0.07}>
               <Card className="shadow-trust">
                 <CardHeader className="space-y-1">
-                  <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
+                  <CardTitle className="text-2xl text-center">Create Your Account</CardTitle>
                   <CardDescription className="text-center">
-                    Choose your role to access your personalized dashboard
+                    Choose your role to get started
                   </CardDescription>
                 </CardHeader>
 
@@ -165,7 +130,7 @@ const Login = () => {
                     ))}
                   </Tabs>
 
-                  <form onSubmit={handleLogin} className="space-y-4 mt-6">
+                  <form onSubmit={handleSignup} className="space-y-4 mt-6">
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
                       <div className="relative">
@@ -207,26 +172,26 @@ const Login = () => {
                       variant="hero"
                       size="lg"
                       className="w-full"
-                      disabled={isLoading}
+                      disabled={loading}
                     >
-                      {isLoading ? 'Signing In...' : 'Sign In'}
+                      {loading ? 'Signing Up...' : 'Sign Up'}
                     </Button>
                   </form>
 
                   <Button
-                    onClick={handleGoogleLogin}
+                    onClick={handleGoogleSignup}
                     variant="outline"
                     size="lg"
                     className="w-full mt-4 flex items-center justify-center space-x-2"
                   >
                     <FaGoogle className="h-5 w-5" />
-                    <span>Sign in with Google</span>
+                    <span>Sign up with Google</span>
                   </Button>
 
                   <div className="mt-6 text-center text-sm">
-                    <span className="text-muted-foreground">Don’t have an account? </span>
-                    <Link to="/signup" className="text-primary hover:underline font-medium">
-                      Sign up
+                    <span className="text-muted-foreground">Already have an account? </span>
+                    <Link to="/login" className="text-primary hover:underline font-medium">
+                      Log in
                     </Link>
                   </div>
                 </CardContent>
@@ -247,4 +212,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
