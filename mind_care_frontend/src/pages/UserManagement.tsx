@@ -64,6 +64,7 @@ import {
   MessageSquare,
   Heart,
   TrendingUp,
+  Loader2,
 } from 'lucide-react';
 
 interface User {
@@ -223,6 +224,7 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [bulkActionType, setBulkActionType] = useState<string>('');
+  const [isBulkLoading, setIsBulkLoading] = useState(false);
   const [sortBy, setSortBy] = useState<string>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -448,7 +450,7 @@ const UserManagement = () => {
   };
 
   // Bulk Actions
-  const handleBulkAction = () => {
+  const handleBulkAction = async () => {
     if (selectedUsers.length === 0) {
       toast({
         title: 'Error',
@@ -458,55 +460,74 @@ const UserManagement = () => {
       return;
     }
 
-    switch (bulkActionType) {
-      case 'activate':
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            selectedUsers.includes(user.id) ? { ...user, status: 'active' as const } : user
-          )
-        );
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been activated.`,
-        });
-        break;
-      case 'deactivate':
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            selectedUsers.includes(user.id) ? { ...user, status: 'inactive' as const } : user
-          )
-        );
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been deactivated.`,
-        });
-        break;
-      case 'suspend':
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            selectedUsers.includes(user.id) ? { ...user, status: 'suspended' as const } : user
-          )
-        );
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been suspended.`,
-        });
-        break;
-      case 'delete':
-        setUsers((prevUsers) => prevUsers.filter((user) => !selectedUsers.includes(user.id)));
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been deleted.`,
-        });
-        break;
-      case 'export':
-        handleExportUsers(selectedUsers);
-        break;
-    }
+    setIsBulkLoading(true);
 
-    setSelectedUsers([]);
-    setIsBulkActionDialogOpen(false);
-    setBulkActionType('');
+    try {
+      // Simulate processing time for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      switch (bulkActionType) {
+        case 'activate':
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              selectedUsers.includes(user.id) ? { ...user, status: 'active' as const } : user
+            )
+          );
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been activated.`,
+          });
+          break;
+        case 'deactivate':
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              selectedUsers.includes(user.id) ? { ...user, status: 'inactive' as const } : user
+            )
+          );
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been deactivated.`,
+          });
+          break;
+        case 'suspend':
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              selectedUsers.includes(user.id) ? { ...user, status: 'suspended' as const } : user
+            )
+          );
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been suspended.`,
+          });
+          break;
+        case 'delete':
+          setUsers((prevUsers) => prevUsers.filter((user) => !selectedUsers.includes(user.id)));
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been deleted.`,
+          });
+          break;
+        case 'export':
+          handleExportUsers(selectedUsers);
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users exported successfully.`,
+          });
+          break;
+      }
+
+      setSelectedUsers([]);
+      setIsBulkActionDialogOpen(false);
+      setBulkActionType('');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'An error occurred while processing the bulk action. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsBulkLoading(false);
+    }
   };
 
   // Export functionality
@@ -994,6 +1015,14 @@ const UserManagement = () => {
         {selectedUsers.length > 0 && (
           <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 backdrop-blur-xl border-primary/20">
             <CardContent className="pt-6">
+              {isBulkLoading && (
+                <div className="mb-4 flex items-center space-x-3 text-primary">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span className="font-medium">
+                    Processing bulk action for {selectedUsers.length} users...
+                  </span>
+                </div>
+              )}
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center space-x-4">
                   <Badge variant="secondary" className="bg-primary/20 text-primary font-semibold">
@@ -1004,6 +1033,7 @@ const UserManagement = () => {
                     size="sm"
                     onClick={() => setSelectedUsers([])}
                     className="hover:bg-red-500/10"
+                    disabled={isBulkLoading}
                   >
                     <FileX className="h-4 w-4 mr-2" />
                     Clear Selection
@@ -1018,8 +1048,13 @@ const UserManagement = () => {
                       setIsBulkActionDialogOpen(true);
                     }}
                     className="hover:bg-green-500/10"
+                    disabled={isBulkLoading}
                   >
-                    <CheckCircle className="h-4 w-4 mr-2" />
+                    {isBulkLoading && bulkActionType === 'activate' ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                    )}
                     Activate
                   </Button>
                   <Button
@@ -1030,8 +1065,13 @@ const UserManagement = () => {
                       setIsBulkActionDialogOpen(true);
                     }}
                     className="hover:bg-yellow-500/10"
+                    disabled={isBulkLoading}
                   >
-                    <Ban className="h-4 w-4 mr-2" />
+                    {isBulkLoading && bulkActionType === 'suspend' ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Ban className="h-4 w-4 mr-2" />
+                    )}
                     Suspend
                   </Button>
                   <Button
@@ -1042,8 +1082,13 @@ const UserManagement = () => {
                       handleBulkAction();
                     }}
                     className="hover:bg-blue-500/10"
+                    disabled={isBulkLoading}
                   >
-                    <Download className="h-4 w-4 mr-2" />
+                    {isBulkLoading && bulkActionType === 'export' ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Download className="h-4 w-4 mr-2" />
+                    )}
                     Export
                   </Button>
                   <AlertDialog>
@@ -1052,8 +1097,13 @@ const UserManagement = () => {
                         size="sm"
                         variant="outline"
                         className="hover:bg-red-500/10 text-red-600 hover:text-red-700"
+                        disabled={isBulkLoading}
                       >
-                        <Trash2 className="h-4 w-4 mr-2" />
+                        {isBulkLoading && bulkActionType === 'delete' ? (
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4 mr-2" />
+                        )}
                         Delete
                       </Button>
                     </AlertDialogTrigger>
@@ -1073,8 +1123,16 @@ const UserManagement = () => {
                             handleBulkAction();
                           }}
                           className="bg-red-600 hover:bg-red-700"
+                          disabled={isBulkLoading}
                         >
-                          Delete Users
+                          {isBulkLoading && bulkActionType === 'delete' ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Deleting...
+                            </>
+                          ) : (
+                            'Delete Users'
+                          )}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -1630,17 +1688,30 @@ const UserManagement = () => {
               <DialogTitle>Confirm Bulk Action</DialogTitle>
               <DialogDescription>
                 Are you sure you want to {bulkActionType} {selectedUsers.length} selected users?
+                {isBulkLoading && <span className="block mt-2 text-primary">Processing...</span>}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsBulkActionDialogOpen(false)}>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsBulkActionDialogOpen(false)}
+                disabled={isBulkLoading}
+              >
                 Cancel
               </Button>
               <Button
                 onClick={handleBulkAction}
                 className="bg-gradient-to-r from-primary to-secondary"
+                disabled={isBulkLoading}
               >
-                Confirm
+                {isBulkLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Confirm'
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>
