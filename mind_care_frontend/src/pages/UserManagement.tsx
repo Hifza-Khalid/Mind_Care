@@ -64,6 +64,7 @@ import {
   MessageSquare,
   Heart,
   TrendingUp,
+  Loader2,
 } from 'lucide-react';
 
 interface User {
@@ -223,6 +224,7 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [bulkActionType, setBulkActionType] = useState<string>('');
+  const [isBulkLoading, setIsBulkLoading] = useState(false);
   const [sortBy, setSortBy] = useState<string>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -448,7 +450,7 @@ const UserManagement = () => {
   };
 
   // Bulk Actions
-  const handleBulkAction = () => {
+  const handleBulkAction = async () => {
     if (selectedUsers.length === 0) {
       toast({
         title: 'Error',
@@ -458,55 +460,74 @@ const UserManagement = () => {
       return;
     }
 
-    switch (bulkActionType) {
-      case 'activate':
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            selectedUsers.includes(user.id) ? { ...user, status: 'active' as const } : user
-          )
-        );
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been activated.`,
-        });
-        break;
-      case 'deactivate':
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            selectedUsers.includes(user.id) ? { ...user, status: 'inactive' as const } : user
-          )
-        );
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been deactivated.`,
-        });
-        break;
-      case 'suspend':
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            selectedUsers.includes(user.id) ? { ...user, status: 'suspended' as const } : user
-          )
-        );
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been suspended.`,
-        });
-        break;
-      case 'delete':
-        setUsers((prevUsers) => prevUsers.filter((user) => !selectedUsers.includes(user.id)));
-        toast({
-          title: 'Success',
-          description: `${selectedUsers.length} users have been deleted.`,
-        });
-        break;
-      case 'export':
-        handleExportUsers(selectedUsers);
-        break;
-    }
+    setIsBulkLoading(true);
 
-    setSelectedUsers([]);
-    setIsBulkActionDialogOpen(false);
-    setBulkActionType('');
+    try {
+      // Simulate processing time for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      switch (bulkActionType) {
+        case 'activate':
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              selectedUsers.includes(user.id) ? { ...user, status: 'active' as const } : user
+            )
+          );
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been activated.`,
+          });
+          break;
+        case 'deactivate':
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              selectedUsers.includes(user.id) ? { ...user, status: 'inactive' as const } : user
+            )
+          );
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been deactivated.`,
+          });
+          break;
+        case 'suspend':
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              selectedUsers.includes(user.id) ? { ...user, status: 'suspended' as const } : user
+            )
+          );
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been suspended.`,
+          });
+          break;
+        case 'delete':
+          setUsers((prevUsers) => prevUsers.filter((user) => !selectedUsers.includes(user.id)));
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users have been deleted.`,
+          });
+          break;
+        case 'export':
+          handleExportUsers(selectedUsers);
+          toast({
+            title: 'Success',
+            description: `${selectedUsers.length} users exported successfully.`,
+          });
+          break;
+      }
+
+      setSelectedUsers([]);
+      setIsBulkActionDialogOpen(false);
+      setBulkActionType('');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'An error occurred while processing the bulk action. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsBulkLoading(false);
+    }
   };
 
   // Export functionality
@@ -783,96 +804,96 @@ const UserManagement = () => {
         </div>
 
         {/* Enhanced Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-4">
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <Users className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
-                <Badge variant="secondary" className="bg-primary/20 text-primary">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary group-hover:scale-110 transition-transform" />
+                <Badge variant="secondary" className="bg-primary/20 text-primary text-xs">
                   Total
                 </Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.total}</CardTitle>
-              <CardDescription className="text-sm">All Users</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.total}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">All Users</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <UserCheck className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
-                <Badge className="bg-green-500/20 text-green-600">Active</Badge>
+                <UserCheck className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 group-hover:scale-110 transition-transform" />
+                <Badge className="bg-green-500/20 text-green-600 text-xs">Active</Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.active}</CardTitle>
-              <CardDescription className="text-sm">Active Users</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.active}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Active Users</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <Activity className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                <Badge className="bg-blue-500/20 text-blue-600">Online</Badge>
+                <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 group-hover:scale-110 transition-transform" />
+                <Badge className="bg-blue-500/20 text-blue-600 text-xs">Online</Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.online}</CardTitle>
-              <CardDescription className="text-sm">Online Now</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.online}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Online Now</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <Users className="h-5 w-5 text-secondary group-hover:scale-110 transition-transform" />
-                <Badge variant="secondary" className="bg-secondary/20 text-secondary">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5 text-secondary group-hover:scale-110 transition-transform" />
+                <Badge variant="secondary" className="bg-secondary/20 text-secondary text-xs">
                   Students
                 </Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.students}</CardTitle>
-              <CardDescription className="text-sm">Student Accounts</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.students}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Student Accounts</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <Shield className="h-5 w-5 text-accent group-hover:scale-110 transition-transform" />
-                <Badge className="bg-accent/20 text-accent">Counselors</Badge>
+                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-accent group-hover:scale-110 transition-transform" />
+                <Badge className="bg-accent/20 text-accent text-xs">Counselors</Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.counselors}</CardTitle>
-              <CardDescription className="text-sm">Licensed Counselors</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.counselors}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Licensed Counselors</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <Shield className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
-                <Badge className="bg-primary/20 text-primary">Admins</Badge>
+                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary group-hover:scale-110 transition-transform" />
+                <Badge className="bg-primary/20 text-primary text-xs">Admins</Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.admins}</CardTitle>
-              <CardDescription className="text-sm">System Admins</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.admins}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">System Admins</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <AlertTriangle className="h-5 w-5 text-red-600 group-hover:scale-110 transition-transform" />
-                <Badge className="bg-red-500/20 text-red-600">High Risk</Badge>
+                <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 group-hover:scale-110 transition-transform" />
+                <Badge className="bg-red-500/20 text-red-600 text-xs">High Risk</Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.highRisk}</CardTitle>
-              <CardDescription className="text-sm">Require Attention</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.highRisk}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Require Attention</CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-xl border-white/20 hover:bg-white/15 transition-all duration-300 group">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-6">
               <div className="flex items-center justify-between">
-                <TrendingUp className="h-5 w-5 text-purple-600 group-hover:scale-110 transition-transform" />
-                <Badge className="bg-purple-500/20 text-purple-600">New</Badge>
+                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 group-hover:scale-110 transition-transform" />
+                <Badge className="bg-purple-500/20 text-purple-600 text-xs">New</Badge>
               </div>
-              <CardTitle className="text-2xl font-bold">{userStats.newThisMonth}</CardTitle>
-              <CardDescription className="text-sm">This Month</CardDescription>
+              <CardTitle className="text-lg sm:text-2xl font-bold">{userStats.newThisMonth}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">This Month</CardDescription>
             </CardHeader>
           </Card>
         </div>
@@ -893,8 +914,8 @@ const UserManagement = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              <div className="lg:col-span-2 space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+              <div className="sm:col-span-2 lg:col-span-2 space-y-2">
                 <Label htmlFor="search" className="text-sm font-semibold">
                   Search Users
                 </Label>
@@ -902,7 +923,7 @@ const UserManagement = () => {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="search"
-                    placeholder="Search by name, email, or department..."
+                    placeholder="Search by name, email..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     className="pl-10 bg-white/50"
@@ -994,6 +1015,14 @@ const UserManagement = () => {
         {selectedUsers.length > 0 && (
           <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 backdrop-blur-xl border-primary/20">
             <CardContent className="pt-6">
+              {isBulkLoading && (
+                <div className="mb-4 flex items-center space-x-3 text-primary">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span className="font-medium">
+                    Processing bulk action for {selectedUsers.length} users...
+                  </span>
+                </div>
+              )}
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center space-x-4">
                   <Badge variant="secondary" className="bg-primary/20 text-primary font-semibold">
@@ -1004,6 +1033,7 @@ const UserManagement = () => {
                     size="sm"
                     onClick={() => setSelectedUsers([])}
                     className="hover:bg-red-500/10"
+                    disabled={isBulkLoading}
                   >
                     <FileX className="h-4 w-4 mr-2" />
                     Clear Selection
@@ -1018,8 +1048,13 @@ const UserManagement = () => {
                       setIsBulkActionDialogOpen(true);
                     }}
                     className="hover:bg-green-500/10"
+                    disabled={isBulkLoading}
                   >
-                    <CheckCircle className="h-4 w-4 mr-2" />
+                    {isBulkLoading && bulkActionType === 'activate' ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                    )}
                     Activate
                   </Button>
                   <Button
@@ -1030,8 +1065,13 @@ const UserManagement = () => {
                       setIsBulkActionDialogOpen(true);
                     }}
                     className="hover:bg-yellow-500/10"
+                    disabled={isBulkLoading}
                   >
-                    <Ban className="h-4 w-4 mr-2" />
+                    {isBulkLoading && bulkActionType === 'suspend' ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Ban className="h-4 w-4 mr-2" />
+                    )}
                     Suspend
                   </Button>
                   <Button
@@ -1042,8 +1082,13 @@ const UserManagement = () => {
                       handleBulkAction();
                     }}
                     className="hover:bg-blue-500/10"
+                    disabled={isBulkLoading}
                   >
-                    <Download className="h-4 w-4 mr-2" />
+                    {isBulkLoading && bulkActionType === 'export' ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Download className="h-4 w-4 mr-2" />
+                    )}
                     Export
                   </Button>
                   <AlertDialog>
@@ -1052,8 +1097,13 @@ const UserManagement = () => {
                         size="sm"
                         variant="outline"
                         className="hover:bg-red-500/10 text-red-600 hover:text-red-700"
+                        disabled={isBulkLoading}
                       >
-                        <Trash2 className="h-4 w-4 mr-2" />
+                        {isBulkLoading && bulkActionType === 'delete' ? (
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4 mr-2" />
+                        )}
                         Delete
                       </Button>
                     </AlertDialogTrigger>
@@ -1073,8 +1123,16 @@ const UserManagement = () => {
                             handleBulkAction();
                           }}
                           className="bg-red-600 hover:bg-red-700"
+                          disabled={isBulkLoading}
                         >
-                          Delete Users
+                          {isBulkLoading && bulkActionType === 'delete' ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Deleting...
+                            </>
+                          ) : (
+                            'Delete Users'
+                          )}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -1097,22 +1155,24 @@ const UserManagement = () => {
                   Users ({filteredAndSortedUsers.length})
                 </span>
               </CardTitle>
-              <div className="flex items-center space-x-4">
-                <div className="text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
                   Showing {paginationData.startIndex + 1}-{Math.min(paginationData.endIndex, filteredAndSortedUsers.length)} of{' '}
                   {filteredAndSortedUsers.length}
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2 order-1 sm:order-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                     aria-label="Go to previous page"
+                    className="text-xs sm:text-sm px-2 sm:px-3"
                   >
-                    Previous
+                    <span className="hidden sm:inline">Previous</span>
+                    <span className="sm:hidden">Prev</span>
                   </Button>
-                  <span className="text-sm font-semibold px-3 py-1 rounded bg-primary/20 text-primary">
+                  <span className="text-xs sm:text-sm font-semibold px-2 sm:px-3 py-1 rounded bg-primary/20 text-primary whitespace-nowrap">
                     {currentPage} / {paginationData.totalPages}
                   </span>
                   <Button
@@ -1121,6 +1181,7 @@ const UserManagement = () => {
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, paginationData.totalPages))}
                     disabled={currentPage === paginationData.totalPages}
                     aria-label="Go to next page"
+                    className="text-xs sm:text-sm px-2 sm:px-3"
                   >
                     Next
                   </Button>
@@ -1147,14 +1208,14 @@ const UserManagement = () => {
               {paginationData.currentUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`group relative p-6 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${
+                  className={`group relative p-3 sm:p-4 md:p-6 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${
                     selectedUsers.includes(user.id)
                       ? 'bg-primary/10 border-primary/30 shadow-md'
                       : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30'
                   }`}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-4">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0">
+                    <div className="flex items-start space-x-3 sm:space-x-4 flex-1">
                       <Checkbox
                         checked={selectedUsers.includes(user.id)}
                         onCheckedChange={(checked) => {
@@ -1164,11 +1225,11 @@ const UserManagement = () => {
                             setSelectedUsers((prev) => prev.filter((id) => id !== user.id));
                           }
                         }}
-                        className="mt-2"
+                        className="mt-1 sm:mt-2 flex-shrink-0"
                       />
-                      <div className="relative">
+                      <div className="relative flex-shrink-0">
                         <div
-                          className={`w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br ${
+                          className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-gradient-to-br ${
                             user.role === 'admin'
                               ? 'from-primary to-primary/70'
                               : user.role === 'counselor'
@@ -1177,67 +1238,69 @@ const UserManagement = () => {
                           } shadow-lg`}
                         >
                           {user.role === 'admin' ? (
-                            <Shield className="h-8 w-8 text-white" />
+                            <Shield className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white" />
                           ) : user.role === 'counselor' ? (
-                            <Heart className="h-8 w-8 text-white" />
+                            <Heart className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white" />
                           ) : (
-                            <Users className="h-8 w-8 text-white" />
+                            <Users className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-white" />
                           )}
                         </div>
                         {user.isOnline && (
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full animate-pulse"></div>
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 border-2 border-white rounded-full animate-pulse"></div>
                         )}
                       </div>
 
-                      <div className="flex-1 space-y-3">
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-3">
-                              <h3 className="text-lg font-bold">{user.name}</h3>
-                              <Badge className={getRoleColor(user.role)}>{user.role}</Badge>
-                              <Badge className={getStatusColor(user.status)}>{user.status}</Badge>
-                              {user.riskLevel && user.role === 'student' && (
-                                <Badge className={getRiskColor(user.riskLevel)}>
-                                  {user.riskLevel} risk
-                                </Badge>
-                              )}
+                      <div className="flex-1 space-y-2 sm:space-y-3 min-w-0">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-3 lg:space-y-0">
+                          <div className="space-y-2 flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                              <h3 className="text-base sm:text-lg font-bold truncate">{user.name}</h3>
+                              <div className="flex flex-wrap gap-1 sm:gap-2">
+                                <Badge className={`${getRoleColor(user.role)} text-xs`}>{user.role}</Badge>
+                                <Badge className={`${getStatusColor(user.status)} text-xs`}>{user.status}</Badge>
+                                {user.riskLevel && user.role === 'student' && (
+                                  <Badge className={`${getRiskColor(user.riskLevel)} text-xs`}>
+                                    {user.riskLevel} risk
+                                  </Badge>
+                                )}
+                              </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-muted-foreground">
-                              <span className="flex items-center space-x-2">
-                                <Mail className="h-4 w-4" />
-                                <span>{user.email}</span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
+                              <span className="flex items-center space-x-2 truncate">
+                                <Mail className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                                <span className="truncate">{user.email}</span>
                               </span>
                               <span className="flex items-center space-x-2">
-                                <Calendar className="h-4 w-4" />
+                                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                                 <span>Joined {user.joinDate}</span>
                               </span>
                               <span className="flex items-center space-x-2">
-                                <Activity className="h-4 w-4" />
+                                <Activity className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                                 <span>Last seen {user.lastActive}</span>
                               </span>
                               {user.phoneNumber && (
-                                <span className="flex items-center space-x-2">
-                                  <Phone className="h-4 w-4" />
-                                  <span>{user.phoneNumber}</span>
+                                <span className="flex items-center space-x-2 truncate">
+                                  <Phone className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                                  <span className="truncate">{user.phoneNumber}</span>
                                 </span>
                               )}
                               {user.department && (
-                                <span className="flex items-center space-x-2">
-                                  <Shield className="h-4 w-4" />
-                                  <span>{user.department}</span>
+                                <span className="flex items-center space-x-2 truncate">
+                                  <Shield className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                                  <span className="truncate">{user.department}</span>
                                 </span>
                               )}
                               {user.totalChatMessages !== undefined && (
                                 <span className="flex items-center space-x-2">
-                                  <MessageSquare className="h-4 w-4" />
+                                  <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                                   <span>{user.totalChatMessages} messages</span>
                                 </span>
                               )}
                             </div>
 
                             {user.specialties && (
-                              <div className="flex flex-wrap gap-2 mt-2">
+                              <div className="flex flex-wrap gap-1 sm:gap-2 mt-2">
                                 {user.specialties.map((specialty, index) => (
                                   <Badge
                                     key={index}
@@ -1251,26 +1314,27 @@ const UserManagement = () => {
                             )}
 
                             {user.notes && (
-                              <p className="text-sm text-muted-foreground bg-white/10 p-2 rounded border-l-4 border-yellow-500">
+                              <p className="text-xs sm:text-sm text-muted-foreground bg-white/10 p-2 sm:p-3 rounded border-l-4 border-yellow-500">
                                 <strong>Note:</strong> {user.notes}
                               </p>
                             )}
                           </div>
 
-                          <div className="flex flex-col items-end space-y-3">
-                            <div className="text-right">
-                              <p className="text-2xl font-bold text-primary">
+                          {/* Stats and Actions Section - Now responsive */}
+                          <div className="flex flex-row lg:flex-col justify-between lg:justify-start lg:items-end space-x-4 lg:space-x-0 lg:space-y-3 flex-shrink-0">
+                            <div className="text-left lg:text-right">
+                              <p className="text-xl sm:text-2xl font-bold text-primary">
                                 {user.sessionsCount}
                               </p>
-                              <p className="text-sm text-muted-foreground">sessions</p>
+                              <p className="text-xs sm:text-sm text-muted-foreground">sessions</p>
                               {user.averageSessionRating && (
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs sm:text-sm text-muted-foreground">
                                   ⭐ {user.averageSessionRating}/5.0
                                 </p>
                               )}
                             </div>
 
-                            <div className="flex items-center space-x-2">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -1278,10 +1342,11 @@ const UserManagement = () => {
                                   setSelectedUser(user);
                                   setIsUserDetailDialogOpen(true);
                                 }}
-                                className="hover:bg-blue-500/10"
+                                className="hover:bg-blue-500/10 w-full sm:w-auto text-xs sm:text-sm"
                               >
-                                <Eye className="h-4 w-4 mr-1" />
-                                View
+                                <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                                <span className="hidden sm:inline">View</span>
+                                <span className="sm:hidden">View</span>
                               </Button>
                               <Button
                                 variant="outline"
@@ -1290,20 +1355,21 @@ const UserManagement = () => {
                                   setSelectedUser(user);
                                   setIsEditDialogOpen(true);
                                 }}
-                                className="hover:bg-green-500/10"
+                                className="hover:bg-green-500/10 w-full sm:w-auto text-xs sm:text-sm"
                               >
-                                <Edit className="h-4 w-4 mr-1" />
-                                Edit
+                                <Edit className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                                <span className="hidden sm:inline">Edit</span>
+                                <span className="sm:hidden">Edit</span>
                               </Button>
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    className="hover:bg-red-500/10 text-red-600 hover:text-red-700"
+                                    className="hover:bg-red-500/10 text-red-600 hover:text-red-700 w-full sm:w-auto"
                                     aria-label={`Delete user ${user.name}`}
                                   >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                                   </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
@@ -1332,18 +1398,18 @@ const UserManagement = () => {
                     </div>
                   </div>
 
-                  {/* Quick Status Actions */}
-                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Quick Status Actions - Mobile friendly positioning */}
+                  <div className="absolute top-2 right-2 sm:top-4 sm:right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="flex space-x-1">
                       {user.status !== 'active' && (
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => handleStatusChange(user.id, 'active')}
-                          className="h-8 w-8 p-0 hover:bg-green-500/20 text-green-600"
+                          className="h-7 w-7 sm:h-8 sm:w-8 p-0 hover:bg-green-500/20 text-green-600"
                           aria-label={`Activate user ${user.name}`}
                         >
-                          <CheckCircle className="h-4 w-4" />
+                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                       )}
                       {user.status === 'active' && (
@@ -1351,10 +1417,10 @@ const UserManagement = () => {
                           size="sm"
                           variant="ghost"
                           onClick={() => handleStatusChange(user.id, 'suspended')}
-                          className="h-8 w-8 p-0 hover:bg-yellow-500/20 text-yellow-600"
+                          className="h-7 w-7 sm:h-8 sm:w-8 p-0 hover:bg-yellow-500/20 text-yellow-600"
                           aria-label={`Suspend user ${user.name}`}
                         >
-                          <Ban className="h-4 w-4" />
+                          <Ban className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                       )}
                     </div>
@@ -1622,17 +1688,30 @@ const UserManagement = () => {
               <DialogTitle>Confirm Bulk Action</DialogTitle>
               <DialogDescription>
                 Are you sure you want to {bulkActionType} {selectedUsers.length} selected users?
+                {isBulkLoading && <span className="block mt-2 text-primary">Processing...</span>}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsBulkActionDialogOpen(false)}>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsBulkActionDialogOpen(false)}
+                disabled={isBulkLoading}
+              >
                 Cancel
               </Button>
               <Button
                 onClick={handleBulkAction}
                 className="bg-gradient-to-r from-primary to-secondary"
+                disabled={isBulkLoading}
               >
-                Confirm
+                {isBulkLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Confirm'
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>

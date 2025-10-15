@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import { OptimizedImage } from '@/components/ui/optimized-image';
 import heroImage from '@/assets/freepik__retouch__90823.png';
 import { Shield, Heart, UserCheck, CheckCircle, Play } from 'lucide-react';
 import { useEffect } from 'react';
@@ -53,10 +54,12 @@ const About = () => {
 
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden shadow-xl transform hover:scale-102 transition-transform duration-500">
-                  <img
+                  <OptimizedImage
                     src={heroImage}
                     alt="Compassionate mental health care illustration depicting supportive healthcare professionals and individuals in a nurturing therapeutic environment"
                     className="w-full h-80 md:h-96 object-cover"
+                    loading="eager"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
                   />
                 </div>
                 <div className="absolute -bottom-6 left-6 bg-white/6 backdrop-blur-md rounded-xl p-4 shadow-md flex items-center gap-3">

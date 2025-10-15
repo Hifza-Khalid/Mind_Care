@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, Brain, Users, BookOpen, Calendar, Clock, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { OptimizedImage } from '@/components/ui/optimized-image';
 
 interface CarouselSlide {
   id: number;
@@ -273,10 +274,12 @@ const MentalHealthBlog: React.FC = () => {
               <div
                 className="h-48 relative overflow-hidden"
               >
-                <img
+                <OptimizedImage
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover object-center absolute inset-0 z-0"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors z-10" />
                 <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-semibold z-20 ${getCategoryColor(post.category)}`}>

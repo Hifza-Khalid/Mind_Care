@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { OptimizedBackgroundImage } from '@/components/ui/optimized-image';
 import Footer from '@/components/layout/Footer';
 import heroImage from '@/assets/freepik__retouch__90823.png';
 import {
@@ -270,14 +271,9 @@ const Index = () => {
       <ScrollFadeIn yOffset={34} delay={0.03}>
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background pt-24 pb-20 px-4 sm:px-6 lg:px-8 sm:pt-28 lg:pt-32 sm:pb-24 lg:pb-28">
           <FloatingParticles />
-          <div
+          <OptimizedBackgroundImage
+            src={heroImage}
             className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage: `url(${heroImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }}
           />
           <div className="absolute inset-0 bg-gradient-hero opacity-20" />
           <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
