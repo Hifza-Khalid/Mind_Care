@@ -1108,6 +1108,7 @@ const UserManagement = () => {
                     size="sm"
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
+                    aria-label="Go to previous page"
                   >
                     Previous
                   </Button>
@@ -1119,6 +1120,7 @@ const UserManagement = () => {
                     size="sm"
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, paginationData.totalPages))}
                     disabled={currentPage === paginationData.totalPages}
+                    aria-label="Go to next page"
                   >
                     Next
                   </Button>
@@ -1299,6 +1301,7 @@ const UserManagement = () => {
                                     variant="outline"
                                     size="sm"
                                     className="hover:bg-red-500/10 text-red-600 hover:text-red-700"
+                                    aria-label={`Delete user ${user.name}`}
                                   >
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
@@ -1338,6 +1341,7 @@ const UserManagement = () => {
                           variant="ghost"
                           onClick={() => handleStatusChange(user.id, 'active')}
                           className="h-8 w-8 p-0 hover:bg-green-500/20 text-green-600"
+                          aria-label={`Activate user ${user.name}`}
                         >
                           <CheckCircle className="h-4 w-4" />
                         </Button>
@@ -1348,6 +1352,7 @@ const UserManagement = () => {
                           variant="ghost"
                           onClick={() => handleStatusChange(user.id, 'suspended')}
                           className="h-8 w-8 p-0 hover:bg-yellow-500/20 text-yellow-600"
+                          aria-label={`Suspend user ${user.name}`}
                         >
                           <Ban className="h-4 w-4" />
                         </Button>
