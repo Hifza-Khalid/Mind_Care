@@ -1,47 +1,44 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { User as UserType } from '@/types/auth';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  User,
-  Phone,
-  Mail,
-  Calendar,
-  MapPin,
-  GraduationCap,
-  Award,
-  Shield,
-  Edit,
-  Save,
-  Camera,
+import { 
+  Camera, 
+  Mail, 
+  Phone, 
+  Shield, 
   Upload,
-  Trash2,
-  MoreVertical,
+  Save,
+  Edit,
+  Trash2 
 } from 'lucide-react';
+
+const { useState, useEffect } = React;
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { User as UserType } from '@/types/auth';
+import { ImageUpload } from '@/components/profile/ImageUpload';
+import { FormField } from '@/components/profile/FormField';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useToast } from '@/hooks/use-toast';
-import { validateProfileData } from '@/utils/validation';
+import { ProfileCompleteness } from '@/components/profile/ProfileCompleteness';
 
-const Profile = () => {
+const Profile = (): React.JSX.Element => {
   const { user, updateUser } = useAuth();
   const { toast } = useToast();
-  const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState<Partial<UserType>>(user || {});
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editData, setEditData] = React.useState<Partial<UserType>>(user || {});
+  const [isUploadingImage, setIsUploadingImage] = React.useState(false);
+  const [validationErrors, setValidationErrors] = React.useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user) {
@@ -62,23 +59,56 @@ const Profile = () => {
   }
 
   const handleSave = () => {
-    // 1. Reset errors at start of save attempt
     setValidationErrors({});
 
-    // Check validation. We need to capture errors if it fails.
-    const errors = validateProfileData(editData, toast);
+    const requiredFields = {
+      name: 'Name is required',
+      email: 'Email is required',
+      phone: 'Phone number is required',
+      dateOfBirth: 'Date of birth is required',
+    };
 
-    if (errors && typeof errors === 'object' && Object.keys(errors).length > 0) {
-      // 2. If errors exist, set the visual error state and STOP saving.
-      setValidationErrors(errors as Record<string, boolean>);
-      console.log('Validation failed. Stopping save.');
+    const errors: Record<string, string> = {};
+
+    // Validate required fields
+    Object.entries(requiredFields).forEach(([field, message]) => {
+      if (!editData[field as keyof UserType]) {
+        errors[field] = message;
+      }
+    });
+
+    // Validate email format
+    if (editData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    // Validate phone format
+    if (editData.phone && !/^\+?[\d\s-]{10,}$/.test(editData.phone)) {
+      errors.phone = 'Please enter a valid phone number';
+    }
+
+    // Role-specific validation
+    if (user.role === 'student') {
+      if (!editData.university) errors.university = 'University name is required';
+      if (!editData.major) errors.major = 'Major is required';
+      if (!editData.studentId) errors.studentId = 'Student ID is required';
+    } else if (user.role === 'counselor') {
+      if (!editData.license) errors.license = 'License number is required';
+      if (!editData.experience) errors.experience = 'Experience is required';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      toast({
+        title: 'Validation Error',
+        description: 'Please check the highlighted fields and try again.',
+        variant: 'destructive',
+      });
       return;
     }
 
-    // If validation passes, this line runs and updates the state/context.
     updateUser(editData);
     setIsEditing(false);
-    // Clear any persistent errors on successful save
     setValidationErrors({});
 
     toast({
@@ -87,32 +117,8 @@ const Profile = () => {
     });
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowedTypes.includes(file.type)) {
-      toast({
-        title: 'Invalid File Type',
-        description: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP).',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      toast({
-        title: 'File Too Large',
-        description: 'Please upload an image smaller than 5MB.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
+  const handleImageUpload = (file: File) => {
     setIsUploadingImage(true);
-
     const imageUrl = URL.createObjectURL(file);
 
     setTimeout(() => {
@@ -165,20 +171,49 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mx-auto px-8 py-10 max-w-screen-xl space-y-12">
-      <div className="mb-6">
+    <main className="container mx-auto px-8 py-10 max-w-screen-xl space-y-12">
+      <section className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Profile</h1>
         <p className="text-muted-foreground">Manage your personal information and preferences</p>
-      </div>
+      </section>
 
-      <div className="flex flex-col lg:flex-row gap-12 items-start">
-        <Card className="w-full lg:w-96 flex-shrink-0 h-full min-h-[560px] relative overflow-hidden z-10">
-          <CardHeader className="text-center">
-            <div className="relative mx-auto mb-6">
-              <Avatar className="h-32 w-32">
-                <AvatarImage src={editData.avatar || user.avatar} alt={user.name} />
-                <AvatarFallback className="text-2xl">{getInitials(user.name)}</AvatarFallback>
-              </Avatar>
+      <section className="flex flex-col lg:flex-row gap-12 items-start">
+        <div className="w-full lg:w-96 space-y-6">
+          <Card className="relative overflow-hidden z-10">
+            <CardHeader className="text-center">
+              <ImageUpload
+                currentImage={editData.avatar || user.avatar}
+                onImageUpload={handleImageUpload}
+                onImageRemove={removeProfilePicture}
+                isLoading={isUploadingImage}
+                userName={user.name}
+              />
+              <CardTitle className="text-xl mt-4">{user.name}</CardTitle>
+              <CardDescription className="flex items-center justify-center space-x-2">
+                <Badge variant="outline">
+                  <span className="text-xs font-medium">
+                    {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                  </span>
+                </Badge>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="text-muted-foreground">
+                  <Camera className="h-4 w-4" />
+                </span>
+                <span>{user.email}</span>
+              </div>
+              {user.phone && (
+                <div className="flex items-center space-x-2 text-sm">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span>{user.phone}</span>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          
+          <ProfileCompleteness user={user} />
               <input
                 id="profile-image-upload"
                 type="file"
@@ -221,22 +256,24 @@ const Profile = () => {
             </div>
             <CardTitle className="text-xl">{user.name}</CardTitle>
             <CardDescription className="flex items-center justify-center space-x-2">
-              <Badge className={`${getRoleColor(user.role)} text-white`}>
-                {user.role === 'student' && <GraduationCap className="h-3 w-3 mr-1" />}
-                {user.role === 'counselor' && <Award className="h-3 w-3 mr-1" />}
-                {user.role === 'admin' && <Shield className="h-3 w-3 mr-1" />}
-                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-              </Badge>
+              <div className="flex items-center space-x-1">
+                <Badge variant="outline">
+                  <div className="flex items-center space-x-1">
+                    {user.role === 'admin' && <span className="h-3 w-3 mr-1"><Shield /></span>}
+                    <span>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span>
+                  </div>
+                </Badge>
+              </div>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center space-x-2 text-sm">
-              <Mail className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground"><Mail className="h-4 w-4" /></span>
               <span>{user.email}</span>
             </div>
             {user.phone && (
               <div className="flex items-center space-x-2 text-sm">
-                <Phone className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground"><Phone className="h-4 w-4" /></span>
                 <span>{user.phone}</span>
               </div>
             )}
@@ -276,58 +313,63 @@ const Profile = () => {
               <TabsContent value="basic" className="space-y-4 mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input
+                    <FormField
                       id="name"
+                      label="Full Name"
                       value={isEditing ? editData.name || '' : user.name || ''}
-                      onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                      onChange={(value) => setEditData({ ...editData, name: value })}
                       disabled={!isEditing}
-                      className="h-12"
+                      error={validationErrors.name}
+                      required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
+                    <FormField
                       id="email"
+                      label="Email"
+                      type="email"
                       value={isEditing ? editData.email || '' : user.email || ''}
-                      onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                      onChange={(value) => setEditData({ ...editData, email: value })}
                       disabled={!isEditing}
-                      className="h-12"
+                      error={validationErrors.email}
+                      required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="dateOfBirth">Date of Birth</Label>
-                    <Input
+                    <FormField
                       id="dateOfBirth"
+                      label="Date of Birth"
                       type="date"
                       value={isEditing ? editData.dateOfBirth || '' : user.dateOfBirth || ''}
-                      onChange={(e) => setEditData({ ...editData, dateOfBirth: e.target.value })}
+                      onChange={(value) => setEditData({ ...editData, dateOfBirth: value })}
                       disabled={!isEditing}
-                      className="h-12"
+                      error={validationErrors.dateOfBirth}
+                      required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="preferredLanguage">Preferred Language</Label>
-                    <Input
+                    <FormField
                       id="preferredLanguage"
+                      label="Preferred Language"
                       value={
                         isEditing ? editData.preferredLanguage || '' : user.preferredLanguage || ''
                       }
-                      onChange={(e) =>
-                        setEditData({ ...editData, preferredLanguage: e.target.value })
+                      onChange={(value) =>
+                        setEditData({ ...editData, preferredLanguage: value })
                       }
                       disabled={!isEditing}
-                      className="h-12"
+                      error={validationErrors.preferredLanguage}
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="emergencyPhone">Emergency Phone</Label>
-                  <Input
+                  <FormField
                     id="emergencyPhone"
+                    label="Emergency Phone"
                     value={isEditing ? editData.emergencyPhone || '' : user.emergencyPhone || ''}
-                    onChange={(e) => setEditData({ ...editData, emergencyPhone: e.target.value })}
+                    onChange={(value) => setEditData({ ...editData, emergencyPhone: value })}
                     disabled={!isEditing}
+                    error={validationErrors.emergencyPhone}
                   />
                 </div>
               </TabsContent>
@@ -335,27 +377,28 @@ const Profile = () => {
               <TabsContent value="contact" className="space-y-4 mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
+                    <FormField
                       id="phone"
+                      label="Phone Number"
                       value={isEditing ? editData.phone || '' : user.phone || ''}
-                      onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
+                      onChange={(value) => setEditData({ ...editData, phone: value })}
                       disabled={!isEditing}
-                      className="h-12"
+                      error={validationErrors.phone}
+                      required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="emergencyContact">Emergency Contact</Label>
-                    <Input
+                    <FormField
                       id="emergencyContact"
+                      label="Emergency Contact"
                       value={
                         isEditing ? editData.emergencyContact || '' : user.emergencyContact || ''
                       }
-                      onChange={(e) =>
-                        setEditData({ ...editData, emergencyContact: e.target.value })
+                      onChange={(value) =>
+                        setEditData({ ...editData, emergencyContact: value })
                       }
                       disabled={!isEditing}
-                      className="h-12"
+                      error={validationErrors.emergencyContact}
                     />
                   </div>
                 </div>
@@ -365,39 +408,47 @@ const Profile = () => {
                 {user.role === 'student' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="university">University</Label>
-                      <Input
+                      <FormField
                         id="university"
+                        label="University"
                         value={isEditing ? editData.university || '' : user.university || ''}
-                        onChange={(e) => setEditData({ ...editData, university: e.target.value })}
+                        onChange={(value) => setEditData({ ...editData, university: value })}
                         disabled={!isEditing}
+                        error={validationErrors.university}
+                        required={user.role === 'student'}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="major">Major</Label>
-                      <Input
+                      <FormField
                         id="major"
+                        label="Major"
                         value={isEditing ? editData.major || '' : user.major || ''}
-                        onChange={(e) => setEditData({ ...editData, major: e.target.value })}
+                        onChange={(value) => setEditData({ ...editData, major: value })}
                         disabled={!isEditing}
+                        error={validationErrors.major}
+                        required={user.role === 'student'}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="year">Academic Year</Label>
-                      <Input
+                      <FormField
                         id="year"
+                        label="Academic Year"
                         value={isEditing ? editData.year || '' : user.year || ''}
-                        onChange={(e) => setEditData({ ...editData, year: e.target.value })}
+                        onChange={(value) => setEditData({ ...editData, year: value })}
                         disabled={!isEditing}
+                        error={validationErrors.year}
+                        required={user.role === 'student'}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="studentId">Student ID</Label>
-                      <Input
+                      <FormField
                         id="studentId"
+                        label="Student ID"
                         value={isEditing ? editData.studentId || '' : user.studentId || ''}
-                        onChange={(e) => setEditData({ ...editData, studentId: e.target.value })}
+                        onChange={(value) => setEditData({ ...editData, studentId: value })}
                         disabled={!isEditing}
+                        error={validationErrors.studentId}
+                        required={user.role === 'student'}
                       />
                     </div>
                   </div>
@@ -407,21 +458,25 @@ const Profile = () => {
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="license">License</Label>
-                        <Input
+                        <FormField
                           id="license"
+                          label="License"
                           value={isEditing ? editData.license || '' : user.license || ''}
-                          onChange={(e) => setEditData({ ...editData, license: e.target.value })}
+                          onChange={(value) => setEditData({ ...editData, license: value })}
                           disabled={!isEditing}
+                          error={validationErrors.license}
+                          required={user.role === 'counselor'}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="experience">Experience</Label>
-                        <Input
+                        <FormField
                           id="experience"
+                          label="Experience"
                           value={isEditing ? editData.experience || '' : user.experience || ''}
-                          onChange={(e) => setEditData({ ...editData, experience: e.target.value })}
+                          onChange={(value) => setEditData({ ...editData, experience: value })}
                           disabled={!isEditing}
+                          error={validationErrors.experience}
+                          required={user.role === 'counselor'}
                         />
                       </div>
                     </div>
@@ -441,21 +496,23 @@ const Profile = () => {
                 {user.role === 'admin' && (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="department">Department</Label>
-                      <Input
+                      <FormField
                         id="department"
+                        label="Department"
                         value={isEditing ? editData.department || '' : user.department || ''}
-                        onChange={(e) => setEditData({ ...editData, department: e.target.value })}
+                        onChange={(value) => setEditData({ ...editData, department: value })}
                         disabled={!isEditing}
+                        error={validationErrors.department}
+                        required={user.role === 'admin'}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Permissions</Label>
+                      <h4 className="text-sm font-medium mb-2">Permissions</h4>
                       <div className="flex flex-wrap gap-2">
                         {user.permissions?.map((permission, index) => (
-                          <Badge key={index} variant="outline">
+                          <span key={index} className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                             {permission.replace('_', ' ').toUpperCase()}
-                          </Badge>
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -465,8 +522,8 @@ const Profile = () => {
             </Tabs>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 
