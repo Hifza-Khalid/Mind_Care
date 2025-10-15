@@ -1099,7 +1099,7 @@ const UserManagement = () => {
               </CardTitle>
               <div className="flex items-center space-x-4">
                 <div className="text-sm text-muted-foreground">
-                  Showing {startIndex + 1}-{Math.min(endIndex, filteredAndSortedUsers.length)} of{' '}
+                  Showing {paginationData.startIndex + 1}-{Math.min(paginationData.endIndex, filteredAndSortedUsers.length)} of{' '}
                   {filteredAndSortedUsers.length}
                 </div>
                 <div className="flex items-center space-x-2">
